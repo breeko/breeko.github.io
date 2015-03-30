@@ -7,8 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
+    
     <title>Luja Fitness</title>
 
     <!-- Bootstrap core CSS -->
@@ -41,17 +40,11 @@
           </button>
           <a class="navbar-brand" href="#">Luja Fitness</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="mailto:dianaamari@gmail.com?Subject=Luja%20Fitness">Contact <span class="sr-only">(current)</span></a></li>
+              </ul>          
+          </div>
       </div>
     </nav>
 
@@ -73,12 +66,12 @@
         <div class="col-md-4">
           <h2>Customized Workouts</h2>
           <p>New workouts added regularly, including the Scientific 7-Minute Workout as seen on New York Times</p>
-          <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+          <p><a class="btn btn-default" href="#workouts" role="button">Learn more &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Workout Tracking</h2>
           <p>Help keep track of your progress with a visual calendar of your progress</p>
-          <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p>
+          <p><a class="btn btn-default" href="#calendar" role="button">Learn more &raquo;</a></p>
        </div>
         <div class="col-md-4">
           <h2>As Seen on Men's Fitness</h2>
@@ -89,11 +82,41 @@
 
       <hr>
 
+      </div> <!-- /container -->
+      
+      <div class="container">
+          <h2 id="workouts">Customized Workouts</h2>
+          <h4>New workouts added weekly will always keep you on your toes!</h4>
+          
+          <ul>
+              <li>Scientific 7 Minute Workout</li>
+              <li>Advanced Scientific 7 Minute Workout</li>
+              <li>Extreme Cardio</li>
+              <li>And more!</li>
+              
+            </ul>  
+
+      </div>
+      
+      <hr>
+      
+      <div class="container">
+          <h2 id="calendar">Workout Tracking</h2>
+            <h4>Keep track of your progress with your workout history</h4>
+          
+      </div>
+      
+      <hr>
+      
+      <div class="container">
+          <h2 id="mensfitness">Men's Fitness</h2>
+      </div>
+      
+      <hr>
+      
       <footer>
         <p>&copy; Twelve 31 Labs 2015</p>
       </footer>
-    </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
