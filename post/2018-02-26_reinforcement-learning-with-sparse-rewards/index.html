@@ -19,8 +19,8 @@ This is a continuation of a series of posts on reinforcement learning. This will
 Reinforcement learning shouldn’t be hard. The idea is simple enough:
  Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://example.org/post/2018-02-26_reinforcement-learning-with-sparse-rewards/">
-        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+<meta property="og:url" content="http://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/">
+        <link rel="stylesheet" href="http://breeko.github.io/dist/styles.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
@@ -36,10 +36,10 @@ Reinforcement learning shouldn’t be hard. The idea is simple enough:
                     <div class="site-title-wrapper">
                         
                             <h1 class="site-title">
-                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                                <a title="ML-Everything" href="http://breeko.github.io/">ML-Everything</a>
                             </h1>
                         
-                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        <a class="button-square" href="http://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
                         
                         
                         
@@ -94,7 +94,7 @@ Reinforcement learning shouldn’t be hard. The idea is simple enough:
 
 <p>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…</p>
 
-<p>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the <a href="http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a>) and use the OpenAI environment discussed in an <a href="http://example.org/post/2018-02-05_evolutionary-learning-models-with-openai/">earlier post</a>.</p>
+<p>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the <a href="http://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a>) and use the OpenAI environment discussed in an <a href="http://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/">earlier post</a>.</p>
 
 <p>Reinforcement learning shouldn’t be hard. The idea is simple enough:</p>
 
@@ -124,7 +124,7 @@ Reinforcement learning shouldn’t be hard. The idea is simple enough:
 
 <p>Ideally we should be able to develop a completely general algorithm to handle any environment, any reward structure and any action space. But in practice this is just not feasible and we need to understand our environment to effectively create useful bots.</p>
 
-<p>In the <a href="http://example.org/post/2018-02-05_evolutionary-learning-models-with-openai/">last post</a>, I spoke about Experience Replay, which is basically a buffer that holds your experiences (state, action taken, reward, next states and whether game is over). Sampling randomly from the buffer is an effective means to get a variety of experiences that get refreshed over time. But many games have sparse rewards, so 99% of your experiences just result in a 0 reward. You model will do great, as it’ll just predict 0 and for the most part, it’ll be right. So you want to focus on examples in which things happened. Here is an example of snake being played randomly on a 20x20 board:</p>
+<p>In the <a href="http://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/">last post</a>, I spoke about Experience Replay, which is basically a buffer that holds your experiences (state, action taken, reward, next states and whether game is over). Sampling randomly from the buffer is an effective means to get a variety of experiences that get refreshed over time. But many games have sparse rewards, so 99% of your experiences just result in a 0 reward. You model will do great, as it’ll just predict 0 and for the most part, it’ll be right. So you want to focus on examples in which things happened. Here is an example of snake being played randomly on a 20x20 board:</p>
 
 <p><img src="/post/resources/img/1*EnCstN3ChnE8hfSiF9K3yw.gif" alt="" /></p>
 
@@ -179,7 +179,7 @@ Distribution of rewards: Counter({0: 33123, -1: 1000, 1: 60})</p>
 
 <p>So ~33k steps there is no reward. I have a -1 reward on 1k of them (as expected since I played 1k games). And I got a reward on 60. If we just sample these experiences randomly, we’re obviously going to be very biased towards nothing happening. And it’s not wrong. Most of the time, nothing happens. But we need to try to learn exactly what’s going on in those 60 cases where we received a reward and those 1k times leading up to my death.</p>
 
-<p>You can separate out the examples in which you have a certain score and sample a number from each score. But this is a bit arbitrary since you’d have to know what your score distribution is, and it may change as your bot learns. The better way is to just sort your experiences based on absolute reward and then draw samples where you’re biased towards the high rewards. Sorting every time we want to sample is not very efficient but for our purposes the performance benefit of adding complexity would be negligible. Below is a modification of the ExperienceReplay class from the <a href="http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a> in which unusual experiences are over-sampled.</p>
+<p>You can separate out the examples in which you have a certain score and sample a number from each score. But this is a bit arbitrary since you’d have to know what your score distribution is, and it may change as your bot learns. The better way is to just sort your experiences based on absolute reward and then draw samples where you’re biased towards the high rewards. Sorting every time we want to sample is not very efficient but for our purposes the performance benefit of adding complexity would be negligible. Below is a modification of the ExperienceReplay class from the <a href="http://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a> in which unusual experiences are over-sampled.</p>
 
 <script type="application/javascript" src="//gist.github.com/breeko/1157a3083c43cd212d3c8175d5934768.js"></script>
 
@@ -237,7 +237,7 @@ for model in models:
 
 <h3 id="checking-predictions">Checking predictions</h3>
 
-<p>What is your bot predicting? You can look at loss numbers, and that’s pretty easy to pinpoint when it’s going out of control. But look at your prediction values as well. If your game returns 0 most of the time with a reward of 1 every 10 steps or so (assuming perfect play), then you should expect your predictions to come in between 0 to 1 for the most part. However when you’re bootstrapping as we did in the <a href="http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a> rewards can spiral out of control and turn incredibly positive or negative. You can handle this by decreasing the learning rate, or decreasing the frequency in which you update the target network. But most importantly, identify that this is happening early and don’t waste time feeding the model more experiences.</p>
+<p>What is your bot predicting? You can look at loss numbers, and that’s pretty easy to pinpoint when it’s going out of control. But look at your prediction values as well. If your game returns 0 most of the time with a reward of 1 every 10 steps or so (assuming perfect play), then you should expect your predictions to come in between 0 to 1 for the most part. However when you’re bootstrapping as we did in the <a href="http://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">last post</a> rewards can spiral out of control and turn incredibly positive or negative. You can handle this by decreasing the learning rate, or decreasing the frequency in which you update the target network. But most importantly, identify that this is happening early and don’t waste time feeding the model more experiences.</p>
 
 <h3 id="finally-try-different-neural-network-architectures">Finally try different neural network architectures</h3>
 
@@ -252,7 +252,7 @@ for model in models:
 
     <div class="share">
         
-            <a class="icon-twitter" href="https://twitter.com/share?text=Reinforcement%20learning%20with%20sparse%20rewards&url=http%3a%2f%2fexample.org%2fpost%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
+            <a class="icon-twitter" href="https://twitter.com/share?text=Reinforcement%20learning%20with%20sparse%20rewards&url=http%3a%2f%2fbreeko.github.io%2fpost%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
                 onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
                 <i class="fa fa-twitter"></i>
                 <span class="hidden">Twitter</span>
@@ -260,7 +260,7 @@ for model in models:
         
 
         
-            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fbreeko.github.io%2fpost%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
                 onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
                 <i class="fa fa-facebook"></i>
                 <span class="hidden">Facebook</span>
@@ -283,7 +283,7 @@ for model in models:
             <div class="container">
                 <div class="site-title-wrapper">
                     <h1 class="site-title">
-                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                        <a title="ML-Everything" href="http://breeko.github.io/">ML-Everything</a>
                     </h1>
                     <a class="button-square button-jump-top js-jump-top" href="#">
                         <i class="fa fa-angle-up"></i>
@@ -300,14 +300,14 @@ for model in models:
             </div>
         </footer>
 
-        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
-        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        <script src="http://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="http://breeko.github.io/js/jquery.fitvids.js"></script>
         
         
             <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         
         
-        <script src="http://example.org/js/scripts.js"></script>
+        <script src="http://breeko.github.io/js/scripts.js"></script>
     </body>
 </html>
 
