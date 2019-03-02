@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ After an unsatisfactory selection of free (free to download, no ads/tracking or 
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -96,19 +108,12 @@ After an unsatisfactory selection of free (free to download, no ads/tracking or 
 
 <p>After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native. The design is heavily inspired by <a href="https://play.google.com/store/apps/details?id=com.google.android.calculator&amp;hl=en">Google’s calculator app for Android</a>. The iOS and iPad app store in particular is spammy and unprofitable for developers due to saturation and insurmountable app store economics. Available for <a href="https://itunes.apple.com/us/app/opencalc/id1403173317?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.twelve31labs.opencalc">Android</a>. Full source is available at <a href="https://github.com/breeko/OpenCalc">GitHub</a>.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*vQmqq8eQZBbRxkDPvf49_g.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*vQmqq8eQZBbRxkDPvf49_g.png"/> <figcaption>
+            <h4>OpenCalc on iPad</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">OpenCalc on iPad</td>
-</tr>
-</tbody>
-</table>
 
 <p>This post will discuss some of my thoughts on the mobile app market. A more detailed technical post on OpenCalc will be in a separate post.</p>
 
@@ -116,19 +121,12 @@ After an unsatisfactory selection of free (free to download, no ads/tracking or 
 
 <p>I’ve always been surprised at the lack of quality iPad apps. I haven’t done an exhaustive review, but my impression is that many apps that should be supported on iPad are not. It’s incredible to think that one of the most popular apps, WhatsApp, is not available. Also, Instagram is only available as a scaled up iPhone version. Given that XCode had <a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html">autolayout</a> for some time, porting an iPhone app to support iPads should be simple, especially for Facebook. There doesn’t have to be an entirely new experience necessarily, just something better than this:</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*Kgz_fsFbVG7VgBO2gJOx5Q.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*Kgz_fsFbVG7VgBO2gJOx5Q.png"/> <figcaption>
+            <h4>Instagram on iPad</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Instagram on iPad</td>
-</tr>
-</tbody>
-</table>
 
 <p>Apple also decided against including a native calculator app on iPad. They have a perfectly good iPhone calculator app but apparently <a href="http://www.businessinsider.com/why-isnt-the-ipad-shipping-with-a-calculator-app-steve-jobs-didnt-like-the-way-it-looked-2010-3">Steve Jobs didn’t like how the calculator looked blown up on the iPad</a>. So now iPad users have to deal with spammy third-party calculator apps.</p>
 
@@ -160,35 +158,16 @@ After an unsatisfactory selection of free (free to download, no ads/tracking or 
 
 <p>Consider the search term “calculator” made on an iPad:</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*MWqE-k9X08hCIJsg0BlIoQ.png" alt="" /></th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">Top-2 pages of calculator apps on iOS</td>
-</tr>
-</tbody>
-</table>
+<p>{{ figure src=&ldquo;/post/resources/img/1*MWqE-k9X08hCIJsg0BlIoQ.png&rdquo; title=&ldquo;Top-2 pages of calculator apps on iOS&rdquo; }}</p>
 
 <p>I haven’t reviewed every top calculator apps, but I did check out a few. <em>The Calculator</em> (top non-ad result) has full screen pop-up ads and a banner ad. Not sure what <em>The Beautify of Science</em> is but it looks like some kind of story. The fourth one <em>Calculator — Number Systems</em> seems like an irregular use-case. <em>Calculator’</em> and <em>Calculator*</em> are simple and functional enough. But they both have a banner ad and very limited functionality. I mean <em>very</em> limited.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*F1EtkiGY0DkyafpRzUChcQ.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*F1EtkiGY0DkyafpRzUChcQ.png"/> <figcaption>
+            <h4>Calculator’</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Calculator’</td>
-</tr>
-</tbody>
-</table>
 
 <blockquote>
 <p>Aren’t you glad Steve Jobs didn’t want iPad users to experience an ugly blown-up version of the iPhone calculator?</p>
@@ -277,6 +256,16 @@ After an unsatisfactory selection of free (free to download, no ads/tracking or 
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/react-native/">react-native</a>, 
+            
+                <a href="/tags/mobile/">mobile</a>
+            
+        </p>
     
 
     <div class="share">

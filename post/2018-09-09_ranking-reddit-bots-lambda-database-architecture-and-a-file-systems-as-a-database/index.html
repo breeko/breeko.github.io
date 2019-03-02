@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -59,6 +67,10 @@ In my last post I wrote about a few Reddit bots I am working on. One of them, B0
                         
     <li class="site-nav-item">
         <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
     </li>
 
                     </ul>
@@ -125,19 +137,12 @@ In my last post I wrote about a few Reddit bots I am working on. One of them, B0
 
 <p><a href="https://www.manning.com/books/big-data">Big Data</a> by Manning Publications uses an example throughout the book that is essentially my use-case. Instead of tracking votes, their example tracks clicks on websites. The book then goes on to describe a Lambda Architecture. The architecture is based on three layers: batch layer, servicing layer and speed layer. The data remains untouched and the batch and speed layers act of the data and the servicing layer acts on the batch layer. Queries on the data are based on the servicing layer and speed layer.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/0*DibK0wL0tYJ-Jctu.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/0*DibK0wL0tYJ-Jctu.png"/> <figcaption>
+            <h4>Lambda architecture</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Lambda architecture</td>
-</tr>
-</tbody>
-</table>
 
 <p>The book does a much better job explaining the concepts and the first chapter is freely available, so check that out if you want more information.</p>
 
@@ -369,6 +374,18 @@ get_latest_record(BASE_DIR, USER, &quot;good&quot;, val=True)
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/reddit/">reddit</a>, 
+            
+                <a href="/tags/database/">database</a>
+            
+        </p>
     
 
     <div class="share">

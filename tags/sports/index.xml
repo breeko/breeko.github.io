@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sports on ML-Everything</title>
+    <link>https://breeko.github.io/tags/sports/</link>
+    <description>Recent content in Sports on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 06 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/sports/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using ESPN Forecasts to Make Draft King Final Fantasy Football Picks</title>
+      <link>https://breeko.github.io/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/</guid>
+      <description>ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
+In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists</description>
+    </item>
+    
+    <item>
+      <title>Using Linear Regression to Make Fantasy Football Picks</title>
+      <link>https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</guid>
+      <description>Optimize your fantasy football picks with a linear regression in just a few lines of code.
+Using a regression to predict fantasy football performance is easier than you think in R. With a few lines of code, you can predict player performance and optimize your lineup.
+In a prior post, I wrote about using linear programming to optimize your fantasy football picks. Linear programming ensures you pick the best lineup based on some points projections and constraints (e.</description>
+    </item>
+    
+    <item>
+      <title>Using Python and Linear Programming to Optimize Fantasy Football Picks</title>
+      <link>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
+      <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
+      <description>Automated optimal fantasy football selection using linear programming
+Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
+I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.</description>
+    </item>
+    
+  </channel>
+</rss>

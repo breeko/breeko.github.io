@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ I have read a fair number of posts about variational auto encoders but only rece
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -98,31 +110,19 @@ I have read a fair number of posts about variational auto encoders but only rece
 
 <p>An <strong>auto-encoder</strong> deconstructs (or encodes) some data into a hidden representation with the goal of losing as little information as possible. Its performance is measured by how well it can reconstruct (decode) the data based on its internal representation.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/0*sukoan_LqtFKllCW.jpg" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/0*sukoan_LqtFKllCW.jpg"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>The cool thing about auto-encoders is that they are unsupervised. Nowhere in the example above did we tell the encoder the number is a 2. So we can use them to create a structure on a data set without the need for labels. We can then use that structure for supervised training. We also don’t tell it how to encode the data. We just provide a structure for the encoder and decoder, and measure how well its doing based on how much information is lost in the process.</p>
 
 <p>A <strong>variational auto-encoder (VAE)</strong> is an auto-encoder, except instead of learning a compressed representation, it learns a probability distribution of the data:</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/0*qVSTI1FNmySZkjLj.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/0*qVSTI1FNmySZkjLj.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>This is the point at which most explanations get all hand-wavy and spill a few words about latent space. But all this means is that the compressed representation will be a mean and standard deviation, representing a normal distribution. When we connect it to the decoder, we’ll want to take a noise sample using the mean and variance. This is the <strong>μ + Σ * ε</strong> from the graph above. This just means that when we decode, we’ll use the mean and add the standard deviation multiplied by some random normal value.</p>
 
@@ -169,16 +169,10 @@ X_test, y_test = process_emnist(test, mappings)
 display_images(X_train[:10],y_train[:10])
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>Our training set is (88800, 28, 28) representing 88,800 letters from A to Z in either upper or lower case.</p>
 
@@ -186,45 +180,26 @@ display_images(X_train[:10],y_train[:10])
 
 <p>A variational auto encoder is just an encoder that feeds a decoder and encodes to a probability density function. We define the models independently and then define the VAE as the combined model. The function returns two models: one for training and one for evaluation. The only difference is that for training, the final layer is hooked up to the sampling layer. But when we want to display our results, we should not include the noise. That model is vae_eval and is just connected to the z_mean layer.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>The final layer of the encoder is the sampling layer which we defined ourselves and wrapped in a Lambda layer. The mean and var layers are used for the loss function which tracks how far away our probability distribution in our encoding is from a mean of 0 and a standard deviation of 1. The mean layer is also used when we want to see our results.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="https://cdn-images-1.medium.com/max/1000/1*vuzoh3WH7g--FFB4xrZg8A.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*vuzoh3WH7g--FFB4xrZg8A.png"/> <figcaption>
+            <h4>Decoder</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Decoder</td>
-</tr>
-</tbody>
-</table>
 
 <p>The decoder is relatively straight forward. It takes an input of 2 representing our latent dimensions. It then reconstructs the image.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>Variational Auto Encoder</p>
 
@@ -246,39 +221,27 @@ display_images(X_train[:10],y_train[:10])
 
 <p>Let’s see how it did.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*wrT-bOKuW92N_516DnEBNQ.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*wrT-bOKuW92N_516DnEBNQ.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>Not great. The problem is that our representation isn’t deep enough. Ideally we would want to use convolutional layers to get a deeper understanding of the letters and edges.</p>
 
 <p>Let’s see how the latent space looks. We can do so by getting the decoder and feeding it a series of values and seeing what it comes up with. To get the encoder and decoder, we can just reference the second and third layers of the VAE.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png"/> 
+</figure>
 
-<tbody>
-</tbody>
-</table>
 
 <p>Latent space</p>
 
 <p>It looks crowded. There is some semblance of Ms in the bottom left and Is in the top right. By comparison, here’s how the same analysis looks on numeric digits:</p>
 
 <div stly="text-align:center">
-    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/200/1*QArAhQbz79lFWo-2nn47zw.png">
-    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/1000/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
+    <img style="display:inline-block;" src="resources/img/1*QArAhQbz79lFWo-2nn47zw.png">
+    <img style="display:inline-block;" src="resources/img/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
 </div>
 
 <p>Latent space of a VAE trained on digits</p>
@@ -298,8 +261,8 @@ X_test_vowels, y_test_vowels = filter_char(X_test, y_test, [&quot;A&quot;,&quot;
 </code></pre>
 
 <div stly="text-align:center">
-    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/200/1*zEJVVG-XqmUlpD9ILjt61w.png">
-    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/1000/1*wbJi6Bd7oghNq6wf6UAUzA.png">
+    <img style="display:inline-block;" src="resources/img/1*zEJVVG-XqmUlpD9ILjt61w.png">
+    <img style="display:inline-block;" src="resources/img/1*wbJi6Bd7oghNq6wf6UAUzA.png">
 </div>
 
 <p>This is much better with a clearer distinction between each vowel, although the model does get some letters confused.</p>
@@ -311,6 +274,18 @@ X_test_vowels, y_test_vowels = filter_char(X_test, y_test, [&quot;A&quot;,&quot;
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/auto-encoders/">auto-encoders</a>
+            
+        </p>
     
 
     <div class="share">

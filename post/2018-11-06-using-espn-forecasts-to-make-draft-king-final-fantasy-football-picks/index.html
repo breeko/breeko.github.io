@@ -1,11 +1,18 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Using ESPN Forecasts to Make Draft King Final Fantasy Football Picks &middot; Branko Blagojevic</title>
-        <meta name="description" content="ESPN fantasy football projection are free and available historically. Let’s see if they’re any good.
-ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
+        <meta name="description" content="ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
 In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
@@ -13,8 +20,7 @@ In this post we’ll use ESPN predictions to optimize our fantasy pool. You can 
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Using ESPN Forecasts to Make Draft King Final Fantasy Football Picks">
-<meta property="og:description" content="ESPN fantasy football projection are free and available historically. Let’s see if they’re any good.
-ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
+<meta property="og:description" content="ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
 In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://breeko.github.io/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/">
@@ -61,6 +67,10 @@ In this post we’ll use ESPN predictions to optimize our fantasy pool. You can 
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -89,8 +99,6 @@ In this post we’ll use ESPN predictions to optimize our fantasy pool. You can 
     
 
     
-
-<p>ESPN fantasy football projection are free and available historically. Let’s see if they’re any good.</p>
 
 <p>ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power</p>
 
@@ -231,6 +239,20 @@ solve(ahFiltered)
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/r/">R</a>, 
+            
+                <a href="/tags/fantasy-football/">fantasy-football</a>, 
+            
+                <a href="/tags/sports/">sports</a>, 
+            
+                <a href="/tags/forecasting/">forecasting</a>
+            
+        </p>
     
 
     <div class="share">

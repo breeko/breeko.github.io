@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>New York on ML-Everything</title>
+    <link>https://breeko.github.io/tags/new-york/</link>
+    <description>Recent content in New York on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 25 Mar 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/new-york/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Everything you’ve ever wanted to know about New York City’s restaurant ratings</title>
+      <link>https://breeko.github.io/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</link>
+      <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</guid>
+      <description>What do the food ratings tell us about restaurants and health departments?
+Every restaurant in NYC receives a letter grade by the city. Using this information we can draw insights into safety and where to eat.
+Anyone who’s been to New York City likely noticed the restaurant letter grades on virtually all eating establishments. The letter grades were introduced in 2010 and range from A through C, with A being the highest (best) rating.</description>
+    </item>
+    
+  </channel>
+</rss>

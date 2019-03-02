@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reinforcement Learning on ML-Everything</title>
+    <link>https://breeko.github.io/tags/reinforcement-learning/</link>
+    <description>Recent content in Reinforcement Learning on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/reinforcement-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Reinforcement learning with sparse rewards</title>
+      <link>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</guid>
+      <description>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
+This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
+Reinforcement learning shouldn’t be hard. The idea is simple enough:
+ Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.</description>
+    </item>
+    
+    <item>
+      <title>Learning from pixels and Deep Q-Networks with Keras</title>
+      <link>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</link>
+      <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</guid>
+      <description>This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
+This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.</description>
+    </item>
+    
+    <item>
+      <title>Policy Based Reinforcement Learning with Keras</title>
+      <link>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</link>
+      <pubDate>Mon, 12 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</guid>
+      <description>This post will discuss reinforcement learning through policy based agents on an OpenAI environment
+Policy based reinforcement learning is simply training a neural network to remember the actions that worked best in the past. This framework provides incredible flexibility and works across many envs
+This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed on my last post. The next few posts are heavily influenced by Arthur Juliani’s great series on reinforcement learning.</description>
+    </item>
+    
+    <item>
+      <title>Evolutionary Learning Models with OpenAI</title>
+      <link>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</link>
+      <pubDate>Mon, 05 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</guid>
+      <description>Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and…
+Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and surprisingly easy to implement. In this post, I’ll create an evolutionary learning model to use on the OpenAI. The great thing about OpenAI is the simple API and large number of environments to experiment on. So any bot we create in one environment can (in theory) be used on any other environment.</description>
+    </item>
+    
+    <item>
+      <title>Tic-Tac-Toe and Connect-4 using Mini-Max</title>
+      <link>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</guid>
+      <description>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
+A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ OpenCalc is a mobile calculator written in React Native. This is my first app us
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -96,19 +108,12 @@ OpenCalc is a mobile calculator written in React Native. This is my first app us
 
 <p>OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc. Part 1 will deal with mostly the UI and design elements. Part 2 will deal with how the operations are handled. Available for <a href="https://itunes.apple.com/us/app/opencalc/id1403173317?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.twelve31labs.opencalc">Android</a>. Full source on <a href="https://github.com/breeko/OpenCalc">GitHub</a>.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*IY3LVZWNvCbHhVboPDdlsw.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*IY3LVZWNvCbHhVboPDdlsw.png"/> <figcaption>
+            <h4>OpenCalc</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">OpenCalc</td>
-</tr>
-</tbody>
-</table>
 
 <h3 id="file-structure">File Structure</h3>
 
@@ -242,35 +247,21 @@ export class Orientation {
 }
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="https://cdn-images-1.medium.com/max/1000/1*qKGxRRw0DJU_IHCrpj3fjg.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*qKGxRRw0DJU_IHCrpj3fjg.png"/> <figcaption>
+            <h4>Possible layouts of OpenCalc</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Possible layouts of OpenCalc</td>
-</tr>
-</tbody>
-</table>
 
 <p>The rule I used was if height &gt; width, then the device is in portrait. This doesn’t work so well on Android split view since the screen is technically wider than it is taller (portrait), but I would still prefer the portrait layout.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*BMN_oxndY_vlxkTz6To5BA.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*BMN_oxndY_vlxkTz6To5BA.png"/> <figcaption>
+            <h4>OpenCalc on split view Android</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">OpenCalc on split view Android</td>
-</tr>
-</tbody>
-</table>
 
 <p>I tried using other rules (e.g. width has to be 25% greater than height), but it forced some tablet models into portrait mode. I also tried forcing a minimum width to trigger landscape mode, but the correct cutoff was not clear and the ratio is really what matters anyway. In the end, I didn’t think fixing this problem was worth the extra complexity.</p>
 
@@ -320,19 +311,12 @@ if (isNumeric(value)) {
   }
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="https://cdn-images-1.medium.com/max/600/1*1qs5SV9lSN7B8hnemT9S8w.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*1qs5SV9lSN7B8hnemT9S8w.png"/> <figcaption>
+            <h4>Toast</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Toast</td>
-</tr>
-</tbody>
-</table>
 
 <p>This is the only place where I used an external package (<a href="https://github.com/remobile/react-native-toast">react-native-toast</a>). This allowed me to display a short temporary message to the user when copying or pasting. Toast is <a href="https://facebook.github.io/react-native/docs/toastandroid.html">native to Android</a> but Apple doesn’t have anything similar.</p>
 
@@ -438,7 +422,7 @@ return (
 
 <p>The <strong>CalculatorResponse</strong> component</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/600/1*iXhEXBRs0me0Xw4YD4xtjw.png" alt="" /></p>
+<p><img src="resources/img/1*iXhEXBRs0me0Xw4YD4xtjw.png" alt="" /></p>
 
 <p>One thing new about this view is the <em>SafeAreaView</em> component. This handles the iPhone X notch design. Without this, the response could be cut-off by the camera notch.</p>
 
@@ -466,6 +450,16 @@ return (
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/react-native/">react-native</a>, 
+            
+                <a href="/tags/mobile/">mobile</a>
+            
+        </p>
     
 
     <div class="share">

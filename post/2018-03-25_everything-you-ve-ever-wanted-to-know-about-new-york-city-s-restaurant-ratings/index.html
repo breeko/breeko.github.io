@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ Anyone who’s been to New York City likely noticed the restaurant letter grades
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -96,19 +108,12 @@ Anyone who’s been to New York City likely noticed the restaurant letter grades
 
 <p>Anyone who’s been to New York City likely noticed the restaurant letter grades on virtually all eating establishments. The letter grades were introduced in 2010 and range from A through C, with A being the highest (best) rating. Restaurants are required to clearly display the letter grade although some establishments get creative.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*4tpEbdwiTUMU0zpzExqvNQ.jpeg" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*4tpEbdwiTUMU0zpzExqvNQ.jpeg"/> <figcaption>
+            <h4>The &#39;B&#39; is for Brunch!</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">The “B” is for Brunch!</td>
-</tr>
-</tbody>
-</table>
 
 <p>I was always curious about the ratings and since <a href="https://data.cityofnewyork.us/Health/Restaurant-Grades/gra9-xbjk/data">the data is available online</a>, I figured I’d test it out myself. TLDR: Inspectors prefer not to give grades other than As, don’t like to work weekends, and chain restaurants are quite clean. And there is one mystery that I was unable to crack (skip to the end about how often restaurants get reviewed). All the code can be found <a href="https://github.com/breeko/nyc_restaurants/blob/master/nyc_restaurants.ipynb">here</a>.</p>
 
@@ -227,6 +232,16 @@ Anyone who’s been to New York City likely noticed the restaurant letter grades
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/new-york/">new-york</a>
+            
+        </p>
     
 
     <div class="share">

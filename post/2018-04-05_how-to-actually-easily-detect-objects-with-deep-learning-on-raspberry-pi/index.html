@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ I came across a popular post on hackernews titled How to easily Detect Objects w
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -110,19 +122,12 @@ I came across a popular post on hackernews titled How to easily Detect Objects w
 
 <p>Prior to YOLO, most object detection used sliding windows to detect objects. That basically means that an algorithm scans them image using windows of arbitrary size and checks if there is an object that it detects in there.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*KCpy3xvBTeX5xTRwB1baCA.gif" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*KCpy3xvBTeX5xTRwB1baCA.gif"/> <figcaption>
+            <h4>Sliding window scanning an image</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Sliding window scanning an image</td>
-</tr>
-</tbody>
-</table>
 
 <p>The problem with the sliding window is that the window size has to be determined, and in order to be able to detect objects of different sizes, there likely has to be several window sizes. Not to mention the inefficiency of having to scan over the same area multiple times. For these reasons, sliding windows make real-time object detection impractical and inflexible.</p>
 
@@ -211,6 +216,18 @@ I came across a popular post on hackernews titled How to easily Detect Objects w
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/raspberry-pi/">raspberry-pi</a>
+            
+        </p>
     
 
     <div class="share">

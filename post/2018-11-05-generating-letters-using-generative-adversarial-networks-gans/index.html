@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -59,6 +67,10 @@ In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, G
                         
     <li class="site-nav-item">
         <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
     </li>
 
                     </ul>
@@ -124,67 +136,39 @@ In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, G
 
 <p><em>Convolutional layers</em> consist of an n x n filter. The filter then scans a 2 dimensional array and sets the sum-product of each stride into its output. In the example below, the filter is 3 x 3, the input image is 5 x 5 with a stride of 1 and the output is 3 x 3.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*1ZQThyOaswr6Ul5G-tuXbQ.gif" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*1ZQThyOaswr6Ul5G-tuXbQ.gif"/> <figcaption>
+            <h4>Convolutional layer</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Convolutional layer</td>
-</tr>
-</tbody>
-</table>
 
 <p>Below is another visualization of convolutional layers taken from <a href="https://github.com/vdumoulin/conv_arithmetic">Convolutional Arithmetic visualization</a>. In that example, the filter is 3 x 3, the input is 4 x 4 and the stride is 1. The image is not padded so our final output is 2 x 2. Input is blue, output is green.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*cFMF_uWgUFdVRMZAZ0Bfzg.gif" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*cFMF_uWgUFdVRMZAZ0Bfzg.gif"/> <figcaption>
+            <h4>5 x 5 input, 3 x 3 filter, 2 x 2 output (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">5 x 5 input, 3 x 3 filter, 2 x 2 output (input is blue, output is green)</td>
-</tr>
-</tbody>
-</table>
 
 <p>A <em>transposed convolution</em> does the opposite. It goes from a filter and output to the input.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*KGrCz7aav02KoGuO6znO0w.gif" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*KGrCz7aav02KoGuO6znO0w.gif"/> <figcaption>
+            <h4>2 x 2 input, 3 x 3 filter, 5 x 5 output (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">2 x 2 input, 3 x 3 filter, 5 x 5 output (input is blue, output is green)</td>
-</tr>
-</tbody>
-</table>
 
 <p>The above examples have no padding so the input and output dimensions are different. The convolution shrinks the output (5 x 5 -&gt; 2 x 2), while the transposed convolution grows the output (2 x 2 -&gt; 5 x 5). But we can change the padding so that out input and output are the same dimensions. Below is the same convolution except with padding. In that case, the input and output are both the same (5 x 5). A transposed convolution would look exactly the same.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*1okwhewf5KCtIPaFib4XaA.gif" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="resources/img/1*1okwhewf5KCtIPaFib4XaA.gif"/> <figcaption>
+            <h4>5 x 5 input, 3 x 3 filter, 5 x 5 output, padding of 1 (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">5 x 5 input, 3 x 3 filter, 5 x 5 output, padding of 1 (input is blue, output is green)</td>
-</tr>
-</tbody>
-</table>
 
 <p>Since we want to generate an image from a flat vector, we need to use transposed convolutions. We also want to up-sample to grow our image in each transposed convolution.</p>
 
@@ -406,7 +390,7 @@ Non-trainable params: 4,337,089
 
 <p>Disc status: val_loss: 0.18264 val_acc: 0.96875 loss: 0.35883 acc: 0.83594 epochs: 2</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*5VkGTcsMkFWx37C3UgcSTg.png" alt="" /></p>
+<p><img src="resources/img/1*5VkGTcsMkFWx37C3UgcSTg.png" alt="" /></p>
 
 <p>1 iteration</p>
 
@@ -416,7 +400,7 @@ Non-trainable params: 4,337,089
 
 <p>Iteration 2 is similar but we can see the generator is getting better at tricking the discriminator. This back and forth is common when training GANs.</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*TK_fvb5c5t-xPhJRVEsbJQ.png" alt="" /></p>
+<p><img src="resources/img/1*TK_fvb5c5t-xPhJRVEsbJQ.png" alt="" /></p>
 
 <p>2 iterations</p>
 
@@ -427,19 +411,19 @@ Gen status:  val_loss: 0.86473 val_acc: 0.50000 loss: 0.91149 acc: 0.40625 epoch
 
 <p>Disc status: val_loss: 0.81117 val_acc: 0.68750 loss: 0.53552 acc: 0.74219 epochs: 36</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*2JWb_XcYI0knHAIuvnK1Qw.png" alt="" /></p>
+<p><img src="resources/img/1*2JWb_XcYI0knHAIuvnK1Qw.png" alt="" /></p>
 
 <p>25 iterations</p>
 
 <p>After 500 iterations, the generator is looking somewhat more convincing.</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*aEVdoTioChz-SGgKKQmQBA.png" alt="" /></p>
+<p><img src="resources/img/1*aEVdoTioChz-SGgKKQmQBA.png" alt="" /></p>
 
 <p>500 iterations</p>
 
 <p>Let’s review more output values of the generator in comparison to actual images. Again, the percent probability that the discriminator places on the image being real is above the image. <strong>Green titles mean the image is in fact real, while red means the image is generated.</strong></p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*1G6iplyZeXIVbTaGkCiuFw.png" alt="" /></p>
+<p><img src="resources/img/1*1G6iplyZeXIVbTaGkCiuFw.png" alt="" /></p>
 
 <p>500 iterations</p>
 
@@ -447,7 +431,7 @@ Gen status:  val_loss: 0.86473 val_acc: 0.50000 loss: 0.91149 acc: 0.40625 epoch
 
 <p>After 5,000 iterations, the output is more convincing.</p>
 
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*QREsSZgDaCXlE31lgDjJBA.png" alt="" /></p>
+<p><img src="resources/img/1*QREsSZgDaCXlE31lgDjJBA.png" alt="" /></p>
 
 <p>5,000 iterations</p>
 
@@ -464,6 +448,18 @@ Gen status:  val_loss: 0.86473 val_acc: 0.50000 loss: 0.91149 acc: 0.40625 epoch
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/gans/">gans</a>
+            
+        </p>
     
 
     <div class="share">

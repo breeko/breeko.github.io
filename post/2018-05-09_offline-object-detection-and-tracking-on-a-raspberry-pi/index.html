@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -61,6 +69,10 @@ In my last post I wrote about the YOLO (You Only Look Once) model used for objec
         <a title="Blog" href="/">Blog</a>
     </li>
 
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
                     </ul>
                 </div>
             </header>
@@ -102,19 +114,12 @@ In my last post I wrote about the YOLO (You Only Look Once) model used for objec
 
 <p>I have two cats and I wanted to track their whereabouts when I was not at home. So I setup a raspberry pi to take periodically take a picture, detect the picture for objects and save the object locations down to a json file. After the objects were processed, I then wrote a script that applies a kind of heatmap on a base image with where the provided objects were over all the logs.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*azur79ZVQn3ISAVO_Q5SRw.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*azur79ZVQn3ISAVO_Q5SRw.png"/> <figcaption>
+            <h4>My cats eagerly awaiting the return of my wife</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">My cats eagerly awaiting the return of my wife</td>
-</tr>
-</tbody>
-</table>
 
 <p>The project requires tensorflow, keras, numpy and matplotlib to be installed on your raspberry pi. I have some notes below on getting those installed. Below will set everything up and take a photo every minute until stopped, detect object and save them in json format in the logs directory.</p>
 
@@ -128,19 +133,12 @@ python track.py
 
 <p>python convert.py -i [input_image to draw over] -d [directory of logs] -o [object to detect]</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*pfGIMsqfdbb1F1D2rRnj_A.jpeg" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*pfGIMsqfdbb1F1D2rRnj_A.jpeg"/> <figcaption>
+            <h4>I spy a Rapberry Pi</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">I spy a Rapberry Pi</td>
-</tr>
-</tbody>
-</table>
 
 <h4 id="dependencies">Dependencies</h4>
 
@@ -158,19 +156,7 @@ python track.py
 
 <p>The first step is being able to detect the images.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*VZPf2wq8AIjASwy0IfARCA.png" alt="" /></th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">He loves those stools</td>
-</tr>
-</tbody>
-</table>
+<p>{{ figure src=&ldquo;/post/resources/img/1*VZPf2wq8AIjASwy0IfARCA.png&rdquo; title=&ldquo;He loves those stools&rdquo; }}</p>
 
 <p>I wrote at length in my <a href="https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/">last post</a> about how object detection works, so I won’t go over much here. The file detect.py has a function called detect_from_image that creates the model based on provided config file and weights. The model takes about a minute to load from the config and weights (raspberry pi v3), but it only needs to load once.</p>
 
@@ -276,19 +262,12 @@ python track.py
 
 <p>I didn’t run this long enough to capture any interesting cat location analytics but below is a the final output detecting the placement of cups in my living room throughout the day.</p>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*pE3JF2dGes3h6aMntdcmzQ.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*pE3JF2dGes3h6aMntdcmzQ.png"/> <figcaption>
+            <h4>Someone moved my cup!</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Someone moved my cup!</td>
-</tr>
-</tbody>
-</table>
 
 <p>The code for the heatmap was taken from the <a href="https://stackoverflow.com/questions/42481203/heatmap-on-top-of-image">github answer</a> on a similar question. It is more of a hack and can definitely be improved. The underlying picture becomes faded and its sometimes tricky to get the right alpha balance but it serves its purpose here.</p>
 
@@ -336,6 +315,18 @@ python track.py
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/raspberry-pi/">raspberry-pi</a>
+            
+        </p>
     
 
     <div class="share">

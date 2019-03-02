@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>React Native on ML-Everything</title>
+    <link>https://breeko.github.io/tags/react-native/</link>
+    <description>Recent content in React Native on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 23 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/react-native/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OpenCalc - React Native - Deep Dive (Part 2)</title>
+      <link>https://breeko.github.io/post/2018-07-23_opencalc-react-native-deep-dive-part-2/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-07-23_opencalc-react-native-deep-dive-part-2/</guid>
+      <description>This is part 2 of a 2 part series on OpenCalc, an open-source mobile calculator built with react-native, javascript and flow. The first part dealt with the design and UI components and a previous post addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on iOS and Android.
+  OpenCalc in action   The main controller has a property called brain, which is an instance of CalculatorBrain.</description>
+    </item>
+    
+    <item>
+      <title>OpenCalc - React Native - Deep Dive (Part 1)</title>
+      <link>https://breeko.github.io/post/2018-07-05_opencalc-react-native-deep-dive-part-1/</link>
+      <pubDate>Thu, 05 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-07-05_opencalc-react-native-deep-dive-part-1/</guid>
+      <description>OpenCalc is a mobile calculator written in React Native. Below is a deep dive on the inner workings and design decisions I made on OpenCalc
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc…
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript.</description>
+    </item>
+    
+    <item>
+      <title>A Free Open-Source iPad Calculator and Why Your App Won&#39;t Make You Any Money</title>
+      <link>https://breeko.github.io/post/2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money/</guid>
+      <description>After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote one myself.
+The app store won&amp;rsquo;t make you any money. So why do people keep trying to monetize even the most basic apps? I decided to write simple free open-source apps for everyone, starting with a calculator.
+After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native.</description>
+    </item>
+    
+  </channel>
+</rss>

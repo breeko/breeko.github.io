@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Auto Encoders on ML-Everything</title>
+    <link>https://breeko.github.io/tags/auto-encoders/</link>
+    <description>Recent content in Auto Encoders on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/auto-encoders/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding</title>
+      <link>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</guid>
+      <description>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
+Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
+I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.</description>
+    </item>
+    
+  </channel>
+</rss>

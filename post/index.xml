@@ -27,8 +27,7 @@ With the rise of stock market volatility in the last few months, there has been 
       <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>https://breeko.github.io/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/</guid>
-      <description>ESPN fantasy football projection are free and available historically. Let’s see if they’re any good.
-ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
+      <description>ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
 In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists</description>
     </item>
     
@@ -127,7 +126,7 @@ I came across this article about why the IRS has had trouble to break away from 
       
       <guid>https://breeko.github.io/post/2018-07-23_opencalc-react-native-deep-dive-part-2/</guid>
       <description>This is part 2 of a 2 part series on OpenCalc, an open-source mobile calculator built with react-native, javascript and flow. The first part dealt with the design and UI components and a previous post addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on iOS and Android.
-        OpenCalc in action    The main controller has a property called brain, which is an instance of CalculatorBrain.</description>
+  OpenCalc in action   The main controller has a property called brain, which is an instance of CalculatorBrain.</description>
     </item>
     
     <item>

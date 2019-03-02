@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on ML-Everything</title>
+    <link>https://breeko.github.io/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 05 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Generating Letters Using Generative Adversarial Networks (GANs)</title>
+      <link>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
+      <description>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</description>
+    </item>
+    
+    <item>
+      <title>Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding</title>
+      <link>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</guid>
+      <description>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
+Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
+I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.</description>
+    </item>
+    
+    <item>
+      <title>AI, Optimists vs Pessimists and Why The Singularity Isn’t Near</title>
+      <link>https://breeko.github.io/post/2018-10-08_ai-optimists-vs-pessimists-and-why-the-singularity-isn-t-near/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-10-08_ai-optimists-vs-pessimists-and-why-the-singularity-isn-t-near/</guid>
+      <description>AI has its pessimists and optimists. The one thing they agree on is that the singularity is just around the corner. It’s not.
+AI optimists and pessimists both agree that the singularity is just around the corner. Both think it will transform society. But practitioners think not much of anything will happen.
+Last year I read Ray Kurzweil’s book How to Create a Mind and it made quite an impression on me.</description>
+    </item>
+    
+    <item>
+      <title>Offline Object Detection and Tracking on a Raspberry Pi</title>
+      <link>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
+      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
+      <description>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.
+In my last post I wrote about the YOLO model used for object detection. The most surprising thing was how simple the model is. It’s so simple that it can run offline on a raspberry pi
+In my last post I wrote about the YOLO (You Only Look Once) model used for object detection.</description>
+    </item>
+    
+    <item>
+      <title>How to (actually) easily detect objects with deep learning on raspberry pi</title>
+      <link>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
+      <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
+      <description>YOLO provides state of the art real-time object detection and classification.
+The YOLO image detection model is one of the fastest and most accurate object detection models. Flexible and fast, YOLO is a huge step forward in machine learning.
+I came across a popular post on hackernews titled How to easily Detect Objects with Deep Learning on Raspberry Pi. The article discusses the YOLO object detection model that can be used for real-time object detection and classification.</description>
+    </item>
+    
+    <item>
+      <title>Reinforcement learning with sparse rewards</title>
+      <link>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</guid>
+      <description>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
+This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
+Reinforcement learning shouldn’t be hard. The idea is simple enough:
+ Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.</description>
+    </item>
+    
+    <item>
+      <title>Learning from pixels and Deep Q-Networks with Keras</title>
+      <link>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</link>
+      <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</guid>
+      <description>This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
+This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.</description>
+    </item>
+    
+    <item>
+      <title>Policy Based Reinforcement Learning with Keras</title>
+      <link>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</link>
+      <pubDate>Mon, 12 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</guid>
+      <description>This post will discuss reinforcement learning through policy based agents on an OpenAI environment
+Policy based reinforcement learning is simply training a neural network to remember the actions that worked best in the past. This framework provides incredible flexibility and works across many envs
+This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed on my last post. The next few posts are heavily influenced by Arthur Juliani’s great series on reinforcement learning.</description>
+    </item>
+    
+    <item>
+      <title>Evolutionary Learning Models with OpenAI</title>
+      <link>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</link>
+      <pubDate>Mon, 05 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</guid>
+      <description>Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and…
+Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and surprisingly easy to implement. In this post, I’ll create an evolutionary learning model to use on the OpenAI. The great thing about OpenAI is the simple API and large number of environments to experiment on. So any bot we create in one environment can (in theory) be used on any other environment.</description>
+    </item>
+    
+    <item>
+      <title>Tic-Tac-Toe and Connect-4 using Mini-Max</title>
+      <link>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</guid>
+      <description>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
+A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.</description>
+    </item>
+    
+  </channel>
+</rss>

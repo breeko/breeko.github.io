@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
 <html prefix="og: http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
@@ -57,6 +65,10 @@ With the rise of stock market volatility in the last few months, there has been 
                         
     <li class="site-nav-item">
         <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
     </li>
 
                     </ul>
@@ -129,19 +141,12 @@ f.autofmt_xdate()
 f.tight_layout()
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*T7Jo_IWF4ivJnQ0ri2oy4w.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*T7Jo_IWF4ivJnQ0ri2oy4w.png"/> <figcaption>
+            <h4>S&amp;P 500 performance over last two years</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">S&amp;P 500 performance over last two years</td>
-</tr>
-</tbody>
-</table>
 
 <p>Ideally we would like to predict log returns. Some people <a href="https://towardsdatascience.com/using-lstms-for-stock-market-predictions-tensorflow-9e83999d4653">tried</a> to use a neural network, specifically a recurrent neural network to predict market returns. A recurrent neural network is useful for time series data since it considers historic values. But that seems to be overkill. A neural network is unnecessarily complicated. Let’s see if we can fit a simpler model with using just random numbers!</p>
 
@@ -195,19 +200,12 @@ compare(prediction=prediction, actual=latest_log_prices.values)
 MSE: 0.00797138
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="//post/resources/img/1*7vrADh1zJ6VppGGlA2XEiw.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*7vrADh1zJ6VppGGlA2XEiw.png"/> <figcaption>
+            <h4>Prediction using a seed of 0</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Prediction using a seed of 0</td>
-</tr>
-</tbody>
-</table>
 
 <p>It’s not great but it’s a start. Our model predicted the rise early on this year, but it definitely overshot. This is the point where we’ll want to tune our model’s seed value to better predict the actual market.</p>
 
@@ -245,19 +243,12 @@ compare(prediction, latest_log_prices.values)
 compare(prediction, log_prices.values)
 </code></pre>
 
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/post/resources/img/1*Kqex92Cy6S4ZCA7ZQJx-OQ.png" alt="" /></th>
-</tr>
-</thead>
+<figure>
+    <img src="/post/resources/img/1*Kqex92Cy6S4ZCA7ZQJx-OQ.png"/> <figcaption>
+            <h4>Our model using the best seed</h4>
+        </figcaption>
+</figure>
 
-<tbody>
-<tr>
-<td align="center">Our model using the best seed*</td>
-</tr>
-</tbody>
-</table>
 
 <p>There you have it. According to our model, the market should begin to pick up and reach new heights by the end of the year.</p>
 
@@ -298,6 +289,18 @@ compare(prediction, log_prices.values)
 </div>
 
         <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/finance/">finance</a>, 
+            
+                <a href="/tags/prediction/">prediction</a>, 
+            
+                <a href="/tags/python/">python</a>
+            
+        </p>
     
 
     <div class="share">
