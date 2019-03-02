@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Generating Letters Using Generative Adversarial Networks (GANs) &middot; Branko Blagojevic</title>
+        <meta name="description" content="A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Generating Letters Using Generative Adversarial Networks (GANs)">
+<meta property="og:description" content="A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Generating Letters Using Generative Adversarial Networks (GANs)</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-11-05" itemprop="datePublished">Mon, Nov 5, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake</p>
+
+<p>In my <a href="http://example.org/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/">last post</a> post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.</p>
+
+<p>In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</p>
+
+<p>You can skip to the end if you just want to see the outputs, or check out my <a href="https://github.com/breeko/gans-in-action/blob/master/ch3_gan_emnist.ipynb">jupyter notebook</a>.</p>
+
+<p>Consider a GAN for digits. The generator portion takes random noise and tries to generate a digit that indistinguishable from actual digits. The discriminator tries to distinguish between a fake digit made by the generator and a real digit.</p>
+
+<p><img src="/post/resources/img/1*XKanAdkjQbg1eDDMF2-4ow.png" alt="" /></p>
+
+<h4 id="relationship-between-generator-and-discriminator">Relationship between generator and discriminator</h4>
+
+<blockquote>
+<p>A GAN is just a model consisting of two layers: a generator that generates images and a discriminator that tries to determine whether images are real or generated.</p>
+</blockquote>
+
+<p>The crucial point is that the two models, the generator and discriminator, are linked. You can treat them independently, but that would be a lot harder to train. If un-linked ,the discriminator would just tell the generator that it either believes the image it generated is real or fake and the generator would be left on its own trying to use that to improve the images it generates.</p>
+
+<p>But when the generator has access to the discriminator’s weights, it’s able to use them to build a better model to trick the discriminator. However, it cannot be allowed to do so by just messing with the discriminator’s weights. It needs to improve by changing its own weights and actually generate images that can trick the discriminator.</p>
+
+<p>The downside is that since the two models are doing their own thing, the models can develop whatever method they want to do the discriminating and generating. The real goal is to have the generator generate images that can fool humans but we’re stuck with just a discriminator that we’re training along side a generator.</p>
+
+<h3 id="building-the-generative-adversarial-network">Building the Generative Adversarial Network</h3>
+
+<p>We’ll be building a GAN to generate letters (A-Z both upper and lower case). The GAN consists of a generator and a discriminator.</p>
+
+<h4 id="the-generator">The Generator</h4>
+
+<p>Since our input is 2-dimensional, convolutional layers makes the most sense. The generator will go from some arbitrary input of 100 dimensions and return a 2 dimensional array meant to mimic a letter (28 x 28 x 1). So our input is [None, 100] and our output will be [None, 28, 28, 1].</p>
+
+<p><em>Convolutional layers</em> consist of an n x n filter. The filter then scans a 2 dimensional array and sets the sum-product of each stride into its output. In the example below, the filter is 3 x 3, the input image is 5 x 5 with a stride of 1 and the output is 3 x 3.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*1ZQThyOaswr6Ul5G-tuXbQ.gif" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Convolutional layer</td>
+</tr>
+</tbody>
+</table>
+
+<p>Below is another visualization of convolutional layers taken from <a href="https://github.com/vdumoulin/conv_arithmetic">Convolutional Arithmetic visualization</a>. In that example, the filter is 3 x 3, the input is 4 x 4 and the stride is 1. The image is not padded so our final output is 2 x 2. Input is blue, output is green.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*cFMF_uWgUFdVRMZAZ0Bfzg.gif" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">5 x 5 input, 3 x 3 filter, 2 x 2 output (input is blue, output is green)</td>
+</tr>
+</tbody>
+</table>
+
+<p>A <em>transposed convolution</em> does the opposite. It goes from a filter and output to the input.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*KGrCz7aav02KoGuO6znO0w.gif" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">2 x 2 input, 3 x 3 filter, 5 x 5 output (input is blue, output is green)</td>
+</tr>
+</tbody>
+</table>
+
+<p>The above examples have no padding so the input and output dimensions are different. The convolution shrinks the output (5 x 5 -&gt; 2 x 2), while the transposed convolution grows the output (2 x 2 -&gt; 5 x 5). But we can change the padding so that out input and output are the same dimensions. Below is the same convolution except with padding. In that case, the input and output are both the same (5 x 5). A transposed convolution would look exactly the same.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*1okwhewf5KCtIPaFib4XaA.gif" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">5 x 5 input, 3 x 3 filter, 5 x 5 output, padding of 1 (input is blue, output is green)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Since we want to generate an image from a flat vector, we need to use transposed convolutions. We also want to up-sample to grow our image in each transposed convolution.</p>
+
+<p>Our last transposed convolution will result in the same dimension as the image we’re trying to recreate (28 x 28 x 1). We’ll apply a tanh activation to ensure our outputs are between -1 and 1. We’ll also transform our original images to be between -1 and 1 as well.</p>
+
+<p>Below is the code for our generator.</p>
+
+<pre><code class="language-python">def generator(img_shape, z_dim):  
+    inp = Input(shape=(z_dim,), name=&quot;noise&quot;)  
+      
+    # Dense  
+    x = Dense(7 * 7 * 256, name=&quot;gen_dense&quot;)(inp)  
+    x = LeakyReLU(alpha=0.01, name=&quot;gen_act&quot;)(x)  
+    x = BatchNormalization(name=&quot;gen_batch_norm&quot;)(x)  
+      
+    x = Reshape([7,7,256], name=&quot;gen_reshape&quot;)(x)  
+    x = Dropout(0.4)(x)  
+    x = UpSampling2D(name=&quot;gen_up_sample&quot;)(x)
+
+# Transposed Convolution  
+    x = Conv2DTranspose(128, 5, padding=&quot;same&quot;, name=&quot;gen_conv_1&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;gen_act_1&quot;)(x)  
+    x = BatchNormalization(name=&quot;gen_batch_norm_1&quot;)(x)  
+    x = UpSampling2D(name=&quot;gen_up_sample_1&quot;)(x)
+
+# Transposed Convolution  
+    x = Conv2DTranspose(64, 5, padding=&quot;same&quot;, name=&quot;gen_conv_2&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;gen_act_2&quot;)(x)  
+    x = BatchNormalization(name=&quot;gen_batch_norm_2&quot;)(x)
+
+# Transposed Convolution  
+    x = Conv2DTranspose(32, 5, padding=&quot;same&quot;, name=&quot;gen_conv_3&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;gen_act_3&quot;)(x)  
+    x = BatchNormalization(name=&quot;gen_batch_norm_3&quot;)(x)  
+      
+    out = Conv2DTranspose(1, 5, padding=&quot;same&quot;, name=&quot;gen_conv_4&quot;, activation=&quot;tanh&quot;)(x)  
+      
+    return Model(inp, out, name=&quot;generator&quot;)
+</code></pre>
+
+<p>Here’s what our generator looks like:</p>
+
+<pre><code class="language-python">Layer (type)                 Output Shape              Param #     
+=================================================================  
+noise (InputLayer)           (None, 100)               0           
+gen_dense (Dense)            (None, 12544)             1266944     
+gen_act (LeakyReLU)          (None, 12544)             0           
+gen_batch_norm (BatchNormali (None, 12544)             50176       
+gen_reshape (Reshape)        (None, 7, 7, 256)         0           
+dropout_16 (Dropout)         (None, 7, 7, 256)         0           
+gen_up_sample (UpSampling2D) (None, 14, 14, 256)       0           
+gen_conv_1 (Conv2DTranspose) (None, 14, 14, 128)       819328      
+gen_act_1 (LeakyReLU)        (None, 14, 14, 128)       0           
+gen_batch_norm_1 (BatchNorma (None, 14, 14, 128)       512         
+gen_up_sample_1 (UpSampling2 (None, 28, 28, 128)       0           
+gen_conv_2 (Conv2DTranspose) (None, 28, 28, 64)        204864      
+gen_act_2 (LeakyReLU)        (None, 28, 28, 64)        0           
+gen_batch_norm_2 (BatchNorma (None, 28, 28, 64)        256         
+gen_conv_3 (Conv2DTranspose) (None, 28, 28, 32)        51232       
+gen_act_3 (LeakyReLU)        (None, 28, 28, 32)        0           
+gen_batch_norm_3 (BatchNorma (None, 28, 28, 32)        128         
+gen_conv_4 (Conv2DTranspose) (None, 28, 28, 1)         801         
+=================================================================  
+Total params: 2,394,241  
+Trainable params: 2,368,705  
+Non-trainable params: 25,536
+</code></pre>
+
+<h4 id="the-discriminator">The Discriminator</h4>
+
+<p>Our discriminator is similar to the generator except instead of using <em>transposed convolutional</em> layers, we’ll just be using <em>convolutional</em> layers. As we used up-sampling in the generator, we’ll use strides of 2 in our discriminator so we can shrink the output at each convolution.</p>
+
+<p>Our final output will be a value between 0 and 1 signifying whether the discriminator believes that the image is real or fake. For that we use a sigmoid activation.</p>
+
+<pre><code class="language-python">def discriminator(img_shape):  
+    inp = Input(shape=[*img_shape, 1], name=&quot;image&quot;)  
+      
+    x = Reshape([*img_shape, 1], name=&quot;disc_reshape&quot;)(inp)  
+      
+    x = Conv2D(64, 5, strides=2, padding=&quot;same&quot;, name=&quot;disc_conv_1&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;disc_act_1&quot;)(x)  
+    x = Dropout(0.4)(x)  
+      
+    x = Conv2D(128, 5, strides=2, padding=&quot;same&quot;, name=&quot;disc_conv_2&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;disc_act_2&quot;)(x)  
+    x = Dropout(0.4)(x)  
+      
+    x = Conv2D(256, 5, strides=2, padding=&quot;same&quot;, name=&quot;disc_conv_3&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;disc_act_3&quot;)(x)  
+    x = Dropout(0.4)(x)  
+      
+    x = Conv2D(512, 5, strides=1, padding=&quot;same&quot;, name=&quot;disc_conv_4&quot;)(x)  
+    x = LeakyReLU(alpha=0.01, name=&quot;disc_act_4&quot;)(x)  
+    x = Dropout(0.4)(x)
+
+x = Flatten()(x)
+
+out = Dense(1, activation=&quot;sigmoid&quot;, name=&quot;disc_out&quot;)(x)
+
+return Model(inp, out, name=&quot;discriminator&quot;)
+</code></pre>
+
+<p>This is what our discriminator will look like:</p>
+
+<pre><code class="language-python">_________________________________________________________________  
+_________________________________________________________________  
+Layer (type)                 Output Shape              Param #     
+=================================================================  
+image (InputLayer)           (None, 28, 28, 1)         0           
+_________________________________________________________________  
+disc_reshape (Reshape)       (None, 28, 28, 1)         0           
+_________________________________________________________________  
+disc_conv_1 (Conv2D)         (None, 14, 14, 64)        1664        
+_________________________________________________________________  
+disc_act_1 (LeakyReLU)       (None, 14, 14, 64)        0           
+_________________________________________________________________  
+dropout_7 (Dropout)          (None, 14, 14, 64)        0           
+_________________________________________________________________  
+disc_conv_2 (Conv2D)         (None, 7, 7, 128)         204928      
+_________________________________________________________________  
+disc_act_2 (LeakyReLU)       (None, 7, 7, 128)         0           
+_________________________________________________________________  
+dropout_8 (Dropout)          (None, 7, 7, 128)         0           
+_________________________________________________________________  
+disc_conv_3 (Conv2D)         (None, 4, 4, 256)         819456      
+_________________________________________________________________  
+disc_act_3 (LeakyReLU)       (None, 4, 4, 256)         0           
+_________________________________________________________________  
+dropout_9 (Dropout)          (None, 4, 4, 256)         0           
+_________________________________________________________________  
+disc_conv_4 (Conv2D)         (None, 4, 4, 512)         3277312     
+_________________________________________________________________  
+disc_act_4 (LeakyReLU)       (None, 4, 4, 512)         0           
+_________________________________________________________________  
+dropout_10 (Dropout)         (None, 4, 4, 512)         0           
+_________________________________________________________________  
+flatten_2 (Flatten)          (None, 8192)              0           
+_________________________________________________________________  
+disc_out (Dense)             (None, 1)                 8193        
+=================================================================  
+Total params: 4,311,553  
+Trainable params: 0  
+Non-trainable params: 4,311,553
+</code></pre>
+
+<h4 id="the-generative-adversarial-network">The Generative Adversarial Network</h4>
+
+<p>Since the generator output is the same as the discriminator input, we can just connect the two to form the GAN.</p>
+
+<pre><code class="language-python">def generative_adversarial_model(img_shape, z_dim):  
+    gen = generator(img_shape, z_dim)  
+    disc = discriminator(img_shape)  
+      
+    inp = Input(shape=(*gen.input_shape[1:],), name=&quot;image&quot;)  
+    img = gen(inp)
+
+    # NOTE: We do not want the discriminator to be trainable  
+    disc.trainable = False
+
+    prediction = disc(img)
+
+    gan = Model(inp, prediction, name=&quot;gan&quot;)  
+    gan.compile(loss=&quot;binary_crossentropy&quot;, optimizer=&quot;adam&quot;, metrics=[&quot;accuracy&quot;])
+
+    return gan
+</code></pre>
+
+<p>The important thing to note is that when we combine the two, we have to make sure the discriminator is not trainable. We don’t want the generator to improve just by messing with the discriminator’s weights.</p>
+
+<p>Here’s what the final GAN looks like:</p>
+
+<pre><code class="language-python">_________________________________________________________________  
+Layer (type)                 Output Shape              Param #     
+=================================================================  
+image (InputLayer)           (None, 100)               0           
+_________________________________________________________________  
+generator (Model)            (None, 28, 28, 1)         2394241     
+_________________________________________________________________  
+discriminator (Model)        (None, 1)                 4311553     
+=================================================================  
+Total params: 6,705,794  
+Trainable params: 2,368,705  
+Non-trainable params: 4,337,089
+</code></pre>
+
+<h3 id="training-the-generative-adversarial-network">Training the Generative Adversarial Network</h3>
+
+<h4 id="unrealistic-generator-output">Unrealistic Generator Output</h4>
+
+<p>Training a GAN is tricky for a number of reasons. As mentioned earlier, the discriminator will do its own thing in determining whether an image is real or not. So its important to look at the output periodically to make sure its in line with what we think a real image looks like.</p>
+
+<h4 id="mismatch-between-generator-and-discriminator">Mismatch Between Generator and Discriminator</h4>
+
+<p>Another issue is that checking whether an image is real or not (discriminator) is a lot easier task than generating a valid looking image from random input (generator). So there’s naturally a mismatch between the generator and discriminator. To address that, we can do several things. One is to make the generator more powerful than the discriminator. The other thing we can do is to train the generator more than the discriminator.</p>
+
+<p>While we’re training, it’s helpful to see how the generator and discriminator is doing in relationship to each other. We want them to be roughly equal strength during training and train the simultaneously. We’ll switch between training the generator and the discriminator.</p>
+
+<p>We can put in a criteria to say the generator / discriminator is good enough before we move on to train the discriminator / generator.</p>
+
+<blockquote>
+<p>Practically speaking, the generator can never get above 50% because if the discriminator was wrong more often than not, it could just simply switch its output to predict the opposite and attain a higher accuracy.</p>
+</blockquote>
+
+<p>For the same reason, the generator can’t get above 50% accuracy. Let’s say good enough is 20% validation accuracy for the generator and 50% validation accuracy for the discriminator.</p>
+
+<h4 id="proportional-representation-of-different-characters">Proportional Representation of Different Characters</h4>
+
+<p>Another problem is that our generator can just learn to create one type of character indistinguishable from actual input. This isn’t that big of a problem since our discriminator can just call all those fake and still do fairly well even though it would be mislabeling a large number of real images. But ignoring classes and distributions as we’ll do does not guarantee out generator will be able to generate all possible characters. It just maps a random input to just about any output that resembles a letter. It’s a bit surprising the amount of diversity we get in the end.</p>
+
+<h4 id="training">Training</h4>
+
+<p>Below is the training function we’ll use. It’ll switch between training the GAN, which is essentially just training the generator portion. The input will be a random vector and it will try to fool the discriminator into thinking its real. Remember that we made the discriminator portion of the GAN un-trainable. We’ll then train the discriminator separately.</p>
+
+<h3 id="results">Results</h3>
+
+<p>After 1 epoch, we can see the generator is not exactly outputting random noise, but its certainly not a character. Above each image, we can see the discriminator’s output for that particular image. A score of 1.0 means the discriminator is 100% sure its a real image while a score of 0.0 means it thinks there’s a 0% chance of it being real.</p>
+
+<p>Gen status:  val_loss: 0.69608 val_acc: 0.25000 loss: 0.70158 acc: 0.39844 epochs: 4.</p>
+
+<p>Disc status: val_loss: 0.18264 val_acc: 0.96875 loss: 0.35883 acc: 0.83594 epochs: 2</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*5VkGTcsMkFWx37C3UgcSTg.png" alt="" /></p>
+
+<p>1 iteration</p>
+
+<p>One thing to note is that the number of batches we used to train the generator was 4 compared to 2 for that of the discriminator. The final validation accuracy was 25% and 97% for the generator and discriminator, respectively.</p>
+
+<p>As a side note, gen status is collected immediately after the generator is trained, so the actual generator accuracy at the end of the iteration is lower since the discriminator has been trained at the time the statistic was calculated.</p>
+
+<p>Iteration 2 is similar but we can see the generator is getting better at tricking the discriminator. This back and forth is common when training GANs.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*TK_fvb5c5t-xPhJRVEsbJQ.png" alt="" /></p>
+
+<p>2 iterations</p>
+
+<p>By the 25th iteration, we can see something sort of resembling letters. We can also see that we trained the generator on 51 batches while only training the discriminator for 36 batches. Despite that, the accuracy on the discriminator is 68%.</p>
+
+<p>25 iteration.<br />
+Gen status:  val_loss: 0.86473 val_acc: 0.50000 loss: 0.91149 acc: 0.40625 epochs: 51</p>
+
+<p>Disc status: val_loss: 0.81117 val_acc: 0.68750 loss: 0.53552 acc: 0.74219 epochs: 36</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*2JWb_XcYI0knHAIuvnK1Qw.png" alt="" /></p>
+
+<p>25 iterations</p>
+
+<p>After 500 iterations, the generator is looking somewhat more convincing.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*aEVdoTioChz-SGgKKQmQBA.png" alt="" /></p>
+
+<p>500 iterations</p>
+
+<p>Let’s review more output values of the generator in comparison to actual images. Again, the percent probability that the discriminator places on the image being real is above the image. <strong>Green titles mean the image is in fact real, while red means the image is generated.</strong></p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*1G6iplyZeXIVbTaGkCiuFw.png" alt="" /></p>
+
+<p>500 iterations</p>
+
+<p>So we’re going in the right direction although we’re not there yet. The discriminator is still doing a fairly good job and although the generators output is somewhat believable, some images don’t actually resemble characters, just images generated using similar lines. We should continue training.</p>
+
+<p>After 5,000 iterations, the output is more convincing.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*QREsSZgDaCXlE31lgDjJBA.png" alt="" /></p>
+
+<p>5,000 iterations</p>
+
+<p>The output of the generator is considerably better. The discriminator is still correctly marking almost all of the fake images as fakes, but it’s getting a lot of false positives as well. And most importantly, a significant portion of the generated images look as though they are real, at least to me.</p>
+
+<h3 id="next-steps">Next Steps</h3>
+
+<p>GANs are incredibly useful but notoriously difficult to train. There has been a lot of work done with stopping criteria and better loss functions. <a href="https://medium.com/@jonathan_hui/gan-wasserstein-gan-wgan-gp-6a1a2aa1b490">Wasserstein GAN (WGAN) and the WGAN-Gradient penalty</a> are objectively better to our model, but they share the same basic structure. I may write my own implementation of WGANs in a future post, or you can see the <a href="https://github.com/eriklindernoren/Keras-GAN/blob/master/wgan/wgan.py">Keras implementation</a>.</p>
+
+<p>The other difficult part is finding the right model structures, but that’s a common problem in all of machine learning. What makes GANs particularly annoying is that you cannot rely simply on the loss function in determining whether a model structure is suited to the task. But you have to continuously monitor the output. Depending on what you’re training, there may be some ways around it, but in general monitoring the output is a big part of creating useful GANs.</p>
+
+<p>By Branko Blagojevic November 5, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Generating%20Letters%20Using%20Generative%20Adversarial%20Networks%20%28GANs%29&url=http%3a%2f%2fexample.org%2fpost%2f2018-11-05-generating-letters-using-generative-adversarial-networks-gans%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-11-05-generating-letters-using-generative-adversarial-networks-gans%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ML-Everything</title>
+    <link>http://example.org/</link>
+    <description>Recent content on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Predicting the Stock Market, p-Hacking and Why You Should Be Bullish</title>
+      <link>http://example.org/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</guid>
+      <description>Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?
+With the rise of stock market volatility in the last few months, there has been a renewed interest in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money.</description>
+    </item>
+    
+    <item>
+      <title>Using ESPN Forecasts to Make Draft King Final Fantasy Football Picks</title>
+      <link>http://example.org/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-11-06-using-espn-forecasts-to-make-draft-king-final-fantasy-football-picks/</guid>
+      <description>ESPN fantasy football projection are free and available historically. Let’s see if they’re any good.
+ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power
+In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists</description>
+    </item>
+    
+    <item>
+      <title>Generating Letters Using Generative Adversarial Networks (GANs)</title>
+      <link>http://example.org/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
+      <description>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</description>
+    </item>
+    
+    <item>
+      <title>Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding</title>
+      <link>http://example.org/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</guid>
+      <description>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
+Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
+I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.</description>
+    </item>
+    
+    <item>
+      <title>Using Linear Regression to Make Fantasy Football Picks</title>
+      <link>http://example.org/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</guid>
+      <description>Optimize your fantasy football picks with a linear regression in just a few lines of code.
+Using a regression to predict fantasy football performance is easier than you think in R. With a few lines of code, you can predict player performance and optimize your lineup.
+In a prior post, I wrote about using linear programming to optimize your fantasy football picks. Linear programming ensures you pick the best lineup based on some points projections and constraints (e.</description>
+    </item>
+    
+    <item>
+      <title>AI, Optimists vs Pessimists and Why The Singularity Isn’t Near</title>
+      <link>http://example.org/post/2018-10-08_ai-optimists-vs-pessimists-and-why-the-singularity-isn-t-near/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-10-08_ai-optimists-vs-pessimists-and-why-the-singularity-isn-t-near/</guid>
+      <description>AI has its pessimists and optimists. The one thing they agree on is that the singularity is just around the corner. It’s not.
+AI optimists and pessimists both agree that the singularity is just around the corner. Both think it will transform society. But practitioners think not much of anything will happen.
+Last year I read Ray Kurzweil’s book How to Create a Mind and it made quite an impression on me.</description>
+    </item>
+    
+    <item>
+      <title>Using Python and Linear Programming to Optimize Fantasy Football Picks</title>
+      <link>http://example.org/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
+      <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
+      <description>Automated optimal fantasy football selection using linear programming
+Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
+I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.</description>
+    </item>
+    
+    <item>
+      <title>Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database</title>
+      <link>http://example.org/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</guid>
+      <description>Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.
+Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.
+In my last post I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes.</description>
+    </item>
+    
+    <item>
+      <title>Reddit Bots, Drinking from the Fire Hose and Image Colorization</title>
+      <link>http://example.org/post/2018-09-07_reddit-bots-drinking-from-the-fire-hose-and-image-colorization/</link>
+      <pubDate>Fri, 07 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-09-07_reddit-bots-drinking-from-the-fire-hose-and-image-colorization/</guid>
+      <description>My latest obsession has been writing bots for Reddit. Reddit is an online forum that hosts a range of topics, everything from news and…
+My latest obsession has been writing bots for Reddit. Reddit is an online forum that hosts a range of topics, everything from news and politics to strange, possibly nsfw captions to WikiHow images. But mostly, it’s just memes.
+What’s nice about Reddit is the sheer volume of content.</description>
+    </item>
+    
+    <item>
+      <title>Lisp, Floating Points and Muller&#39;s Recurrence</title>
+      <link>http://example.org/post/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</link>
+      <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</guid>
+      <description>Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.
+Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.
+I came across this article about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point.</description>
+    </item>
+    
+    <item>
+      <title>OpenCalc - React Native - Deep Dive (Part 2)</title>
+      <link>http://example.org/post/2018-07-23_opencalc-react-native-deep-dive-part-2/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-07-23_opencalc-react-native-deep-dive-part-2/</guid>
+      <description>This is part 2 of a 2 part series on OpenCalc, an open-source mobile calculator built with react-native, javascript and flow. The first part dealt with the design and UI components and a previous post addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on iOS and Android.
+        OpenCalc in action    The main controller has a property called brain, which is an instance of CalculatorBrain.</description>
+    </item>
+    
+    <item>
+      <title>OpenCalc - React Native - Deep Dive (Part 1)</title>
+      <link>http://example.org/post/2018-07-05_opencalc-react-native-deep-dive-part-1/</link>
+      <pubDate>Thu, 05 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-07-05_opencalc-react-native-deep-dive-part-1/</guid>
+      <description>OpenCalc is a mobile calculator written in React Native. Below is a deep dive on the inner workings and design decisions I made on OpenCalc
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc…
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript.</description>
+    </item>
+    
+    <item>
+      <title>A Free Open-Source iPad Calculator and Why Your App Won&#39;t Make You Any Money</title>
+      <link>http://example.org/post/2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money/</guid>
+      <description>After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote one myself.
+The app store won&amp;rsquo;t make you any money. So why do people keep trying to monetize even the most basic apps? I decided to write simple free open-source apps for everyone, starting with a calculator.
+After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native.</description>
+    </item>
+    
+    <item>
+      <title>Offline Object Detection and Tracking on a Raspberry Pi</title>
+      <link>http://example.org/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
+      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
+      <description>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.
+In my last post I wrote about the YOLO model used for object detection. The most surprising thing was how simple the model is. It’s so simple that it can run offline on a raspberry pi
+In my last post I wrote about the YOLO (You Only Look Once) model used for object detection.</description>
+    </item>
+    
+    <item>
+      <title>How to (actually) easily detect objects with deep learning on raspberry pi</title>
+      <link>http://example.org/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
+      <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
+      <description>YOLO provides state of the art real-time object detection and classification.
+The YOLO image detection model is one of the fastest and most accurate object detection models. Flexible and fast, YOLO is a huge step forward in machine learning.
+I came across a popular post on hackernews titled How to easily Detect Objects with Deep Learning on Raspberry Pi. The article discusses the YOLO object detection model that can be used for real-time object detection and classification.</description>
+    </item>
+    
+    <item>
+      <title>Everything you’ve ever wanted to know about New York City’s restaurant ratings</title>
+      <link>http://example.org/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</link>
+      <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</guid>
+      <description>What do the food ratings tell us about restaurants and health departments?
+Every restaurant in NYC receives a letter grade by the city. Using this information we can draw insights into safety and where to eat.
+Anyone who’s been to New York City likely noticed the restaurant letter grades on virtually all eating establishments. The letter grades were introduced in 2010 and range from A through C, with A being the highest (best) rating.</description>
+    </item>
+    
+    <item>
+      <title>Nassim Taleb, Loaded Questions and Statistics for Hackers</title>
+      <link>http://example.org/post/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</link>
+      <pubDate>Mon, 12 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</guid>
+      <description>Nassim Taleb baits financial professionals and students into an elementary mistake in probability. However a simple check could have helped.
+Probability and statistics is hard and not always intuitive. But with modern computing, we can run simulations to get the answers, or at least tell us when we’re way off. Here I describe such methods.
+In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came across a paper Taleb wrote titled “We Don’t Quite Know What We Are Talking About When We Talk About Volatility”.</description>
+    </item>
+    
+    <item>
+      <title>Nassim Taleb, Absorbing Barriers and House Money</title>
+      <link>http://example.org/post/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</link>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</guid>
+      <description>A recent EconTalk podcast featured Nassim Taleb in which he spoke about his new book Skin in the Game. During the discussion, he criticized…
+A recent EconTalk podcast featured Nassim Taleb in which he spoke about his new book Skin in the Game. During the discussion, he criticized behavioral economists and social scientists for designing “one-shot” type experiments and trying to draw real life insights from the results. When in actuality, the more reasonable scenario is a series of interactions.</description>
+    </item>
+    
+    <item>
+      <title>Reinforcement learning with sparse rewards</title>
+      <link>http://example.org/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</guid>
+      <description>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
+This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
+Reinforcement learning shouldn’t be hard. The idea is simple enough:
+ Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.</description>
+    </item>
+    
+    <item>
+      <title>Learning from pixels and Deep Q-Networks with Keras</title>
+      <link>http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</link>
+      <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</guid>
+      <description>This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
+This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.</description>
+    </item>
+    
+    <item>
+      <title>Policy Based Reinforcement Learning with Keras</title>
+      <link>http://example.org/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</link>
+      <pubDate>Mon, 12 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</guid>
+      <description>This post will discuss reinforcement learning through policy based agents on an OpenAI environment
+Policy based reinforcement learning is simply training a neural network to remember the actions that worked best in the past. This framework provides incredible flexibility and works across many envs
+This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed on my last post. The next few posts are heavily influenced by Arthur Juliani’s great series on reinforcement learning.</description>
+    </item>
+    
+    <item>
+      <title>Evolutionary Learning Models with OpenAI</title>
+      <link>http://example.org/post/2018-02-05_evolutionary-learning-models-with-openai/</link>
+      <pubDate>Mon, 05 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-02-05_evolutionary-learning-models-with-openai/</guid>
+      <description>Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and…
+Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and surprisingly easy to implement. In this post, I’ll create an evolutionary learning model to use on the OpenAI. The great thing about OpenAI is the simple API and large number of environments to experiment on. So any bot we create in one environment can (in theory) be used on any other environment.</description>
+    </item>
+    
+    <item>
+      <title>Tic-Tac-Toe and Connect-4 using Mini-Max</title>
+      <link>http://example.org/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</guid>
+      <description>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
+A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.</description>
+    </item>
+    
+  </channel>
+</rss>

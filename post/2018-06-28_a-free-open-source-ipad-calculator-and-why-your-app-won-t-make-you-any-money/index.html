@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>A Free Open-Source iPad Calculator and Why Your App Won&#39;t Make You Any Money &middot; Branko Blagojevic</title>
+        <meta name="description" content="After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote one myself.
+The app store won&rsquo;t make you any money. So why do people keep trying to monetize even the most basic apps? I decided to write simple free open-source apps for everyone, starting with a calculator.
+After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="A Free Open-Source iPad Calculator and Why Your App Won&#39;t Make You Any Money">
+<meta property="og:description" content="After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote one myself.
+The app store won&rsquo;t make you any money. So why do people keep trying to monetize even the most basic apps? I decided to write simple free open-source apps for everyone, starting with a calculator.
+After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">A Free Open-Source iPad Calculator and Why Your App Won&#39;t Make You Any Money</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-06-28" itemprop="datePublished">Thu, Jun 28, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote one myself.</p>
+
+<p>The app store won&rsquo;t make you any money. So why do people keep trying to monetize even the most basic apps? I decided to write simple free open-source apps for everyone, starting with a calculator.</p>
+
+<p>After an unsatisfactory selection of free (free to download, no ads/tracking or in app purchases) iPad calculator apps, I wrote and open sourced my own using React Native. The design is heavily inspired by <a href="https://play.google.com/store/apps/details?id=com.google.android.calculator&amp;hl=en">Google’s calculator app for Android</a>. The iOS and iPad app store in particular is spammy and unprofitable for developers due to saturation and insurmountable app store economics. Available for <a href="https://itunes.apple.com/us/app/opencalc/id1403173317?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.twelve31labs.opencalc">Android</a>. Full source is available at <a href="https://github.com/breeko/OpenCalc">GitHub</a>.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*vQmqq8eQZBbRxkDPvf49_g.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">OpenCalc on iPad</td>
+</tr>
+</tbody>
+</table>
+
+<p>This post will discuss some of my thoughts on the mobile app market. A more detailed technical post on OpenCalc will be in a separate post.</p>
+
+<h3 id="lack-of-ipad-apps">Lack of iPad Apps</h3>
+
+<p>I’ve always been surprised at the lack of quality iPad apps. I haven’t done an exhaustive review, but my impression is that many apps that should be supported on iPad are not. It’s incredible to think that one of the most popular apps, WhatsApp, is not available. Also, Instagram is only available as a scaled up iPhone version. Given that XCode had <a href="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html">autolayout</a> for some time, porting an iPhone app to support iPads should be simple, especially for Facebook. There doesn’t have to be an entirely new experience necessarily, just something better than this:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*Kgz_fsFbVG7VgBO2gJOx5Q.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Instagram on iPad</td>
+</tr>
+</tbody>
+</table>
+
+<p>Apple also decided against including a native calculator app on iPad. They have a perfectly good iPhone calculator app but apparently <a href="http://www.businessinsider.com/why-isnt-the-ipad-shipping-with-a-calculator-app-steve-jobs-didnt-like-the-way-it-looked-2010-3">Steve Jobs didn’t like how the calculator looked blown up on the iPad</a>. So now iPad users have to deal with spammy third-party calculator apps.</p>
+
+<p>There are other calculator apps for the iPad that are slightly better, but from the popular ones that I’ve seen, they’re all monetized in one way or another. Banner ads and pop-ups are popular and some have in-app-purchases (IAP) for more functionality.</p>
+
+<blockquote>
+<p>Calculator apps should not have pop-up ads</p>
+</blockquote>
+
+<p>Apps for iOS tend to be more heavily monetized when compared to Android apps. That may have to do with Apple charging $100+ a year compared to the flat $30 fee charged by Google.</p>
+
+<h3 id="your-app-won-t-make-any-money">Your App Won’t Make Any Money</h3>
+
+<p>Your app revenue won’t allow you to retire early.</p>
+
+<p>Your app revenue won’t allow you to quit your 9–5 and work on your project full time.</p>
+
+<p>Your app revenue won’t justify a few hours a week in maintenance.</p>
+
+<p>Your app revenue won’t be enough to bother remembering your iCloud login.</p>
+
+<p>So if you’re not going to make any money on ads, you may as well open-source your app.</p>
+
+<p>I’m not an expert but I have published 4 apps (<a href="https://itunes.apple.com/us/developer/twelve-31-labs/id997566971?mt=8">2 iOS games — one with optional ads, the other with ads, 1 iOS</a>/<a href="https://play.google.com/store/apps/details?id=com.twelve31labs.lujafitness&amp;hl=en">Android fitness app — free with IAP</a>). But I see that there is something terribly wrong with the app store model from a revenue perspective. The main problems are discovery, a saturated market and cost of marketing.</p>
+
+<h4 id="discovery-why-no-one-will-download-your-app">Discovery: Why No One Will Download Your App</h4>
+
+<p>Apple is considerably worse than Android. I imagine most people search on the App store and just pick one of the top 5 results, based on price and ratings. That’s what I do at least. I’m sure there are iPad calculator apps that are less spammy, but user’s aren’t going to download them if they can’t find them.</p>
+
+<p>Consider the search term “calculator” made on an iPad:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*MWqE-k9X08hCIJsg0BlIoQ.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Top-2 pages of calculator apps on iOS</td>
+</tr>
+</tbody>
+</table>
+
+<p>I haven’t reviewed every top calculator apps, but I did check out a few. <em>The Calculator</em> (top non-ad result) has full screen pop-up ads and a banner ad. Not sure what <em>The Beautify of Science</em> is but it looks like some kind of story. The fourth one <em>Calculator — Number Systems</em> seems like an irregular use-case. <em>Calculator’</em> and <em>Calculator*</em> are simple and functional enough. But they both have a banner ad and very limited functionality. I mean <em>very</em> limited.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*F1EtkiGY0DkyafpRzUChcQ.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Calculator’</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Aren’t you glad Steve Jobs didn’t want iPad users to experience an ugly blown-up version of the iPhone calculator?</p>
+</blockquote>
+
+<p>To be fair, <em>Calculator+</em> (top result second page) has no ads and is probably my favorite calculator app. But it’s missing a few features I would like.</p>
+
+<p>I don’t expect free great apps but the top results are especially spammy. And a calculator app is a relatively simple app that is sometimes <a href="https://itunes.apple.com/us/course/developing-ios-8-apps-with-swift/id961180099">used as a tutorial in learning app development.</a> Maybe less spammy free calculator apps exist, but Apple is failing to funnel users to the best experience.</p>
+
+<p><strong>A Saturated Market</strong></p>
+
+<p>There are approximately <a href="https://www.statista.com/statistics/276623/number-of-apps-available-in-leading-app-stores/">2 million apps</a> on the Apple app store. The Apple app store has been around since 2008. Even assuming a linear growth of apps available, there have been an average of 54 apps released every day. So its understandable that Apple can’t manage that well.</p>
+
+<h4 id="cost-of-marketing-why-your-app-won-t-make-any-money">Cost of Marketing: Why Your App Won’t Make Any Money</h4>
+
+<p>To drive download numbers you can market. I’ve used Facebook and Google AdSense to market and found them effective in terms of reaching your target audience.</p>
+
+<p>At time of writing, if you were to open a Facebook ad campaign optimized for app downloads, $40 would get you an estimated 10–62 app installs. Let’s call it about $1 an app install. This is in line with my experience using Facebook and Google AdSense for a free app. So you have to get at least $1 of value from a download to break even. But consider the following (from 2016):</p>
+
+<ol>
+<li><a href="http://fortune.com/2016/05/19/app-economy/">Fewer than 25% of users will return to a new app after first use</a></li>
+<li><a href="http://fortune.com/2016/05/19/app-economy/">Retention drops to 11% by the first week</a></li>
+<li><a href="http://fortune.com/2016/05/19/app-economy/">A full 94% of revenue in the App Store comes from just 1% of all publishers</a></li>
+<li><a href="https://marketingland.com/app-purchases-dominate-ads-app-store-lifetime-revenue-hits-71-billion-183953">Only about 5% of users are making in-app purchases</a></li>
+</ol>
+
+<p>If you’re using IAP to drive revenue, and 5% of users make in-app-purchases, then your average paid user would have to spend $20 to justify a $1 acquisition cost (1 / 0.05). Apple takes a 30% cut as well so the actual amount is ~$28.5 (1 / 0.05 / 0.7) and the tax man takes his share as well. This is using the generous assumption that a “user” is anyone who downloads your app. And that’s just to break even on what it costs to advertise.</p>
+
+<blockquote>
+<p>To justify the $1 cost per acquisition marketing cost, the average paying user must spend over $28.5</p>
+</blockquote>
+
+<p>How about ad revenue?</p>
+
+<p>Assume that your <a href="https://www.minterest.com/how-much-traffic-do-you-need-to-make-money/">average revenue per click is $0.25 and your click-through rate is 1%</a>. Also, remember that retention rate is only 11% by the first week. Then the number of impressions you would have to make per user to justify a $1 user acquisition is ~3,600 (1 / (0.11 * 0.25 * 0.01)). You can have pop-ups or videos that probably pay more, but the numbers would still be unrealistic.</p>
+
+<blockquote>
+<p>Each regular user would have to see 3,600 banner ads to justify a $1 cost of acquisition</p>
+</blockquote>
+
+<p>You can also generate original content via social networks and try to market more organically, but I’m not convinced that’s any cheaper when considering the time investment and luck required. The online advertising business is mature and impressions/influence are fairly priced.</p>
+
+<p>Finally, you can pay for downloads and drive your numbers that way. I’m not too familiar with the overall market, but ethical concerns aside, it is likely a cat-and-mouse game with Apple and Google that is risky over the long-term. I could be wrong though.</p>
+
+<blockquote>
+<p>To paraphrase Yogi Berra, nobody publishes apps anymore. It’s too crowded</p>
+</blockquote>
+
+<h3 id="how-is-this-sustainable">How is this Sustainable?</h3>
+
+<p>I’m not sure that it is. Marketing and micro-targeting have been getting much better, which is driving advertising effectiveness. But at the same time, businesses may not be critical enough to see whether their marketing is actually economically effective. Large global brands may get a lot of ancillary benefits from the marketing as well that smaller organizations wouldn’t get. The only app developers I know that make any money are those that are paid to build apps for other people.</p>
+
+<h3 id="creating-simple-non-spammy-universal-apps">Creating Simple Non-Spammy Universal Apps</h3>
+
+<p>I would like to contribute to a series of non-monetized open source apps. Its possible that many truly free apps exist and I just cannot find them. In that case, my efforts to create simple free apps won’t make an impact. But it’s worth trying.</p>
+
+<p>I have a number of things that I would like to add to OpenCalc, but I’m going to move on to other apps. If anyone would like to contribute, here are my thoughts on additions, in order of importance:</p>
+
+<ol>
+<li>Break out copy-paste to be accessible by touching the text. Use the extra two buttons to add support for degrees and radians and inverse geometric functions</li>
+<li>Support split-screen on Android (font size needs to adjust better for response and buttons)</li>
+<li>History</li>
+<li>Settings (pretty much anything in the Configs file as well as font sizes)</li>
+<li>Different color schemes</li>
+<li>Animations</li>
+<li>Refactor everything</li>
+</ol>
+
+<p>Pull requests are welcome.</p>
+
+<h3 id="future-apps">Future Apps</h3>
+
+<p>A list of future apps I would like to build</p>
+
+<ol>
+<li>Financial calculator similar to <a href="https://education.ti.com/en/products/calculators/financial-calculators/baii-plus">BA II Plus calculator</a>. An <a href="https://itunes.apple.com/us/app/ba-ii-plus-tm-financial-calculator/id329739750?mt=8">app</a> already exists but is expensive ($15)</li>
+<li>A simple microphone recording app</li>
+<li>A single player Go app</li>
+<li>A weather app for iPad</li>
+</ol>
+
+<p>Suggestions are welcome.</p>
+
+<p>By Branko Blagojevic on June 28, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=A%20Free%20Open-Source%20iPad%20Calculator%20and%20Why%20Your%20App%20Won%27t%20Make%20You%20Any%20Money&url=http%3a%2f%2fexample.org%2fpost%2f2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-06-28_a-free-open-source-ipad-calculator-and-why-your-app-won-t-make-you-any-money%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

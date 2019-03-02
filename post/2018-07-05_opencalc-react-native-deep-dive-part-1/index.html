@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>OpenCalc - React Native - Deep Dive (Part 1) &middot; Branko Blagojevic</title>
+        <meta name="description" content="OpenCalc is a mobile calculator written in React Native. Below is a deep dive on the inner workings and design decisions I made on OpenCalc
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc…
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="OpenCalc - React Native - Deep Dive (Part 1)">
+<meta property="og:description" content="OpenCalc is a mobile calculator written in React Native. Below is a deep dive on the inner workings and design decisions I made on OpenCalc
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc…
+OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-07-05_opencalc-react-native-deep-dive-part-1/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">OpenCalc - React Native - Deep Dive (Part 1)</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-07-05" itemprop="datePublished">Thu, Jul 5, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>OpenCalc is a mobile calculator written in React Native. Below is a deep dive on the inner workings and design decisions I made on OpenCalc</p>
+
+<p>OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc…</p>
+
+<p>OpenCalc is a mobile calculator written in React Native. This is my first app using React Native and JavaScript. Below is a deep dive on the inner workings and design decisions I made on OpenCalc. Part 1 will deal with mostly the UI and design elements. Part 2 will deal with how the operations are handled. Available for <a href="https://itunes.apple.com/us/app/opencalc/id1403173317?mt=8">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.twelve31labs.opencalc">Android</a>. Full source on <a href="https://github.com/breeko/OpenCalc">GitHub</a>.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*IY3LVZWNvCbHhVboPDdlsw.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">OpenCalc</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="file-structure">File Structure</h3>
+
+<h4 id="boiler-plate-file-structure">Boiler-Plate File Structure</h4>
+
+<p>The file structure of a project conveys a lot of information. When a React Native project is initialized using <strong>react-native init [project name]</strong>, the below files get generated (“&gt;” indicates folders):</p>
+
+<pre><code>&gt; android  
+App.js  
+app.json  
+index.js  
+&gt; ios  
+&gt; node modules  
+package-lock.json  
+package.json
+</code></pre>
+
+<p>The <em>android</em> and <em>ios</em> directories are used as the boiler plate platform specific code. You can open up the projects in Android Studio and XCode, respectively, and edit and project specific attributes like icons and bundle identifiers.</p>
+
+<p><strong>app.json</strong>  contains the app name and display name.</p>
+
+<p><strong>index.js</strong> is the entry entry point of your app and is meant to re-direct to the main controller. You can also create an <strong>index.ios.js</strong>  and <strong>index.android.js</strong> and React Native will use those entry points when building for iOS and Android, respectively. <strong>App.js</strong> is the main controller</p>
+
+<h4 id="opencalc-file-structure">OpenCalc File Structure</h4>
+
+<p>The OpenCalc file structure has all the same boiler plate with the actual app in an app directory:</p>
+
+<pre><code>&gt; app  
+   App.js  
+   app.json  
+   &gt; components  
+       CalculatorAdditionalButtonsContainer.js  
+       CalculatorButton.js  
+       CalculatorButtonsContainer.js  
+       CalculatorLandscapeButtonsContainer.js  
+       CalculatorResponse.js  
+   &gt; configs  
+       Configs.js  
+   &gt; constants  
+       Colors.js  
+       Constants.js  
+   &gt; core  
+       &gt; __tests__  
+         CalculatorBrain-test.js  
+       CalculatorBrain.js  
+       Operations.js  
+       OperationTypes.js  
+   &gt; utils  
+       &gt; __ tests__  
+         Utils-tests.js  
+         Validator-tests.js  
+       CalculatorUtils.js  
+       LayoutBuilder.js  
+       Orientation.js  
+       Utils.js  
+       Validator.js
+</code></pre>
+
+<p>As mentioned above, the entry point is <strong>index.js</strong>. Below is <strong>index.js</strong> for OpenCalc:</p>
+
+<pre><code class="language-javascript">import { AppRegistry } from 'react-native';
+import App from './app/App';
+import { YellowBox } from 'react-native';
+
+AppRegistry.registerComponent('OpenCalc', () =&gt; App);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader','Class RCTCxxModule']);
+</code></pre>
+
+<p>The only thing I added was to <a href="https://github.com/facebook/react-native/issues/18868">suppress a few warnings</a>.</p>
+
+<h3 id="main-controller">Main Controller</h3>
+
+<p>The main controller is <strong>App.js</strong>:</p>
+
+<p>React Native does not force you to break out the style into a separate css. You can, but I found it easier to see everything at once, especially when debugging.</p>
+
+<p>I also used <a href="https://flow.org/">Flow</a>, a static type checker for javascript. I started using it half-way through my project and it proved useful in debugging. When I converted my project to use Flow, I was surprised how many of my functions were handling different type arguments than intended and it all still somehow functioned. Flow forced me to think about my function signatures and focus my code.</p>
+
+<blockquote>
+<p>Props and Assets</p>
+</blockquote>
+
+<p>The App class extends Component, React Native’s main class. The Props and State variables are used to store the properties and state of the object, and since I used Flow, I had to define them when creating the class.</p>
+
+<pre><code class="language-javascript">type Props = {  
+  brain: CalculatorBrain,  
+};
+
+type State = {  
+  topDisplay: string,  
+  bottomDisplay: string,  
+  altButtons: boolean,  
+  orientation: number,  
+};
+</code></pre>
+
+<p>The <strong>CalculatorBrain</strong> is the main work horse of the app which we’ll get to in part 2. The <em>topDisplay</em> and <em>bottomDisplay</em> are the text fields of the app.</p>
+
+<p>Anytime a <em>State</em> variable gets set, the <em>Component</em> is re-drawn. So the State is how I stored variables that affect the UI.</p>
+
+<p><em>altButtons</em> indicates whether the second page of buttons is being used. This is only relevant on the portrait mode.</p>
+
+<blockquote>
+<p>Orienation</p>
+</blockquote>
+
+<p>I keep track of the orientation when the component gets mounted (<em>componentDidMount</em>) or the orientation changes (_<em>orientationDidChange</em>). I couldn’t find anything in react-native that tells you the orientation but there are a few packages out there that attempt to handle this but I decided to build something simple.</p>
+
+<pre><code class="language-javascript">updateOrientation() {  
+ const orientation = Orientation.getOrientation();  
+ this.setState({  
+ orientation: orientation});  
+}
+</code></pre>
+
+<p><strong>Orientation.js</strong></p>
+
+<pre><code class="language-javascript">//@flow  
+import {Dimensions} from 'react-native';
+
+export const OrientationType = Object.freeze({  
+    'Portrait': 1,  
+    'Landscape': 2,  
+});
+
+export class Orientation {  
+    static getOrientation() {  
+        const {height, width} = Dimensions.get('window');  
+        return (height &gt; width) ? OrientationType.Portrait : OrientationType.Landscape;  
+    }  
+}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="https://cdn-images-1.medium.com/max/1000/1*qKGxRRw0DJU_IHCrpj3fjg.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Possible layouts of OpenCalc</td>
+</tr>
+</tbody>
+</table>
+
+<p>The rule I used was if height &gt; width, then the device is in portrait. This doesn’t work so well on Android split view since the screen is technically wider than it is taller (portrait), but I would still prefer the portrait layout.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*BMN_oxndY_vlxkTz6To5BA.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">OpenCalc on split view Android</td>
+</tr>
+</tbody>
+</table>
+
+<p>I tried using other rules (e.g. width has to be 25% greater than height), but it forced some tablet models into portrait mode. I also tried forcing a minimum width to trigger landscape mode, but the correct cutoff was not clear and the ratio is really what matters anyway. In the end, I didn’t think fixing this problem was worth the extra complexity.</p>
+
+<blockquote>
+<p>Function calls</p>
+</blockquote>
+
+<p>The below functions are used to connect the component to other functions.</p>
+
+<pre><code class="language-javascript">_handleCopyPress  
+async _handlePastePress  
+_switchButtons  
+_handleButtonPress  
+_deleteLast
+</code></pre>
+
+<blockquote>
+<p>Copy and paste</p>
+</blockquote>
+
+<p>For the copy/paste functionality, I decided to use the clipboard so users can paste from external apps. For the copy, I just checked if the bottom or top display is a number and put that into clipboard. I could have connected the copy/paste functionality to the <strong>CalculatorBrain</strong> which is doing the work and storing the numbers, but I wanted to make sure the user gets what she expects.</p>
+
+<p>I also made explicit what is being copied since, depending on what’s available, it could be either the top or bottom text (check bottom result first).</p>
+
+<pre><code class="language-javascript">_handleCopyPress() {  
+    const bottomDisplay: string = this.props.brain.getResult().replace(' ','').replace(',','');  
+    const topDisplay: string = this.props.brain.getDisplay().replace(' ','').replace(',','');  
+    const saveString = isNumeric(bottomDisplay) ? bottomDisplay : isNumeric(topDisplay) ? topDisplay : null;  
+    if (saveString) {  
+      Clipboard.setString(saveString);        
+      this.refs.toast.show('Copied ' + saveString + ' to clipboard', DURATION.LENGTH_SHORT, () =&gt; {});  
+    } else {  
+      this.refs.toast.show('Unable to copy to clipboard', DURATION.LENGTH_SHORT, () =&gt; {});  
+    }  
+  }
+
+async _handlePastePress() {  
+    const value = await Clipboard.getString();
+
+if (isNumeric(value)) {  
+      this.props.brain.clear();  
+      this.props.brain.setItem(value);  
+      this.updateDisplay();  
+    } else {  
+      this.refs.toast.show('Invalid clipboard value of ' + value);  
+    }  
+  }
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="https://cdn-images-1.medium.com/max/600/1*1qs5SV9lSN7B8hnemT9S8w.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Toast</td>
+</tr>
+</tbody>
+</table>
+
+<p>This is the only place where I used an external package (<a href="https://github.com/remobile/react-native-toast">react-native-toast</a>). This allowed me to display a short temporary message to the user when copying or pasting. Toast is <a href="https://facebook.github.io/react-native/docs/toastandroid.html">native to Android</a> but Apple doesn’t have anything similar.</p>
+
+<blockquote>
+<p>Switching layouts</p>
+</blockquote>
+
+<p>The _<em>switchButtons</em> just updates the <em>altButtons</em> value in the state. This forces the component to re-render which allows me to check the state and render accordingly.</p>
+
+<pre><code class="language-javascript">_switchButtons() {  
+    this.setState({altButtons: !this.state.altButtons});  
+  }
+</code></pre>
+
+<blockquote>
+<p>Handling button presses</p>
+</blockquote>
+
+<p>The _<em>handleButtonPress</em> and _<em>deleteLast</em> just pass the value on to the <strong>CalculatorBrain</strong>.</p>
+
+<pre><code class="language-javascript">_handleButtonPress(button: string) {  
+    this.props.brain.setItem(button);  
+    this.updateDisplay();  
+    }
+
+_deleteLast() {  
+    this.props.brain.deleteLast();  
+    this.updateDisplay();  
+  }
+</code></pre>
+
+<blockquote>
+<p>Rendering</p>
+</blockquote>
+
+<p>The <em>render</em> function renders the layout. It uses the <strong>LayoutBuilder</strong> to build the button container. The controller passes all the functions a layout could need and the <strong>LayoutBuilder</strong> binds them accordingly. The <strong>CalculatorResponse</strong> component gets passed along the <em>topDisplay</em> and <em>bottomDisplay</em>.</p>
+
+<pre><code class="language-javascript">render() {  
+    const buttonContainer = LayoutBuilder.buildButtonContainer(  
+      this,  
+      this.state.orientation,  
+      this.state.altButtons,  
+      this._handleButtonPress,  
+      this._reset,  
+      this._deleteLast,  
+      this._handleCopyPress,  
+      this._handlePastePress,  
+      this._switchButtons,  
+    );
+
+return (  
+      &lt;View style={styles.container} onLayout={this._updateOrientation.bind(this)}&gt;  
+        &lt;Toast ref=&quot;toast&quot; position='top' opacity={0.8}/&gt;  
+        &lt;CalculatorResponse  
+          topDisplay={this.state.topDisplay}  
+          bottomDisplay={this.state.bottomDisplay}/&gt;  
+        {buttonContainer}  
+      &lt;/View&gt;  
+    );  
+  }
+</code></pre>
+
+<h3 id="layouts">Layouts</h3>
+
+<p>There are three possible layouts:</p>
+
+<ol>
+<li><strong>CalculatorButtonsContainer</strong>,</li>
+<li><strong>CalculatorAdditionalButtonsContainer</strong></li>
+<li><strong>CalculatorLandscapeButtonsContainer</strong></li>
+</ol>
+
+<p>The layouts follow the same basic format so I won’t go through each one. This is the <strong>CalculatorButtonsContainer</strong> which provides the default layout for portrait mode.</p>
+
+<p>There is likely a more succinct way to define a layout, but there are only three layouts and this helped me trouble shoot the flexboxes so I left it this way.</p>
+
+<blockquote>
+<p>Calculator buttons</p>
+</blockquote>
+
+<p>Each <strong>CalculatorButton</strong> takes a <em>handleButtonPress</em>, and for most of them I just pass along the <em>handleButtonPress</em> that was provided. However, a few buttons have special button actions (<em>reset</em>, <em>deleteLast</em> and <em>switchButton</em>). I could have handled this in the <em>handleButtonPress</em> function of the controller and routed accordingly, and if I did it again, I would probably do that.</p>
+
+<p>The <strong>CalculatorButton</strong> class is light-weight, mostly used to specify the layout</p>
+
+<blockquote>
+<p>Scaling text</p>
+</blockquote>
+
+<p>The Text component takes a optional field <em>adjustFontSizeToFit</em> which is unfortunately used just for iOS. But for Android, the button and response texts would get cut-off or look too small depending on the screen size. So I got a font size I liked based on the dimensions I was debugging in. From there I scaled up accordingly based on the max of height and width. I used slightly different max dimensions for iOS and Android.</p>
+
+<pre><code class="language-javascript">const Constants = Object.freeze({  
+    height: Dimensions.get('window').height,  
+    width: Dimensions.get('window').width,  
+    maxDimension: Math.max(Dimensions.get('window').height, Dimensions.get('window').width),  
+    minDimension: Math.min(Dimensions.get('window').height, Dimensions.get('window').width),  
+    baseMaxDimension: (Platform.OS === 'ios') ? 667.0 : 750.0,  
+});
+</code></pre>
+
+<blockquote>
+<p>Calculator response</p>
+</blockquote>
+
+<p>The <strong>CalculatorResponse</strong> component</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/600/1*iXhEXBRs0me0Xw4YD4xtjw.png" alt="" /></p>
+
+<p>One thing new about this view is the <em>SafeAreaView</em> component. This handles the iPhone X notch design. Without this, the response could be cut-off by the camera notch.</p>
+
+<p>The buttons are still partially cut-off in landscape, but if I were to wrap the entire layout in a SafeAreaView, it would look worse. This notch is annoying to deal with and I think it would just encourage developers to force their users into one orientation.</p>
+
+<p>The other thing to note is that the text is wrapped up in a horizontal ScrollView. This allows the user to type arbitrarily long sequences and still see the content.</p>
+
+<pre><code class="language-javascript">&lt;ScrollView   
+          style={styles.resultContainer}  
+          ref={(scroll) =&gt; {this.topDisplayScroll = scroll;}}  
+          onContentSizeChange={() =&gt; {this.topDisplayScroll.scrollToEnd(false);}}  
+          horizontal&gt;  
+          &lt;Text adjustsFontSizeToFit numberOfLines={1} style={styles.topDisplay}&gt;{topDisplay}&lt;/Text&gt;  
+        &lt;/ScrollView&gt;
+</code></pre>
+
+<p>But in order to always have the <em>ScrollView</em> scrolled to the end while typing, I had to add add a listener using <em>onContentSizeChange</em> and scroll it to the end with animations set to false.</p>
+
+<h3 id="part-2">Part 2</h3>
+
+<p>Part 2 will include the core of the brain. This includes actually performing the operations, the operation and operand classes, input validation and tests.</p>
+
+<p>By Branko Blagojevic on July 5, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=OpenCalc%e2%80%8a-%e2%80%8aReact%20Native%e2%80%8a-%e2%80%8aDeep%20Dive%20%28Part%201%29&url=http%3a%2f%2fexample.org%2fpost%2f2018-07-05_opencalc-react-native-deep-dive-part-1%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-07-05_opencalc-react-native-deep-dive-part-1%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

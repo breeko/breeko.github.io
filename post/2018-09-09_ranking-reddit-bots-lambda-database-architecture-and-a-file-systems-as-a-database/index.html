@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database &middot; Branko Blagojevic</title>
+        <meta name="description" content="Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.
+Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.
+In my last post I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database">
+<meta property="og:description" content="Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.
+Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.
+In my last post I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-09-09" itemprop="datePublished">Sun, Sep 9, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.</p>
+
+<p>Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.</p>
+
+<p>In my <a href="http://example.org/post/2018-09-07_reddit-bots-drinking-from-the-fire-hose-and-image-colorization/">last post</a> I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes. The data is then uploaded periodically to a <a href="https://botrank.pastimes.eu/">static site</a> which display rankings.</p>
+
+<p>I didn’t invent this concept. The original good-bot-bad-bot aggregator was <a href="https://old.reddit.com/user/goodbot_badbot">/u/goodbot_badbot</a>, but he had gone offline about a month ago and his <a href="https://goodbot-badbot.herokuapp.com/">site</a> went down as well. I found an <a href="https://web.archive.org/web/*/https://goodbot-badbot.herokuapp.com/">archived version</a> of his site, downloaded the rankings and continued aggregating and displaying bot rankings.</p>
+
+<p>At first I converted the rankings to a csv and wrote a bot that parses the comment and increments the respective good-bot or bad-bot score. But I started to have issues. I ensured that the csv was always grouped (i.e. no duplicate names), but for some reason it was always getting out of sync. I also had other bugs and over time I didn’t trust the csv.</p>
+
+<p><img src="/post/resources/img/0*laX_SsVIu6RZgxZQ" alt="" /></p>
+
+<p>Luckily I always kept all the logs of my bots actions. Here is an example of a single line of the log file:</p>
+
+<pre><code>2018-08-13 07:33:57,543 - B0tRank - INFO - postId: 96u8fk post: 101 in my opinion commentId: e43vwjm comment: good bot action: ___alexa___
+</code></pre>
+
+<p>When my csv became corrupted, I just wrote a simple script that would take the original starting csv I had from the original bot, read through all the logs, parse the action (good or bad) and user name and recreate the csv from scratch. It wasn’t very fast but it was reliable and consistent.</p>
+
+<p>Eventually, I realized the backup of scraping the logs is better than the csv incremental method. The csv incremental method doesn’t keep track of individual votes but is supposed to be simpler to administer. And since it was failing on simplicity, I decided to rethink how I’m tracking everything.</p>
+
+<p>This article was first published as exclusive content in partnership with <a href="https://www.humanreadablemag.com/morningcupofcoding/">Morning Cup of Coding</a>. It’s a daily curated newsletter featuring technical articles on all fields of software engineering.</p>
+
+<h4 id="lambda-architecture">Lambda Architecture</h4>
+
+<p><a href="http://lambda-architecture.net/">Lambda Architecture</a> (LA) is a generic, scalable and fault-tolerant data processing architecture. It’s used in organizations such as <a href="https://medium.com/walmartlabs/how-we-built-a-data-pipeline-with-lambda-architecture-using-spark-spark-streaming-9d3b4b4555d3">Walmart</a> that require low latency and process a lot of data. The main benefit of LA is that the data is immutable so everything is a f(data), f(f(data)) and so on.</p>
+
+<blockquote>
+<p>Immutable data means that no matter what happens I can rebuild and theoretically, recreate any prior view.</p>
+</blockquote>
+
+<p>Adding more data to collect is also simpler and all the processing lends itself well to distributed systems like Hadoop Distributed File System (HDFS). Debugging is also easier since you can debug components independently. The criticism is that maintaining code that needs to produce the same exact result in two complex distributed systems is difficult (one for real-time and another for batch updates).</p>
+
+<p><a href="https://www.manning.com/books/big-data">Big Data</a> by Manning Publications uses an example throughout the book that is essentially my use-case. Instead of tracking votes, their example tracks clicks on websites. The book then goes on to describe a Lambda Architecture. The architecture is based on three layers: batch layer, servicing layer and speed layer. The data remains untouched and the batch and speed layers act of the data and the servicing layer acts on the batch layer. Queries on the data are based on the servicing layer and speed layer.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/0*DibK0wL0tYJ-Jctu.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Lambda architecture</td>
+</tr>
+</tbody>
+</table>
+
+<p>The book does a much better job explaining the concepts and the first chapter is freely available, so check that out if you want more information.</p>
+
+<p>In my case, the <strong>data</strong> was my logs. The <strong>batch layer</strong> aggregates all the data and counts up the good and bad votes. The <strong>speed layer</strong> is used to update the records based on events that had happened since the last batch. It’s a lot faster since it only considers records after the last batch. And the <strong>serving layer</strong> is just the view. In my case, the servicing layer outputs a csv I can use to update my static site.</p>
+
+<p>The best part is that at any given time, I can ditch everything, and recreate the batch from scratch. Also, if some data becomes corrupted (e.g. erroneous logs), I can just quarantine the logs and recreate all my batches.</p>
+
+<p>I decided to write a Lambda Architecture from scratch and use the file system as my database.</p>
+
+<h4 id="lambda-architecture-from-scratch">Lambda Architecture from Scratch</h4>
+
+<p>Note that this is not necessarily efficient and I would not recommend rolling your own database from scratch. This is just for illustrative purposes.</p>
+
+<p>I wanted my final file system to look like this:</p>
+
+<pre><code>logs  
+ botrank  
+  [user]  
+   good  
+    summary  
+     [year]  
+      [month]  
+       [day]  
+        [yyyy-mm-dd-hh:mm:ss]  
+         [count up to that point]  
+    [year]  
+     [month]  
+      [date]  
+       [yyyy-mm-dd hh:mm:ss]  
+        [count]  
+   bad  
+    ...
+</code></pre>
+
+<p>The records are empty files with an integer as the file name. The batch process would take a given user and key, and sum up all the file-names, and update the summary directory.</p>
+
+<p>Note that the final files are indexed by yyyy-mm-dd hh:mm:ss. So if two records come in at exactly the same second for the same bot and rating, only one will be represented. I could have made it down to millisecond or less, but its not necessary for my tracking as I don’t collect that many votes and votes for a given bot are not that common that a collision is highly unlikely. I could also choose to increment the count for duplicate layers, but that would mean if I migrated from my logs twice in a row, I would essentially double everyone’s score. This way I can always be sure that no record is double counted.</p>
+
+<p>The first function I wanted is the ability to write a log. That means I have to get to the appropriate directory, creating the sub-directories as necessary and write a file with the name of its value.</p>
+
+<pre><code class="language-python">def add_record(path: str, user: str, key: str, time: dt, val: int = 1):  
+   &quot;&quot;&quot; Adds record for user and key sharded on time &quot;&quot;&quot;  
+   date_path = time_to_date_path(time)  
+   time_path = time_to_time_dir(time)  
+   final_dir = os.path.join(path, user, key, date_path, time_path)   
+   if not os.path.exists(final_dir):  
+     os.makedirs(final_dir)  
+   final_path = os.path.join(final_dir, &quot;{}&quot;.format(val))  
+   with open(final_path, &quot;w&quot;) as f:  
+      f.write(&quot;&quot;)  
+   return final_path
+</code></pre>
+
+<p>The function above relies on two helper functions: _time_to_date<em>path</em> and _time_to_time<em>dir</em>. These two functions take a datetime object and return a path and directory for our record, respectively.</p>
+
+<pre><code class="language-python">TIME_FORMAT = &quot;%Y-%m-%d %H:%M:%S&quot;  
+DATE_FORMAT = &quot;%Y/%m/%d&quot;
+
+def time_to_date_path(time: dt):  
+   &quot;&quot;&quot; Converts datetime to folder path based on PATH_FORMAT &quot;&quot;&quot;  
+   return time.strftime(DATE_FORMAT)
+
+def time_to_time_dir(time: dt):  
+   &quot;&quot;&quot; Converts datetime to file name based on FILE_FORMAT &quot;&quot;&quot;  
+   return time.strftime(TIME_FORMAT)
+</code></pre>
+
+<p>Now we can do the following:</p>
+
+<pre><code class="language-python"># Adding a base record  
+add_record(BASE_DIR, USER, &quot;good&quot;, dt.min, val=100)  
+# '.../botrank/___alexa___/good/1/01/01/1-01-01 00:00:00/100'
+
+add_record(BASE_DIR, USER, &quot;good&quot;, dt.now())  
+# '.../botrank/___alexa___/good/2018/09/08/2018-09-08 07:53:47/1'
+</code></pre>
+
+<p>This first function call created a base record of 100. The second created a single record of 1. If we were to run the first function again, it would just override the original file since the time is that same.</p>
+
+<p>The next step is to batch. The base-line batching takes place on a user and key level. It find all records for given user and key, sums up the file-names and adds a summary:</p>
+
+<pre><code class="language-python">def batch(path: str, user: str, key: str):  
+   &quot;&quot;&quot; Batches record for given path, user and key &quot;&quot;&quot;  
+   records_to_batch = get_records_filtered(path, user, key, dt.min,   
+     RecordFilter.AFTER_OF_EQUAL)  
+   return add_summary(path, user, key, dt.now(), records_to_batch)
+</code></pre>
+
+<p>In order to batch, we need a few more helper functions. First, we need to find the records to batch. For that I created a function _get_records<em>filtered</em> that finds all records given a user and key, and adds a summary. The _get_records<em>filtered</em> can be leveraged to perform the speed layer, where we only want to get records after a given period.</p>
+
+<p>The _get_records<em>filtered</em> function is the most complicated function we’ll be dealing with since it involves parsing our file system and has flexibility to include only records before, before or equal, after or after or equal to a given datetime.</p>
+
+<p>This is similar to <a href="https://docs.python.org/2/library/glob.html">glob</a> where it walks through the file structure and returns only matching directories. I originally tried to use glob, but it doesn’t support full regex and I wanted to treat folders like integers rather than strings anyway.</p>
+
+<p>For instance, if I’m looking for records after 2018/9/3, I only want to go through the year sub directories of 2018+. Then for months, I want to consider anything from year 2019+ and anything from <sup>2018</sup>&frasl;<sub>9</sub>+, and so on.</p>
+
+<p>The _add<em>summary</em> function is simpler, and just creates a batch key and adds a log to that batch_key.</p>
+
+<pre><code class="language-python">BATCH_KEY = &quot;summary&quot;
+
+def get_batch_key(key: str):  
+   &quot;&quot;&quot; Converts a key into a batch key &quot;&quot;&quot;  
+   return os.path.join(key, BATCH_KEY)
+
+def add_summary(path: str, user: str, key: str, time: dt, val: int):  
+   &quot;&quot;&quot; Adds a summary record for user and key sharded on time &quot;&quot;&quot;  
+   new_key = get_batch_key(key)  
+   val = &quot;{}&quot;.format(val)  
+   return add_record(path, user, new_key, time, val)
+</code></pre>
+
+<p>Now when I batch on a given key, I’ll create a summary record</p>
+
+<pre><code class="language-python"># Batching all records  
+batch(BASE_DIR, USER, &quot;good&quot;)  
+# '.../botrank/___alexa___/good/summary/2018/09/08/2018-09-08 07:54:51/101'
+</code></pre>
+
+<p>The summary value is 101 since we have two records, one with a value of 100 and another with a value of 1.</p>
+
+<p>Now that we have a batch record, we need to be able to get the latest batch. But before we can get the latest batch record, we need a general function to return the latest record given a user and key. With that function, we can just create a batch_key and ask for the latest record for a user and batch_key. It would also be nice to have the option to return the value of the record or the actual record itself.</p>
+
+<pre><code class="language-python">def get_latest_record(path: str, user: str, key: str, val: bool = False):  
+   &quot;&quot;&quot; Returns latest record &quot;&quot;&quot;  
+   cur_path = os.path.join(path, user, key)  
+   cur_sub_dirs = get_int_dirs(cur_path)  
+   while len(cur_sub_dirs) &gt; 0:  
+     new_dir = max(cur_sub_dirs, key=lambda x: int(x))  
+     cur_path = os.path.join(cur_path, new_dir)  
+     cur_sub_dirs = get_int_dirs(cur_path)  
+   latest_file = get_latest_in_path(cur_path)  
+   if latest_file:  
+     latest_path = os.path.join(cur_path, latest_file)  
+     if val:  
+       latest_file_val = sum([int(f) for f in os.listdir(latest_path) if f.isdigit()])  
+       return latest_file_val  
+     return latest_path
+</code></pre>
+
+<p>Here is _get_latest<em>record</em> in action:</p>
+
+<pre><code class="language-python">get_latest_record(BASE_DIR, USER, &quot;good&quot;, val=False)  
+# '.../botrank/___alexa___/good/2018/09/08/2018-09-08 07:53:47'
+
+get_latest_record(BASE_DIR, USER, &quot;good&quot;, val=True)  
+'1'
+</code></pre>
+
+<p>The latest record is the latest record we created given the user and key. And latest record value is just a sum of the file names in the record.</p>
+
+<p>Now get_latest_batch is simply creating a batch_key and getting the latest record.</p>
+
+<pre><code class="language-python">def get_latest_batch(path: str, user: str, key: str, val: bool = False):  
+   &quot;&quot;&quot; Returns latest batch result &quot;&quot;&quot;  
+   new_key = get_batch_key(key)  
+   return get_latest_record(path, user, new_key, val)
+
+def get_latest_batch_time(path: str, user: str, key: str):  
+   &quot;&quot;&quot; Returns time of last batch &quot;&quot;&quot;  
+   latest_batch = get_latest_batch(path, user, key, val=False)  
+   return file_to_time(latest_batch)
+</code></pre>
+
+<p>Here it is in action:</p>
+
+<pre><code class="language-python">get_latest_record(BASE_DIR, USER, &quot;good&quot;, val=False)  
+# '.../botrank/___alexa___/good/summary/2018/09/08/2018-09-08 07:54:51'
+
+get_latest_record(BASE_DIR, USER, &quot;good&quot;, val=True)  
+'101'
+</code></pre>
+
+<p>The result is the latest batch.</p>
+
+<p>We can batch as often as we would like and we have snapshots of prior batches saved. If the data becomes corrupted, we can delete or quarantine erroneous data and re-batch everything. Batching always happens from scratch.</p>
+
+<p>But we may not want to batch from scratch. We may want to just reference the latest batch and batch all the records that came after the latest batch. We may want to reserve batching from scratch as a less frequent process or only to be triggered if historical data changes. That’s where the speed layer comes into play. The speed layer retrieves the time of the latest batch, searches for records after that batch, counts the values and creates a new batch based on the prior batch and any records that came in after the prior batch.</p>
+
+<pre><code class="language-python">def update_batch(path: str, user: str, key: str):  
+   &quot;&quot;&quot; Updates summary without going through all records&quot;&quot;&quot;  
+   latest_batch_val = get_latest_batch(path, user, key, val=True)  
+   latest_batch_time = get_latest_batch_time(path, user, key)  
+   records_to_update = get_records_filtered(path, user, key,   
+     latest_batch_time, RecordFilter.AFTER_OF_EQUAL)  
+   update_val = int(latest_batch_val) + records_to_update  
+   return add_summary(path, user, key, dt.now(), update_val)
+</code></pre>
+
+<p>And that’s the basics of my Lambda Architecture. There are a few other functions I added like batching on a given user for all keys or batching on all users, but that just amounts to iterating through all users/keys and running the respective underlying functions.</p>
+
+<blockquote>
+<p>The core tenet of Lambda Architecture is that the data is immutable. Everything else is a direct result from that fact.</p>
+</blockquote>
+
+<p>Views have to be built from the data, which may require other views. Views are essentially cached and updated through speed layers.</p>
+
+<p>In my use-case, I’m tracking good/bad votes for bots. Every time a vote comes in I have a function update_bot:</p>
+
+<pre><code class="language-python">def update_bot(bot, bots_path, good, save=False):  
+    key = &quot;good&quot; if good else &quot;bad&quot;  
+    return add_record(DB_PATH, bot.lower(), key, dt.now(), val=1)
+</code></pre>
+
+<p>When it comes time to update the site, I re-batch all the records with a speed layer.</p>
+
+<pre><code class="language-python">def update_and_write(db_path: str, log_path: str, csv_path: str):  
+   _ = update_all_users(db_path)  
+   write_to_csv(db_path, log_path, csv_path)
+</code></pre>
+
+<p>Periodically I run a full batch to ensure a correct starting state for my regular updates.</p>
+
+<pre><code class="language-python">_ = batch_all_users(db_path)
+</code></pre>
+
+<p>For full implementation and examples, check out the <a href="https://github.com/breeko/Lambda-Architecture-From-Scratch">github repo</a>.</p>
+
+<p>Further reading:</p>
+
+<ol>
+<li><a href="https://www.manning.com/books/big-data">Big Data</a></li>
+<li><a href="http://lambda-architecture.net/">Lambda Architecture</a></li>
+<li><a href="https://medium.com/walmartlabs/how-we-built-a-data-pipeline-with-lambda-architecture-using-spark-spark-streaming-9d3b4b4555d3">How we built a data pipeline with Lambda Architecture using Spark/Spark Streaming</a></li>
+<li><a href="https://www.oreilly.com/ideas/questioning-the-lambda-architecture">Questioning the Lambda Architecture</a></li>
+</ol>
+
+<p>By Branko Blagojevic on September 9, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Ranking%20Reddit%20Bots%2c%20Lambda%20Database%20Architecture%20and%20a%20File%20Systems%20as%20a%20Database&url=http%3a%2f%2fexample.org%2fpost%2f2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

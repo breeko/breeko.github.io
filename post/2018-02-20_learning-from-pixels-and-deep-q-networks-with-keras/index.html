@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Learning from pixels and Deep Q-Networks with Keras &middot; Branko Blagojevic</title>
+        <meta name="description" content="This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
+This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Learning from pixels and Deep Q-Networks with Keras">
+<meta property="og:description" content="This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
+This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Learning from pixels and Deep Q-Networks with Keras</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-02-20" itemprop="datePublished">Tue, Feb 20, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…</p>
+
+<p>This is a continuation of my series on reinforcement learning. I’d recommend the <a href="http://example.org/post/2018-02-05_evolutionary-learning-models-with-openai/">second post</a> if you’re unfamiliar with OpenAI and the <a href="http://example.org/post/2018-02-12_policy-based-reinforcement-learning-with-keras/">third post</a> if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from <a href="https://medium.com/@awjuliani/simple-reinforcement-learning-with-tensorflow-part-4-deep-q-networks-and-beyond-8438a3e2b8df">Arthur Juliani’s post</a>, especially the game environment.</p>
+
+<p>All the code below is available on my <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow">github tutorial on reinforcement learning</a>, specifically <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/blob/master/Part%204%20-%20Deep%20Q-Networks%20and%20Beyond%20with%20Keras.ipynb">Part 4 — Deep Q-Networks and Beyond with Keras</a> or <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/blob/master/Part%204%20-%20Deep%20Q-Networks%20and%20Beyond.ipynb">Part 4 — Deep Q-Networks and Beyond with Tensorflow</a> for you sadists out there.</p>
+
+<p>In this post, we’ll use Q-learning to indirectly determine policy. This method was made popular in 2013 when a DeepMind <a href="https://arxiv.org/pdf/1312.5602v1.pdf">showed</a> Q-learning to be successful in solving a number of Atari games from analysis of the pixel values.</p>
+
+<p>Q-learning is a model free reinforcement learning technique. Model free means we learn directly from the environment and don’t build out a model to learn how an environment works. We just learn from the observations.</p>
+
+<p>The Q network lookup can be seen below:</p>
+
+<p><img src="/post/resources/img/1*qNPqwKA15lZ03HWkFkBw2Q.png" alt="" /></p>
+
+<p>And to update the value, we just take the old value, and nudge it a little bit based on what we thing the new value is.</p>
+
+<p><img src="/post/resources/img/1*-nX_ptLLbmnSoGScBJDnXA.png" alt="" /></p>
+
+<p>Because everything we’re doing is approximation and dynamic, we use a small learning rate to guide our network to the optimal values.</p>
+
+<p>Q-learning is basically an indirect method used to determine policy by looking up how good a certain state-action pair is. The <em>state</em> is just a representation of the game environment. It can be anything (speed, life, coordinates, or in our case raw pixels). <em>Action</em> is just your available actions from that state (move left, right, etc). <em>Reward</em> is provided by the game environment or determined by us based on what we’re trying to do. If we’re playing Mario, we might want the reward to be distance from start, coins collected or some other game statistic.</p>
+
+<p>Consider a simple one-dimensional environment where we’re a robot and we can move left or right. Our <em>state</em> may look like this:</p>
+
+<p><img src="/post/resources/img/1*Oco6woygz61V8VUuRSdSXQ.png" alt="" /></p>
+
+<p>What’s our Q-network look like?</p>
+
+<pre><code>Q([-1, 🤖, 1], left) = -1   
+Q([-1, 🤖, 1], right) = 1
+</code></pre>
+
+<p>Simple enough. A left move will get us -1 reward, right move gets us 1 reward. So if you used this Q-network and you saw state [-1, 🤖, 1], you would look at the possible rewards and just pick the highest one (right). In actuality, we may want to setup are Q-network like this:</p>
+
+<pre><code>Q([-1, 🤖, 1]) = [-1, 1]
+</code></pre>
+
+<p>The -1 in the 0 index means action 0 (left) yields a -1 reward, while action 1 (right) yields a +1 reward.</p>
+
+<p>That’s just for one step, but suppose you want to consider more steps.</p>
+
+<p><img src="/post/resources/img/1*uf3RYwdNAQgobMOV4hacvg.png" alt="" /></p>
+
+<p>Our one step Q-network still looks the same, but we want to consider two steps so we have to consider what happens after that initial step:</p>
+
+<pre><code>Q(s,a) = reward + discount_factor * max(Q(s(t+1),a)
+
+One step:  
+Q([10, -1, 🤖, 1, 1], left) = -1  
+Q([10, 🤖, 0 , 1, 1], left) = 10  
+Q([10, 🤖, 0 , 1, 1], right) = 0
+
+Q([10, -1, 🤖, 1, 1], right) = 1  
+Q([10, -1, 0 , 🤖,1], left) = 0  
+Q([10, -1, 0 , 🤖,1], right) = 1
+
+Two step:  
+Q([10, -1, 🤖, 1, 1], left) = -1 + max(10, 0) = 9  
+Q([10, -1, 🤖, 1, 1], right) = 1 + max(1, 0) = 2  
+</code></pre>
+
+<p>As you can see from above, although going left is the worse option (-1 immediate reward), it leads to a state that is worth 10 points (going left again).</p>
+
+<p>A few things to note. We prefer rewards now versus rewards in the future. So we apply a <strong>discount factor</strong> to the future rewards. That’s why the formula is <code>reward + discount_factor * future_reward</code>. This is a hyper-parameter we’ll have to set during learning. Set too low, bots will act too greedily and not plan well. Set too high, bots will sometimes unnecessarily delay moves or act with too much confidence as to the future reward.</p>
+
+<p>Also since considering future steps can quickly spiral out of control in terms of the state space to explore, we need to bootstrap. What that means is that we can’t look too far ahead so we’ll rely on some estimate of the final state and use that. Besides, when we’re learning, we’re just making small steps towards what we believe to be the optimal solution.</p>
+
+<p>To bootstrap, <a href="https://arxiv.org/pdf/1511.06581.pdf">research has shown</a> that it makes sense to use another network to determine the q-values to learn. The <strong>target network</strong> is the one you’re using to bootstrap q-values and the <strong>main network</strong> is the one you’re training and using to determine policy. You never train the <strong>target network</strong> but periodically you update the weights of the <strong>target network</strong> with those of the <strong>main network</strong>. Here’s the full algorithm for the mathematically inclined. Note the <strong>θ</strong> is the <strong>main network</strong> and <strong>θ</strong> <strong>̅</strong> is the <strong>target network</strong>.</p>
+
+<p><img src="/post/resources/img/1*mdXQAuTfoTt2gokNQosygg.png" alt="" /></p>
+
+<p>So to summarize, a Q-network maps a <em>state</em> and <em>action</em> pair to it’s expected value. We can use a <em>state</em>, and look at the <em>action</em> options and determine what <em>action</em> would lead to the best results. To train the network, we take the <em>state</em> and <em>action</em> pair we had observed and map it to the immediate reward plus what we believe the next state is worth.</p>
+
+<p>Before we begin talking about implementing a Q-network, let’s discuss the environment briefly. This was originally thought up by <a href="https://medium.com/@awjuliani">Arthur Juliani</a> in his <a href="https://medium.com/@awjuliani/simple-reinforcement-learning-with-tensorflow-part-4-deep-q-networks-and-beyond-8438a3e2b8df">post on Q-networks</a>.</p>
+
+<p>Our environment consists of an rgb array of shape (84,84,3). We play as the blue square, and move left, right, up or down (4 actions) and try to collect the green squares (+1 reward), while avoiding the red squares (-1 reward).</p>
+
+<p><img src="/post/resources/img/1*2OG0wgn7dZhFsq5UVETwcA.png" alt="" /></p>
+
+<p>So our <em>state</em> is (84, 84, 3) and our <em>actions</em> are 4. We want some function that takes a <em>state</em> and outputs 4 values, one for each <em>action</em>.</p>
+
+<p>We’ll build our bot to consider the raw pixels. This makes the challenge considerably harder because our bot will have to learn low level concepts like edges and distinguishing between the different colors and shapes. Also, we have a static point of reference with only the blue square moving. So it won’t be as simple as if green to the left, move left.</p>
+
+<p>We will learn from pixel values without any input other than the raw rewards we had discussed earlier. We’ll just have the bot act randomly, update the network, act a little smarter based on what we observed, and learn from that. Rinse and repeat.</p>
+
+<p>One way to learn from image data is to use convolutional layers. Convolutional layers are a bit beyond the scope of this post, but I’ll try to describe them in a high level.</p>
+
+<p>What convolutional layers do is create a filter (e.g. 3 x 3) and do a dot product on every value of the image to come up with a new set of value.</p>
+
+<p><img src="/post/resources/img/1*1ZQThyOaswr6Ul5G-tuXbQ.gif" alt="" /></p>
+
+<p>The idea is that a filter would be able to detect simple geometric patterns. And when you apply a convolutional layer on top of a convolutional layer, it can detect more and more complex features such as circles, squares and eyes. Some of the best image detection software is simply a series of convolutional layers on top of each other and a final dense layer at the end.</p>
+
+<p>So we have these convolutional layers stacked on top of each other. Then we’ll want to break out the value and advantage values. The value is the reward of the current move. The advantage is the the value from that future state. So in our case Q([10, -1, 🤖, 1, 1], left), our value would be -1 and our advantage would be [10, 0]. Then we add the value to advantage for our final Q-value. In our example the final Q-value would be -1 + [10, 0] = [9, -1]</p>
+
+<p>Below is the network class and what the network will look like.
+<script type="application/javascript" src="//gist.github.com/breeko/dcf64da3d27d4119d6a2af36f0716bdb.js"></script></p>
+
+<p><img src="/post/resources/img/1*zD50BL5pXTJuQFCsKsaVow.png" alt="" /></p>
+
+<p>This nice thing about using a neural-network is that it is pretty well encapsulated. We can add or remove layers, add regularization, add frame augmentation, or plug in a totally different kind of network. It will work as long as the top layer accepts (84, 84, 3) and outputs a value of 4 (4 actions available). So feel free to experiment.</p>
+
+<p>Another concept that will help with learning is the idea of an Experience Replay. It’s just an object that stores experiences (game replays). When we want to train from the network, we take a sample from the trove of experiences we have collected. Eventually we cycle out older experiences for newer ones, since the newer experiences are likely more relevant to actual game play based on our current network. Below is an implementation of experience replay:</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/c60e543274e139390d0a95818ba579e0.js"></script>
+
+<p>We’ll periodically pull some experiences from the experience replay, train our network a bit, and continue playing using the updated network. An experience sampled from the experience replay will hold [state, action, reward, next_state, done].</p>
+
+<h1 id="train-batch-is-state-action-reward-next-state-done">Train batch is [[state,action,reward,next_state,done],&hellip;]</h1>
+
+<p>train_batch = experience_replay.sample(batch_size)</p>
+
+<h1 id="separate-the-batch-into-its-components">Separate the batch into its components</h1>
+
+<p>train_state, train_action, train_reward,train_next_state, train_done = train_batch.T</p>
+
+<p>We then use our <strong>target network</strong> to determine what we think the values should be based on the state and action. Below is a snip of how the training works.</p>
+
+<p><script type="application/javascript" src="//gist.github.com/breeko/5b66f003f18e8f94c850d5a3bad7cc85.js"></script>
+Since we’re only updating the actions we took, the easiest way to do that is to predict what the model will output anyway, and update those actions that we took. The other actions will not be updated since they’ll tie out exactly with what the model predicted (loss of 0). It’s not very efficient since we have to predict everything from the model but I think it’s the most straight-forward way.</p>
+
+<p>Below is an example of how we’re updating our values:</p>
+
+<p><img src="/post/resources/img/1*Zo5QtMIHsY4LVP5tERdBbg.png" alt="" /></p>
+
+<p>The best part is looking at what your bot learned. It usually results in a few head-scratchers and a deeper understanding of what the network is learning. Here is the output of 50 steps from a bot I trained (follow the blue square):</p>
+
+<p><img src="/post/resources/img/1*evr-AZFGE9fAr92Y6NzShg.png" alt="" /></p>
+
+<p>The bot isn’t perfect but it does pretty well to scoop up the green squares. However on step 3, it doesn’t go around a red square. Let’s take a closer look:</p>
+
+<p><img src="/post/resources/img/1*JcBVV5SqDViWMyWP23uDSw.png" alt="" /></p>
+
+<p>My guess is that on step 2, it compared the right square to the up square. It likely thought the right square was more valuable since it’s closer to the square below it and the cluster of squares above it. So it took the shortcut through the red square. Probably not ideal. It could go away with more training. Or another thing you may want to do is replicate the environment, feed it into the network and see what’s really going on. If the right and up actions are very similar, perhaps more training is required. You can just train it on this edge case. In future posts I’ll speak a bit about choosing more meaningful training examples and analyzing the behavior of the bot.</p>
+
+<p>Another common thing you may see is an endless loop. Below is an example.</p>
+
+<p><img src="/post/resources/img/1*PxAmn8bhoBt_y-Sa_OTQGw.png" alt="" /></p>
+
+<p>My guess is that the bot is torn between two events. It goes for the left square but then immediately before capturing the square, it is drawn by the three other squares to the right. In a future post we’ll use an recurrent neural net to provide our bot with a memory. In that case it will “remember” that it was going for the left square and (hopefully) capture it. Another option is to use a non-deterministic policy. So if the Q network has rewards of [0.51, 0.49], it won’t necessarily choose the 0.51 every time.</p>
+
+<p>In summary, Q-networks map a <em>state</em> and <em>action</em> to an expected future <em>reward</em>. We setup a Q-network to accept a <em>state</em>, run it through some convolutional layers and determine the value of each <em>state-action</em> pair. We’ll play the game making random moves and record our experiences. From our experiences, we’ll train the Q-network to calculate the value of each <em>state-action</em> pair. From that Q-network, we can choose the <em>actions</em> that result in the highest <em>state-action</em> values, and use those values to continue to train our bot.</p>
+
+<p>By Branko Blagojevic on February 20, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Learning%20from%20pixels%20and%20Deep%20Q-Networks%20with%20Keras&url=http%3a%2f%2fexample.org%2fpost%2f2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

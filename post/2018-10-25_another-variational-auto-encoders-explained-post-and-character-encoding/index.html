@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding &middot; Branko Blagojevic</title>
+        <meta name="description" content="Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
+Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
+I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding">
+<meta property="og:description" content="Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
+Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
+I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-10-25" itemprop="datePublished">Thu, Oct 25, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models</p>
+
+<p>Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples</p>
+
+<p>I have read a <a href="https://towardsdatascience.com/variational-auto-encoders-fc701b9fc569">fair</a> <a href="http://kvfrans.com/variational-autoencoders-explained/">number</a> of <a href="http://anotherdatum.com/vae.html">posts</a> about variational auto encoders but only recently did I try my hand in generating my own. I’ve been going through the early access edition of <a href="https://www.manning.com/books/gans-in-action">GANs in Action</a> by Manning.</p>
+
+<p>An <strong>auto-encoder</strong> deconstructs (or encodes) some data into a hidden representation with the goal of losing as little information as possible. Its performance is measured by how well it can reconstruct (decode) the data based on its internal representation.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/0*sukoan_LqtFKllCW.jpg" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>The cool thing about auto-encoders is that they are unsupervised. Nowhere in the example above did we tell the encoder the number is a 2. So we can use them to create a structure on a data set without the need for labels. We can then use that structure for supervised training. We also don’t tell it how to encode the data. We just provide a structure for the encoder and decoder, and measure how well its doing based on how much information is lost in the process.</p>
+
+<p>A <strong>variational auto-encoder (VAE)</strong> is an auto-encoder, except instead of learning a compressed representation, it learns a probability distribution of the data:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/0*qVSTI1FNmySZkjLj.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>This is the point at which most explanations get all hand-wavy and spill a few words about latent space. But all this means is that the compressed representation will be a mean and standard deviation, representing a normal distribution. When we connect it to the decoder, we’ll want to take a noise sample using the mean and variance. This is the <strong>μ + Σ * ε</strong> from the graph above. This just means that when we decode, we’ll use the mean and add the standard deviation multiplied by some random normal value.</p>
+
+<pre><code class="language-python">def sampling(args):  
+    z_mean, z_log_var = args  
+    epsilon = K.random_normal(shape=(latent_dim,), mean=0.0)  
+    return z_mean + K.exp(z_log_var/2.0) * epsilon
+</code></pre>
+
+<p>The other interesting thing about auto-encoders is that you can inject your own values into the process and generate output. From there you can map out a latent space and see the internal representation of our model.</p>
+
+<h4 id="implementation">Implementation</h4>
+
+<p>Most posts use the mnist handwritten numeric digit data set but we’ll use <a href="https://www.nist.gov/itl/iad/image-group/emnist-dataset">emnist</a>, the handwritten character data set instead. Someone on <a href="https://www.kaggle.com/crawford/emnist">Kaggle</a> conveniently transformed the dataset into a csv. I’ve excluded some function definitions. My full code can be found <a href="https://github.com/breeko/gans-in-action/blob/master/ch2_vae_emnist.ipynb">here</a>.</p>
+
+<pre><code class="language-python">%matplotlib inline  
+import imageio  
+import matplotlib.pyplot as plt  
+import numpy as np  
+import pandas as pd
+
+from PIL import Image
+
+train = pd.read_csv(&quot;emnist-letters-train.csv&quot;, header=None)  
+test = pd.read_csv(&quot;emnist-letters-test.csv&quot;, header=None)
+
+mappings = {}  
+with open(&quot;emnist-letters-mapping.txt&quot;) as f:  
+    for line in f.readlines():  
+        code, lower, upper = line.split()  
+        mappings[int(code)] = chr(int(lower))
+
+def display_images(imgs, names, max_imgs=100):  
+    &quot;&quot;&quot; Displays images and their corresponding names&quot;&quot;&quot;  
+    ...
+
+def process_emnist(arr, mappings):  
+    &quot;&quot;&quot; Process emnist letters &quot;&quot;&quot;  
+    ...
+
+X_train, y_train = process_emnist(train, mappings)  
+X_test, y_test = process_emnist(test, mappings)
+
+display_images(X_train[:10],y_train[:10])
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>Our training set is (88800, 28, 28) representing 88,800 letters from A to Z in either upper or lower case.</p>
+
+<p>Below we create the VAE.</p>
+
+<p>A variational auto encoder is just an encoder that feeds a decoder and encodes to a probability density function. We define the models independently and then define the VAE as the combined model. The function returns two models: one for training and one for evaluation. The only difference is that for training, the final layer is hooked up to the sampling layer. But when we want to display our results, we should not include the noise. That model is vae_eval and is just connected to the z_mean layer.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>The final layer of the encoder is the sampling layer which we defined ourselves and wrapped in a Lambda layer. The mean and var layers are used for the loss function which tracks how far away our probability distribution in our encoding is from a mean of 0 and a standard deviation of 1. The mean layer is also used when we want to see our results.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="https://cdn-images-1.medium.com/max/1000/1*vuzoh3WH7g--FFB4xrZg8A.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Decoder</td>
+</tr>
+</tbody>
+</table>
+
+<p>The decoder is relatively straight forward. It takes an input of 2 representing our latent dimensions. It then reconstructs the image.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>Variational Auto Encoder</p>
+
+<p>The VAE is just the two combined. Note that the encoder returns both the mean latent value and a noisy sampling of the latent space. We’ll train on the noisy model and display our results on just the mean.</p>
+
+<p>All that’s left is to fit the model.</p>
+
+<pre><code class="language-python">vae_train.fit(
+    X_train,
+    X_train,
+    shuffle=True,
+    epochs=epochs,
+    batch_size=batch_size,
+    validation_data=(X_test,X_test), 
+    verbose=1,
+    callbacks=[EarlyStopping(patience=4)]
+    )
+</code></pre>
+
+<p>Let’s see how it did.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*wrT-bOKuW92N_516DnEBNQ.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>Not great. The problem is that our representation isn’t deep enough. Ideally we would want to use convolutional layers to get a deeper understanding of the letters and edges.</p>
+
+<p>Let’s see how the latent space looks. We can do so by getting the decoder and feeding it a series of values and seeing what it comes up with. To get the encoder and decoder, we can just reference the second and third layers of the VAE.</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/post/resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png" alt="" /></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>Latent space</p>
+
+<p>It looks crowded. There is some semblance of Ms in the bottom left and Is in the top right. By comparison, here’s how the same analysis looks on numeric digits:</p>
+
+<div stly="text-align:center">
+    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/200/1*QArAhQbz79lFWo-2nn47zw.png">
+    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/1000/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
+</div>
+
+<p>Latent space of a VAE trained on digits</p>
+
+<p>In the latent space you can see something representing nearly all the digits. However, the VAE is still having some trouble distinguishing between 4s, 7s and 9s due to their similarity in shape.</p>
+
+<p>We can increase our latent space by adding more latent dimensions (currently 2). However if we go above 2 layers, we lose the ability to easily represent the latent space as a grid. The other way is to limit our training set to just a subset of the original set. Below I train the vae only on the vowels.</p>
+
+<pre><code class="language-python">def filter_char(X, y, chars):  
+    if type(chars) is not list:  
+        chars = [chars]  
+    idxs, chs = zip(*[(idx, ch) for idx, ch in enumerate(y) if ch in chars])  
+    return X[np.array(idxs)], chs
+
+X_train_vowels, y_train_vowels = filter_char(X_train, y_train, [&quot;A&quot;,&quot;E&quot;,&quot;I&quot;,&quot;O&quot;,&quot;U&quot;])  
+X_test_vowels, y_test_vowels = filter_char(X_test, y_test, [&quot;A&quot;,&quot;E&quot;,&quot;I&quot;,&quot;O&quot;,&quot;U&quot;])
+</code></pre>
+
+<div stly="text-align:center">
+    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/200/1*zEJVVG-XqmUlpD9ILjt61w.png">
+    <img style="display:inline-block;" src="https://cdn-images-1.medium.com/max/1000/1*wbJi6Bd7oghNq6wf6UAUzA.png">
+</div>
+
+<p>This is much better with a clearer distinction between each vowel, although the model does get some letters confused.</p>
+
+<p>The next step would be to build a bigger model ideally one using convolutional layers, which is the more natural way to represent images. Another option would be to increase our latent space dimensions. We’re currently using only 2 dimensions and the nice thing about that is that we can represent the output in a 2d grid to evaluate. But more dimensions would allow for a richer representation and better performance.</p>
+
+<p>By Branko Blagojevic on October 25, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Another%20%27Variational%20Auto%20Encoders%20Explained%27%20Post%20and%20Character%20Encoding&url=http%3a%2f%2fexample.org%2fpost%2f2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+

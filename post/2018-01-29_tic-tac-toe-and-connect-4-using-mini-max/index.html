@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tic-Tac-Toe and Connect-4 using Mini-Max &middot; Branko Blagojevic</title>
+        <meta name="description" content="A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
+A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Tic-Tac-Toe and Connect-4 using Mini-Max">
+<meta property="og:description" content="A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
+A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/">
+        <link rel="stylesheet" href="http://example.org/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="http://example.org/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Tic-Tac-Toe and Connect-4 using Mini-Max</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2018-01-29" itemprop="datePublished">Mon, Jan 29, 2018</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <p>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…</p>
+
+<p>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From <a href="https://en.wikipedia.org/wiki/Deep_Blue_%28chess_computer%29">Deep Blue</a> (chess) in the 1990s, to <a href="https://en.wikipedia.org/wiki/AlphaGo">AlphaGo</a> (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker <a href="https://www.technologyreview.com/s/603544/an-ai-poker-bot-has-whipped-the-pros/">aren’t completely safe</a> from the machine takeover.</p>
+
+<p>In this series, I hope to go over some of the basic machine learning methods used to play games. Future posts will deal with reinforcement learning but for this first part, let’s just focus on exhaustive search and table lookup. Although impractical for larger games, a kind of table lookup remains at the core of many reinforcement learning algorithms.</p>
+
+<p>Let’s start with tic-tac-toe and try to build a bot that can play at least as <a href="https://www.nytimes.com/video/nyregion/100000001595360/tick-tack-toe-playing-chicken.html">well as a chicken</a>.</p>
+
+<p>Everything below is also available <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow">here</a> under <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/blob/master/Part%201%20-%20Tic%20Tac%20Toe%20Minimax.ipynb">Part 1 — Tic Tac Toe Minimax.ipynb</a></p>
+
+<p>Tic-tac-toe has 9 possible spaces with 3 possible values for each space (X, O or blank). Ignoring illegal configurations (e.g. all Xs), there are 9 factorial (362,880) possible games and 3 ^ 9 (19,683) possible boards . The actual numbers are less (<a href="http://www.mathrec.org/old/2002jan/solutions.html">by a factor of 100 or so</a>) since some boards are impossible and you can treat symmetrically similar boards as the same, but we’ll ignore that since even the upper bound of the state space is manageable on a CPU.</p>
+
+<p>Since the state space of tic-tac-toe is so small we can easily just exhaust the space and come up with a lookup table based on the board and who you’re playing as. Actually, <a href="https://xkcd.com/832/">xkcd beat me to it</a> but let’s do one anyway.</p>
+
+<p>Let’s start with a game board. It’s pretty boring as far as tic-tac-toe boards go. It let’s the user interface with the board through a move function and spaces are represented with integers 1 to 9.</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/ceb9fbb1c98fa54f56910b3af859392a.js"></script>
+
+<p>Below is an implementation that let’s you play against a bot and see how it performs. It’s pretty straight forward, and just requires a game object that can print, accept moves and has legal players. The bot has to have a function called called play that accepts a game object and returns a move.</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/4f9898b14ab8b7b2d36dffb2f727bb12.js"></script>
+
+<p>Now on to the strategy. Since tic-tac-toe is a zero sum game (what’s good for me is bad for my opponent, and vice versa), we can use mini-max decision rule to exhaust all possible moves. The way mini-max works is it basically asks: what’s my best move (MAX) if my opponent follows my move with the worst possible move for me (MINI) and I follow that with my best move (MAX) and so on. Below is an example of mini-max on a tic-tac-toe board.</p>
+
+<p><img src="/post/resources/img/1*bD2QuWCSVcnFH8j2iPMtbQ.png" alt="" /></p>
+
+<p>The states that have a border are the states that are selected for that level to percolate back up to the higher level. So reading from the bottom up, there is only one choice in that branch, so this is the state that moves up. On the level above that (the MIN level), we have two options, and since we’re looking at min values, we take the worse of the two. The layer above that is the MAX level, and we have three option, two of which return -1 and the other returns +1, so we choose the +1 since its the max value.</p>
+
+<p>There are certainly more <a href="http://giocc.com/concise-implementation-of-minimax-through-higher-order-functions.html">concise and elegant</a> ways to write a generic mini-max rule, but the below is a somewhat verbose implementation of mini-max designed for our board:</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/e7da1b040a69484f3120732f15cf888b.js"></script>
+
+<p>One brief somewhat wonky note on this board is that it’s for games that have the <a href="https://en.wikipedia.org/wiki/Markov_property">Markov property</a>. Meaning that everything you need to know is in a state representation. There is no path dependence. This doesn’t hold true for many games. For instance, in many games an object has movement whose direction is not clear from a single frame. So if the object is moving towards your or away from you, your actions may be different but you can’t tell which of the direction from just one frame. We’ll create designs to deal with that later.</p>
+
+<p>So how does it do? Well, tic-tac-toe is an unwinnable game so our bot should at least not lose (human is X).</p>
+
+<pre><code>Select player: ['X', 'O'] x  
+   ¦   ¦     
+---+---+---   
+   ¦   ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 5  
+ O ¦   ¦     
+---+---+---   
+   ¦ X ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 2  
+ O ¦ X ¦     
+---+---+---   
+   ¦ X ¦     
+---+---+---   
+   ¦ O ¦   
+
+Input move: 6  
+ O ¦ X ¦     
+---+---+---   
+ O ¦ X ¦ X   
+---+---+---   
+   ¦ O ¦   
+
+Input move: 7  
+ O ¦ X ¦ O   
+---+---+---   
+ O ¦ X ¦ X   
+---+---+---   
+ X ¦ O ¦   
+
+Input move: 9  
+ O ¦ X ¦ O   
+---+---+---   
+ O ¦ X ¦ X   
+---+---+---   
+ X ¦ O ¦ X 
+
+It's a draw
+</code></pre>
+
+<p>Good! Let’s see if the bot can win (human is O).</p>
+
+<pre><code>Select player: ['X', 'O'] o  
+ X ¦   ¦     
+---+---+---   
+   ¦   ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 2  
+ X ¦ O ¦     
+---+---+---   
+ X ¦   ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 3  
+ X ¦ O ¦ O   
+---+---+---   
+ X ¦ X ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 6  
+ X ¦ O ¦ O   
+---+---+---   
+ X ¦ X ¦ O   
+---+---+---   
+ X ¦   ¦   
+
+You lost :-(
+</code></pre>
+
+<p>Something interesting happens here. It appears as though our bot is in no rush to win. So if you’re in a state where a winning move is available, but the next move can win as well, our bot may choose to wait as long as there is no possible scenario which it can lose. This is exactly what happened after my first move.</p>
+
+<p>The reason it is in no rush is because the way we wrote the decision rule, there is no negative time value. To remedy this, we could build in a penalty for each time step. This doesn’t have to be a large value, but just big enough to nudge the rule to prefer actions that end the game. If set too high, you could imagine the decision rule could purposely make a move to lose the game in order to prevent taking a penalty from just playing out the future moves.</p>
+
+<p>In the example below, there is a penalty of 0.1 at each time step. Without a time penalty, the bot would be indifferent of the action it would take even though the right most action would be the longest. With a time penalty, the bot is nudged to one of the two action that terminate the game.</p>
+
+<p><img src="/post/resources/img/1*5ZsfuF5ycwnoMOA06UxRjA.png" alt="" /></p>
+
+<p>Here is the time-value bot. Everything is the same, except the time_penalty input and a few lines which have comments (lines 29:31)</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/36d6421ab49c96843f7a7b0ecdfcdc8c.js"></script>
+
+<p>Let’s see how it does:</p>
+
+<pre><code>Select player: ['X', 'O'] o  
+ X ¦   ¦     
+---+---+---   
+   ¦   ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 2  
+ X ¦ O ¦     
+---+---+---   
+ X ¦   ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 3  
+ X ¦ O ¦ O   
+---+---+---   
+ X ¦   ¦     
+---+---+---   
+ X ¦   ¦   
+
+You lost :-(
+</code></pre>
+
+<p>That’s better. It takes goes for the quick kill. But something else is happening that’s odd. The bots first move is the top left corner. Every savvy tic-tac-toe knows that’s an amateur move. Sure, you can still guarantee you won’t lose, but there are fewer ways to win. Why doesn’t the bot play the more traditional middle square?</p>
+
+<p>The problem is that the bot assumes perfect play by the opponent. What we may want to do is tell the bot to consider sub-optimal play, even if it’s just a little to nudge our decisions to a path that may be more likely to win if the opponent slips up. There are a number of ways to do this, but a simple way is to weight all sub-optimal moves by some percentage (e.g. sub-optimal weight of 0.1 means the value of a move is equal to 90% on the optimal award and 10% on the average sub-optimal award).</p>
+
+<p>Here’s the implementation below. Again, everything is the same except accepting a sub-optimal weight and the commented portions (lines 38:41).</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/06c5de38713698a27c8a5c323f71266d.js"></script>
+
+<p>So how does it do?</p>
+
+<pre><code>Select player: ['X', 'O'] o  
+   ¦   ¦     
+---+---+---   
+   ¦ X ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 1  
+ O ¦ X ¦     
+---+---+---   
+   ¦ X ¦     
+---+---+---   
+   ¦   ¦   
+
+Input move: 3  
+ O ¦ X ¦ O   
+---+---+---   
+   ¦ X ¦     
+---+---+---   
+   ¦ X ¦   
+
+You lost :-(
+</code></pre>
+
+<p>Pretty good…</p>
+
+<p>The nice thing about these bots is that they’re fairly general, so we can create our own games an apply them. I would caution though that since it relies on exhaustion, the state space would have to very small. I created a game class for connect-4 the follows the same basic format of the tic-tac-toe board, which will allow us to use our bots and play function.</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/8b7f698a1ebcf2c0a0d477286062cf20.js"></script>
+
+<p>You can’t really use mini-max on connect-4 since the state space is too large. The standard board is 6 (height) x 7 (width) which comes out to <a href="https://tromp.github.io/c4/c4.html">4,531,985,219,092</a> possible positions. So unless you need a good excuse to restart your computer, I wouldn’t suggest trying to run it with one of the bots we wrote. But we can place a limit as to the number of steps ahead our bot can consider. So eventually it just gives up. Below I’ve edited our bot class to take a limit argument and cut off the search after the number of steps has exceeded that limit. It evaluates the state at that point and just returns the value (lines 23:25).</p>
+
+<script type="application/javascript" src="//gist.github.com/breeko/a364b144de0bb5db73be0ea57649f036.js"></script>
+
+<p>The next step would be to get a final evaluation of the board in the terminal (last) step. But I’ll leave that there.</p>
+
+<p>Many reinforcement learning algorithms boil down to this basic premise. Get a board representation and do a kind of lookup. That’s it. The board may be a tic-tac-toe board, a 17x17 Go board or a (210, 160, 3) array representing the pixel values of an Atari game. We take some representation of this board, often times running manipulations on the representation, and try to predict the estimated future reward based on some set of actions. And then we choose the action with the highest reward, lowest risk, or some other consideration. Much of the work is just getting fancy with what we consider the state, either by running it through a neural network or considering multiple frames. The other part is pruning, meaning that we don’t let our bots go down very unlikely sub-optimal paths. So we often have a bot play against another bot (or the game logic itself), see what happened based on the state, and nudge the lookup to try to better predict what actually happened based on the state.</p>
+
+<p>Future posts will do just that and solve more complicated games by manipulating the pixel values. For those interested, <a href="http://incompleteideas.net/book/bookdraft2017nov5.pdf">a free textbook on reinforcement learning is available online</a> which is really thorough and a great resource as long as you’re okay with more mathematical notations and pseudo-code (and no I don’t mean python). There is also a <a href="https://www.youtube.com/watch?v=2pWv7GOvuf0">great Reinforcement Learning course</a> on YouTube by DeepMind (Google’s team that created AlphaGo), which I recommend as well as other resources if you just search. Enjoy.</p>
+
+<p>By Branko Blagojevic on January 29, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Tic-Tac-Toe%20and%20Connect-4%20using%20Mini-Max&url=http%3a%2f%2fexample.org%2fpost%2f2018-01-29_tic-tac-toe-and-connect-4-using-mini-max%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2fpost%2f2018-01-29_tic-tac-toe-and-connect-4-using-mini-max%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="http://example.org/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="http://example.org/js/jquery-1.11.3.min.js"></script>
+        <script src="http://example.org/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="http://example.org/js/scripts.js"></script>
+    </body>
+</html>
+
