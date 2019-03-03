@@ -111,7 +111,7 @@ I have read a fair number of posts about variational auto encoders but only rece
 <p>An <strong>auto-encoder</strong> deconstructs (or encodes) some data into a hidden representation with the goal of losing as little information as possible. Its performance is measured by how well it can reconstruct (decode) the data based on its internal representation.</p>
 
 <figure>
-    <img src="resources/img/0*sukoan_LqtFKllCW.jpg"/> 
+    <img src="/post/resources/img/0*sukoan_LqtFKllCW.jpg"/> 
 </figure>
 
 
@@ -120,7 +120,7 @@ I have read a fair number of posts about variational auto encoders but only rece
 <p>A <strong>variational auto-encoder (VAE)</strong> is an auto-encoder, except instead of learning a compressed representation, it learns a probability distribution of the data:</p>
 
 <figure>
-    <img src="resources/img/0*qVSTI1FNmySZkjLj.png"/> 
+    <img src="/post/resources/img/0*qVSTI1FNmySZkjLj.png"/> 
 </figure>
 
 
@@ -170,7 +170,7 @@ display_images(X_train[:10],y_train[:10])
 </code></pre>
 
 <figure>
-    <img src="resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png"/> 
+    <img src="/post/resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png"/> 
 </figure>
 
 
@@ -181,14 +181,14 @@ display_images(X_train[:10],y_train[:10])
 <p>A variational auto encoder is just an encoder that feeds a decoder and encodes to a probability density function. We define the models independently and then define the VAE as the combined model. The function returns two models: one for training and one for evaluation. The only difference is that for training, the final layer is hooked up to the sampling layer. But when we want to display our results, we should not include the noise. That model is vae_eval and is just connected to the z_mean layer.</p>
 
 <figure>
-    <img src="resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png"/> 
+    <img src="/post/resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png"/> 
 </figure>
 
 
 <p>The final layer of the encoder is the sampling layer which we defined ourselves and wrapped in a Lambda layer. The mean and var layers are used for the loss function which tracks how far away our probability distribution in our encoding is from a mean of 0 and a standard deviation of 1. The mean layer is also used when we want to see our results.</p>
 
 <figure>
-    <img src="resources/img/1*vuzoh3WH7g--FFB4xrZg8A.png"/> <figcaption>
+    <img src="/post/resources/img/1*vuzoh3WH7g--FFB4xrZg8A.png"/> <figcaption>
             <h4>Decoder</h4>
         </figcaption>
 </figure>
@@ -197,7 +197,7 @@ display_images(X_train[:10],y_train[:10])
 <p>The decoder is relatively straight forward. It takes an input of 2 representing our latent dimensions. It then reconstructs the image.</p>
 
 <figure>
-    <img src="resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png"/> 
+    <img src="/post/resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png"/> 
 </figure>
 
 
@@ -222,7 +222,7 @@ display_images(X_train[:10],y_train[:10])
 <p>Let’s see how it did.</p>
 
 <figure>
-    <img src="resources/img/1*wrT-bOKuW92N_516DnEBNQ.png"/> 
+    <img src="/post/resources/img/1*wrT-bOKuW92N_516DnEBNQ.png"/> 
 </figure>
 
 
@@ -231,7 +231,7 @@ display_images(X_train[:10],y_train[:10])
 <p>Let’s see how the latent space looks. We can do so by getting the decoder and feeding it a series of values and seeing what it comes up with. To get the encoder and decoder, we can just reference the second and third layers of the VAE.</p>
 
 <figure>
-    <img src="resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png"/> 
+    <img src="/post/resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png"/> 
 </figure>
 
 
@@ -240,8 +240,8 @@ display_images(X_train[:10],y_train[:10])
 <p>It looks crowded. There is some semblance of Ms in the bottom left and Is in the top right. By comparison, here’s how the same analysis looks on numeric digits:</p>
 
 <div stly="text-align:center">
-    <img style="display:inline-block;" src="resources/img/1*QArAhQbz79lFWo-2nn47zw.png">
-    <img style="display:inline-block;" src="resources/img/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
+    <img style="display:inline-block;" src="/post/resources/img/1*QArAhQbz79lFWo-2nn47zw.png">
+    <img style="display:inline-block;" src="/post/resources/img/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
 </div>
 
 <p>Latent space of a VAE trained on digits</p>
@@ -261,8 +261,8 @@ X_test_vowels, y_test_vowels = filter_char(X_test, y_test, [&quot;A&quot;,&quot;
 </code></pre>
 
 <div stly="text-align:center">
-    <img style="display:inline-block;" src="resources/img/1*zEJVVG-XqmUlpD9ILjt61w.png">
-    <img style="display:inline-block;" src="resources/img/1*wbJi6Bd7oghNq6wf6UAUzA.png">
+    <img style="display:inline-block;" src="/post/resources/img/1*zEJVVG-XqmUlpD9ILjt61w.png">
+    <img style="display:inline-block;" src="/post/resources/img/1*wbJi6Bd7oghNq6wf6UAUzA.png">
 </div>
 
 <p>This is much better with a clearer distinction between each vowel, although the model does get some letters confused.</p>
