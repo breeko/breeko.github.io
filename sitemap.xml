@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://breeko.github.io/post/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</loc>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/post/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</loc>
     <lastmod>2019-03-18T00:00:00+00:00</lastmod>
   </url>
@@ -140,6 +145,12 @@
   </url>
   
   <url>
+    <loc>https://breeko.github.io/tags/data-science/</loc>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/tags/database/</loc>
     <lastmod>2018-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -183,7 +194,7 @@
   
   <url>
     <loc>https://breeko.github.io/</loc>
-    <lastmod>2019-03-18T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -219,7 +230,7 @@
   
   <url>
     <loc>https://breeko.github.io/post/</loc>
-    <lastmod>2019-03-18T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -230,8 +241,14 @@
   </url>
   
   <url>
+    <loc>https://breeko.github.io/tags/probability/</loc>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/tags/python/</loc>
-    <lastmod>2019-03-18T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -285,7 +302,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/statistics/</loc>
-    <lastmod>2018-10-11T00:00:00+00:00</lastmod>
+    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

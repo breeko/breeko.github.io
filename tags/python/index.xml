@@ -6,10 +6,20 @@
     <description>Recent content in Python on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Calculating the Probability of Skittle Distribution by Brute Force</title>
+      <link>https://breeko.github.io/post/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</link>
+      <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</guid>
+      <description>A recent blog post caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.
+I wanted to test this his results empirically while also being lazy.</description>
+    </item>
     
     <item>
       <title>Building an Object Detection API with AWS S3, Rekognition and Lambda</title>
