@@ -6,10 +6,19 @@
     <description>Recent content in Python on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How Facial Recognition Works Part 1: Face Detection</title>
+      <link>https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/</link>
+      <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/</guid>
+      <description>Much has been written about facial recognition and its role in society. As with a lot of topics concerning artificial intelligence, it is often discussed with an air of mysticism, as though all the all seeing machines can now peer into our souls. Depending on the narrative of the piece, its accuracy is chillingly accurate or appallingly inadequate for use. Amazon got flack for pitching their Reckognition service to law enforcement, San Fransisco banned the technology, and it has even been called racist.</description>
+    </item>
     
     <item>
       <title>Calculating the Probability of Skittle Distribution by Brute Force</title>
