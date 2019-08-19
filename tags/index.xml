@@ -102,6 +102,15 @@
     </item>
     
     <item>
+      <title>Functional Programming</title>
+      <link>https://breeko.github.io/tags/functional-programming/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/functional-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Gans</title>
       <link>https://breeko.github.io/tags/gans/</link>
       <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
@@ -203,7 +212,7 @@
     <item>
       <title>Python</title>
       <link>https://breeko.github.io/tags/python/</link>
-      <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://breeko.github.io/tags/python/</guid>
       <description></description>
@@ -260,6 +269,15 @@
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>https://breeko.github.io/tags/reinforcement-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scala</title>
+      <link>https://breeko.github.io/tags/scala/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/scala/</guid>
       <description></description>
     </item>
     

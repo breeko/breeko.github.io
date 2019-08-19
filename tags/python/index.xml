@@ -6,10 +6,20 @@
     <description>Recent content in Python on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scala’s Case Class in Python with Case Matching</title>
+      <link>https://breeko.github.io/post/2019-08-19-python-case-classes/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-08-19-python-case-classes/</guid>
+      <description>I’ve been doing a lot of Scala programming lately. Scala is a statically typed language that compiles to the JVM. Scala doesn’t break away from object oriented programming but has a lot of functional programming features.
+One of my favorite features of Scala is its case classes. Case classes are a lot like regular classes but they’re easier to setup and usually used to model immutable data. They also allow for easy pattern matching.</description>
+    </item>
     
     <item>
       <title>How Facial Recognition Works Part 1: Face Detection</title>
