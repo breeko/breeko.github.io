@@ -6,10 +6,20 @@
     <description>Recent content in Facial Recognition on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/facial-recognition/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How Facial Recognition Works Part 3, How a Face Changes Over 10 Years</title>
+      <link>https://breeko.github.io/post/2019-09-23-how-facial-recognition-works-part-3/</link>
+      <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-09-23-how-facial-recognition-works-part-3/</guid>
+      <description>This is part 3 of a series of posts about facial recognition. In part 1 I discussed facial detection and part 2 I discussed facial landmarks. In this post, I&amp;rsquo;ll go into how accurate some off the shelf facial recognition are and how well they work as a subject ages.
+I found this video of a man (boy?) that took a picture of himself every day over 10 years starting at age 12.</description>
+    </item>
     
     <item>
       <title>How Facial Recognition Works Part 2, Facial Landmarks</title>
@@ -23,21 +33,11 @@ When talking about what distinguishes one face from another we normally talk abo
     </item>
     
     <item>
-      <title>How Facial Recognition Works Part 3, How a Face Changes Over 10 Years</title>
-      <link>https://breeko.github.io/post/2019-08-28-how-facial-recognition-works-part-3/</link>
-      <pubDate>Tue, 27 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/post/2019-08-28-how-facial-recognition-works-part-3/</guid>
-      <description>This is part 3 of a series of posts about facial recognition. In part 1 I discussed facial detection and part 2 I discussed facial landmarks. In this post, I&amp;rsquo;ll go into how accurate some off the shelf facial recognition are and how well they work as a subject ages.
-I found this video of a man (boy?) that took a picture of himself every day over 10 years starting at age 12.</description>
-    </item>
-    
-    <item>
       <title>How Facial Recognition Works Part 4, Comparing Congressmen to Mugshots</title>
-      <link>https://breeko.github.io/post/2019-08-28-how-facial-recognition-works-part-4/</link>
+      <link>https://breeko.github.io/post/2019-09-30-how-facial-recognition-works-part-4/</link>
       <pubDate>Tue, 27 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-08-28-how-facial-recognition-works-part-4/</guid>
+      <guid>https://breeko.github.io/post/2019-09-30-how-facial-recognition-works-part-4/</guid>
       <description>This is part 4 of my series on facial recognition. Part 1 was about face detection, part 2 was about facial landmarks and part 3 was about accuracy over time.
 This post I will compare US congressmen to a public dataset of mugshots. This was inspired by the ACLU claim that Amazon’s face recognition falsely matched 28 members of Congress with mugshots.
 The post didn&amp;rsquo;t include any source code or source of the mugshot datasets or the congressman dataset.</description>
