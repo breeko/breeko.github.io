@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Word Crossword Search in Typescript and React Part 1 &middot; Branko Blagojevic</title>
+        <meta name="description" content="I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Word Crossword Search in Typescript and React Part 1">
+<meta property="og:description" content="I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/post/2019-11-02-word-crossword-search-in-typescript-and-react-part-1/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Word Crossword Search in Typescript and React Part 1</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2019-11-02" itemprop="datePublished">Sat, Nov 2, 2019</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+<p>I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.</p>
+
+<figure>
+    <img src="/post/resources/img/2019-11-02-word_crossword_search.png"/> <figcaption>
+            <h4>Word Crossword Search</h4>
+        </figcaption>
+</figure>
+
+
+<p>You know that the gameplay must be good that people are willing to put up with the garish style.
+Rather than submit to my desires, I decided I can build the game instead. By the time its complete, I will be thoroughly exhausted about thinking about the idea that I&rsquo;ll no longer be interested in playing.</p>
+
+<h1 id="exploring-common-words">Exploring Common Words</h1>
+
+<p>The first step is to find a word list. Most unix systems including osx have a word list under /usr/share/dict/words but there are over 200k words and many are obscure (e.g. abaciscus, abacist, abactinal). I found a list of 5,000 common words although I had to put in an email (throw-away mail works). I made some slight manual changes to the word list (removed duplicates and added word length as a column). I kept all the columns in case I want to reference them later, but my table schema looks like this:</p>
+
+<pre><code>rank   word   len   partOfSpeech   frequency   dispersion
+</code></pre>
+
+<p>I loaded them into an array of Words:</p>
+
+<pre><code>import fs from 'fs'
+const filename = './common_words.csv'
+const getCommonWords = (filename: string) =&gt; {
+    const raw = fs.readFileSync(filename, 'utf8')
+    return raw.split('\r\n').slice(1).map(r =&gt; {
+        const [rank, word, len, partOfSpeech, frequency, dispersion] = r.split(',')
+        return {
+            rank: Number(rank),
+            word, len: Number(len),
+            partOfSpeech,
+            frequency: Number(frequency),
+            dispersion: Number(dispersion)
+        }
+    })
+}
+
+const words = getCommonWords(filename)
+export const allWords = words.map(w =&gt; w.word)
+</code></pre>
+
+<p>Here are the first ten words:</p>
+
+<pre><code>allWords.slice(0,10) =&gt;
+  [ 'the', 'be', 'and', 'of', 'a', 'in', 'to', 'have', 'it', 'I' ]
+</code></pre>
+
+<p>From there I had to build out some general utils to process the array of words. The first function I need is a counter, similar to the counter in python&rsquo;s collection utils.</p>
+
+<p>In our case, we want to take a word and return a map of characters and their respective counts (e.g. counter(&ldquo;hello&rdquo;) =&gt; {h: 1, e: 1, l: 2, o: 1})</p>
+
+<p>The great thing about typed languages is that you can word on the function signature, and when you decide on that the rest of the word becomes considerably easier.</p>
+
+<figure>
+    <img src="/post/resources/img/2019-11-02-static_vs_dynamic_typing.png"/> <figcaption>
+            <h4>Static v Dynamic</h4>
+        </figcaption>
+</figure>
+
+
+<p>In our case, we want to take in a string and return a Map<string, number>.</p>
+
+<pre><code>export const counter = (word: string): Map&lt;string, number&gt; =&gt; {
+    const ct = new Map&lt;string,number&gt;()
+    word.split('').forEach(ch =&gt; ct.set(ch, (ct.get(ch) || 0) + 1))
+    return ct
+}
+</code></pre>
+
+<p>The next thing we need is the see if a word is a subset of another word. The easiest way to do that is to determine a counter of each word, and see if all the character counts in word1 and less than or equal to the character counts in word2.</p>
+
+<pre><code>export const subsetWord = (word1: string, word2: string): boolean =&gt; {
+    const ct1 = counter(word1)
+    const ct2 = counter(word2)
+    return Array.from(ct1).every(([k,v]) =&gt; (ct2.get(k) || 0) &gt;= v)
+}
+</code></pre>
+
+<p>The above function iterates through the counter object of word1, tries to get the corresponding character count from word2 and checks if word1 contains more characters than that of word2.</p>
+
+<pre><code>subsetWord('abe','anabelle') =&gt; true
+subsetWord('sam','anabelle') =&gt; false
+</code></pre>
+
+<p>Now that we have a way to check to see if a word is a subset of another word, we can filter all the words for words that are a subset of a given word.</p>
+
+<pre><code>const getSubsetWords = (word: string, words: string[]): string[] =&gt; 
+  words.filter(w =&gt; subsetWord(w, word))
+</code></pre>
+
+<p>To see the subset of the word <code>method</code>:</p>
+
+<pre><code>getSubsetWords('method', allWords) =&gt;
+  [ 'the', 'to', 'he', 'do', 'them', 'me', 'home', 'oh', 'hot', 'method', 'mode', 'toe', 'dot' ]
+</code></pre>
+
+<p>So let&rsquo;s see what 6 letter common word has the most and least subset common words.</p>
+
+<pre><code>const allWords6 = allWords.filter(w =&gt; w.length === 6)
+const subsetWords6 = allWords6.map(w =&gt; [w, getSubsetWords(w, allWords)])
+</code></pre>
+
+<p>You would think that the type of subsetWords6 would be <code>[string, string[]][]</code>, but Typescript infers the more general format <code>[string | string[]][][]</code>. But we can give Typescript a hint and it won&rsquo;t complain. This is common when your maps return arrays.</p>
+
+<pre><code>const subsetWords6: [string, string[]][] = allWords6.map(w =&gt; [w, getSubsetWords(w, allWords)])
+</code></pre>
+
+<p>Finally, we need to find the 6 letter word with the largest number of subsetWords. Typescript doesn&rsquo;t have a max that can take in a generic. Math.max also only words on number. But what is a max really? It&rsquo;s just a reduce!</p>
+
+<pre><code>const best = subsetWords6.reduce((a,b) =&gt; (a.length &gt; b.length) ? a : b)
+</code></pre>
+
+<p>Finally lets look at the results:</p>
+
+<pre><code>['pistol', 
+  ['to', 'it', 'so', 'its', 'lot', 'sit', 'stop', 'oil', 'top', 'list', 'spot', 'lots', 'lip', 'pilot', 'slip', 'soil', 'tip', 'post', 'pot', 'lost', 'split', 'plot', 'pit', 'opt', 'slot', 'spit', 'pistol']]
+[ 'people', [ 'people', 'pop', 'pole', 'peel' ] ]
+</code></pre>
+
+<p>When choosing what words to use, we may want to limit to words that have a certain number of subset words. So we may want to exclude <code>people</code> as that puzzle would be too short.
+The next step is to figure out how to plot it on a crossword and how to represent that, which I&rsquo;ll cover next time.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/javascript/">javascript</a>, 
+            
+                <a href="/tags/typescript/">typescript</a>, 
+            
+                <a href="/tags/game-development/">game-development</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Word%20Crossword%20Search%20in%20Typescript%20and%20React%20Part%201&url=https%3a%2f%2fbreeko.github.io%2fpost%2f2019-11-02-word-crossword-search-in-typescript-and-react-part-1%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fpost%2f2019-11-02-word-crossword-search-in-typescript-and-react-part-1%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2019 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

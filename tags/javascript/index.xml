@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Javascript on ML-Everything</title>
+    <link>https://breeko.github.io/tags/javascript/</link>
+    <description>Recent content in Javascript on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 02 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Word Crossword Search in Typescript and React Part 1</title>
+      <link>https://breeko.github.io/post/2019-11-02-word-crossword-search-in-typescript-and-react-part-1/</link>
+      <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-11-02-word-crossword-search-in-typescript-and-react-part-1/</guid>
+      <description>I don&amp;rsquo;t normally play mobile games, but I do take the train every day so I&amp;rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.</description>
+    </item>
+    
+  </channel>
+</rss>
