@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://breeko.github.io/post/2019-11-19-how-renaissance-technologies-solved-the-market-part-1/</loc>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/post/2019-11-02-word-crossword-search-in-typescript-and-react-part-1/</loc>
     <lastmod>2019-11-02T00:00:00+00:00</lastmod>
   </url>
@@ -217,7 +222,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/finance/</loc>
-    <lastmod>2018-11-29T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -242,6 +247,12 @@
   <url>
     <loc>https://breeko.github.io/tags/gans/</loc>
     <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/tags/hedge-funds/</loc>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -271,7 +282,7 @@
   
   <url>
     <loc>https://breeko.github.io/</loc>
-    <lastmod>2019-11-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -307,7 +318,7 @@
   
   <url>
     <loc>https://breeko.github.io/post/</loc>
-    <lastmod>2019-11-02T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -392,6 +403,12 @@
   <url>
     <loc>https://breeko.github.io/tags/statistics/</loc>
     <lastmod>2019-04-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/tags/stock-market/</loc>
+    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

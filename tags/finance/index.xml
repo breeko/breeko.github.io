@@ -6,10 +6,20 @@
     <description>Recent content in Finance on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 29 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/finance/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>How Renaissance Technologies Solved the Market: Part 1 - Pipeline</title>
+      <link>https://breeko.github.io/post/2019-11-19-how-renaissance-technologies-solved-the-market-part-1/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-11-19-how-renaissance-technologies-solved-the-market-part-1/</guid>
+      <description>The new book The Man Who Solved the Market details Jim Simons and his hedge fund Renaissance Technologies in great detail. Jim Simons is a world renowned mathematician that left academia and started a hedge fund at the age of 40. He went on to become the most successful hedge fund manager and one of the richest people in the world.
+The crown jewel of Renaissance Technologies is the Medallion Fund.</description>
+    </item>
     
     <item>
       <title>Predicting the Stock Market, p-Hacking and Why You Should Be Bullish</title>
