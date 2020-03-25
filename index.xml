@@ -6,10 +6,52 @@
     <description>Recent content on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Optimal Bet Size Using Kelly Criterion</title>
+      <link>https://breeko.github.io/post/2020-03-09-optimal-bet-size-using-kelly-criterion/</link>
+      <pubDate>Mon, 09 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2020-03-09-optimal-bet-size-using-kelly-criterion/</guid>
+      <description>Optimal Bet Size Using Kelly Criterion TLDR: When placing a wager, choosing a bet size is as important as an edge. Kelly Criterion is a simple formula that determines the bet size for the highest growth in repeated games. I made a calculator/simulator to play out alternative strategies.
+Suppose I offered you to play a game where we flip coins using a fair coin. If it lands on tails, you lose $1, but if it lands on heads, you win $1.</description>
+    </item>
+    
+    <item>
+      <title>Buying a Home in the US is Increasingly Attainable</title>
+      <link>https://breeko.github.io/post/2020-02-28-buying-a-home-is-increasingly-affordable/</link>
+      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2020-02-28-buying-a-home-is-increasingly-affordable/</guid>
+      <description>Buying a Home in the US is Increasingly Attainable There’s a common belief that the American dream is dead. One of the causes is home affordability. But buying a home is actually incredibly affordable now relative to the last 50 years when you consider mortgage rates and median income.
+All charts below have been made by Chart It, a free tool I created for creating and sharing charts.
+History of 30 Year Fixed Rate Mortgages Today the most popular mortgage loan in the US is the 30 year mortgage, but this wasn’t always the case.</description>
+    </item>
+    
+    <item>
+      <title>How Renaissance Technologies Solved the Market: Part 3 - Incentives</title>
+      <link>https://breeko.github.io/post/2019-11-28-how-renaissance-technologies-solved-the-market-part-3/</link>
+      <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-11-28-how-renaissance-technologies-solved-the-market-part-3/</guid>
+      <description>How Renaissance Technologies Solved the Market: Part 3 — Incentives Renaissance Technologies is the most successful hedge fund in history, netting investors an average of 39% a year after fees over the last 3 decades. Renaissance stands out among its peers as by far the best performing fund.
+ One reason is that the incentives Renaissance decided to focus on are different than that of other funds.
+This is part 3 of my thoughts on Renaissance Technologies after reading The Man Who Solved the Market.</description>
+    </item>
+    
+    <item>
+      <title>How Renaissance Technologies Solved the Market: Part 2 - Hiring Academics</title>
+      <link>https://breeko.github.io/post/2019-11-20-how-renaissance-technologies-solved-the-market-part-2/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2019-11-20-how-renaissance-technologies-solved-the-market-part-2/</guid>
+      <description>Renaissance Technologies is the most successful hedge fund in history, averaging nearly 40% annual net returns over the last 30 years. The book The Man Who Solved the Market discusses the fund and its founder Jim Simons in depth.
+This is part 2 on a series discussing the book. Part 1 discussed the Renaissance’s data pipeline. This part will discuss Renaissance’s unusual practice of hiring almost exclusively from academia.</description>
+    </item>
     
     <item>
       <title>How Renaissance Technologies Solved the Market: Part 1 - Pipeline</title>

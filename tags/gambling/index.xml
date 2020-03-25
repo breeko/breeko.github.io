@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gambling on ML-Everything</title>
+    <link>https://breeko.github.io/tags/gambling/</link>
+    <description>Recent content in Gambling on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 09 Mar 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/gambling/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Optimal Bet Size Using Kelly Criterion</title>
+      <link>https://breeko.github.io/post/2020-03-09-optimal-bet-size-using-kelly-criterion/</link>
+      <pubDate>Mon, 09 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2020-03-09-optimal-bet-size-using-kelly-criterion/</guid>
+      <description>Optimal Bet Size Using Kelly Criterion TLDR: When placing a wager, choosing a bet size is as important as an edge. Kelly Criterion is a simple formula that determines the bet size for the highest growth in repeated games. I made a calculator/simulator to play out alternative strategies.
+Suppose I offered you to play a game where we flip coins using a fair coin. If it lands on tails, you lose $1, but if it lands on heads, you win $1.</description>
+    </item>
+    
+  </channel>
+</rss>

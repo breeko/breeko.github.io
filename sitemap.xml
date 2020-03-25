@@ -3,6 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://breeko.github.io/post/2020-03-09-optimal-bet-size-using-kelly-criterion/</loc>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/post/2020-02-28-buying-a-home-is-increasingly-affordable/</loc>
+    <lastmod>2020-02-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/post/2019-11-28-how-renaissance-technologies-solved-the-market-part-3/</loc>
+    <lastmod>2019-11-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/post/2019-11-20-how-renaissance-technologies-solved-the-market-part-2/</loc>
+    <lastmod>2019-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/post/2019-11-19-how-renaissance-technologies-solved-the-market-part-1/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
   </url>
@@ -203,6 +223,12 @@
   </url>
   
   <url>
+    <loc>https://breeko.github.io/tags/economics/</loc>
+    <lastmod>2020-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/tags/facebook/</loc>
     <lastmod>2019-07-11T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -222,7 +248,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/finance/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -235,6 +261,12 @@
   <url>
     <loc>https://breeko.github.io/tags/functional-programming/</loc>
     <lastmod>2019-08-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/tags/gambling/</loc>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -252,7 +284,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/hedge-funds/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -282,7 +314,7 @@
   
   <url>
     <loc>https://breeko.github.io/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -317,8 +349,14 @@
   </url>
   
   <url>
+    <loc>https://breeko.github.io/tags/politics/</loc>
+    <lastmod>2020-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://breeko.github.io/post/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -330,7 +368,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/probability/</loc>
-    <lastmod>2019-04-18T00:00:00+00:00</lastmod>
+    <lastmod>2020-03-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -355,6 +393,12 @@
   <url>
     <loc>https://breeko.github.io/tags/react-native/</loc>
     <lastmod>2018-07-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://breeko.github.io/tags/real-estate/</loc>
+    <lastmod>2020-02-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -408,7 +452,7 @@
   
   <url>
     <loc>https://breeko.github.io/tags/stock-market/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
