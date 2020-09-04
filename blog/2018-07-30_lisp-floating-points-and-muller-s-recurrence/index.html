@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Lisp, Floating Points and Muller&#39;s Recurrence &middot; Branko Blagojevic</title>
+        <meta name="description" content="Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.
+Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.
+I came across this article about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Lisp, Floating Points and Muller&#39;s Recurrence">
+<meta property="og:description" content="Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.
+Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.
+I came across this article about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-07-30_lisp-floating-points-and-muller-s-recurrence/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Lisp, Floating Points and Muller&#39;s Recurrence</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.</p>
+<p>Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.</p>
+<p>I came across <a href="https://medium.com/@bellmar/is-cobol-holding-you-hostage-with-math-5498c0eb428b">this article</a> about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point. Below is a quick recap of the article and the problem with floating points.</p>
+<h4 id="the-problem-with-floating-point-representation">The problem with floating point representation</h4>
+<p>The nature of floating point representations results in some unexpected values. For instance, in python if you try to add 0.1 and 0.2 you get the result below.</p>
+<pre><code>&gt;&gt;&gt; 0.1 + 0.2  
+0.30000000000000004
+</code></pre><p>The dangerous thing about this is that it crops up in unexpected places and during recursion can build up to drastically deviate from the expected result. Muller’s Recurrence is a prime example.</p>
+<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt=""></p>
+<p>Example of Muller’s Recurrence</p>
+<p>If you were to compare the results as i goes from 0 to 19 using floating vs fixed points, you would get the results below.</p>
+<pre><code>i  | floating pt    | fixed pt  
+-- | -------------- | ---------------------------  
+0  | 4              | 4  
+1  | 4.25           | 4.25  
+2  | 4.47058823529  | 4.4705882352941176470588235  
+3  | 4.64473684211  | 4.6447368421052631578947362  
+4  | 4.77053824363  | 4.7705382436260623229461618  
+5  | 4.85570071257  | 4.8557007125890736342039857  
+6  | 4.91084749866  | 4.9108474990827932004342938  
+7  | 4.94553739553  | 4.9455374041239167246519529  
+8  | 4.96696240804  | 4.9669625817627005962571288  
+9  | 4.98004220429  | 4.9800457013556311118526582  
+10 | 4.9879092328   | 4.9879794484783912679439415  
+11 | 4.99136264131  | 4.9927702880620482067468253  
+12 | 4.96745509555  | 4.9956558915062356478184985  
+13 | 4.42969049831  | 4.9973912683733697540253088  
+14 | -7.81723657846 | 4.9984339437852482376781601  
+15 | 168.939167671  | 4.9990600687785413938424188  
+16 | 102.039963152  | 4.9994358732880376990501184  
+17 | 100.099947516  | 4.9996602467866575821700634  
+18 | 100.004992041  | 4.9997713526716167817979714  
+19 | 100.000249579  | 4.9993671517118171375788238
+</code></pre><p>For more discussion, visit the <a href="https://medium.com/@bellmar/is-cobol-holding-you-hostage-with-math-5498c0eb428b">original article</a>. It goes more in depth and I recommend reading it.</p>
+<h4 id="mullers-recurrence-inclojure">Muller’s Recurrence in Clojure</h4>
+<p>I’ve been dabbling in lisp and Clojure over the last few weeks (Clojure is a dialect of lisp). One of the cool things about lisp is that it handles fractions natively. For example, when doing integer division the results are represented as fractions. 1 divided by 10 is the fraction 1/10. And operations on fractions work as expected.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(/ <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">10</span>) =&gt; <span style="color:#ae81ff">1</span>/10  
+(+ <span style="color:#ae81ff">1</span>/10 <span style="color:#ae81ff">2</span>/10) =&gt; <span style="color:#ae81ff">3</span>/10
+</code></pre></div><p>Of course you can still do floating point calculations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(/ <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">10.0</span>)  =&gt; <span style="color:#ae81ff">0.1</span>  
+(+ <span style="color:#ae81ff">0.1</span> <span style="color:#ae81ff">0.2</span>) =&gt; <span style="color:#ae81ff">0.30000000000000004</span>
+</code></pre></div><p>As a quick side-note, lisp has a syntax different from most modern programming languages.</p>
+<p>Most languages:</p>
+<pre><code>function(arg1, arg2, ..., argn)  
+</code></pre><p>e.g. sum(1, 2)</p>
+<p>Lisp</p>
+<pre><code>(function-name arg1 arg2 ... argn)  
+</code></pre><p>e.g. (sum 1 2)</p>
+<p>In general, lisp handles numbers very well and can do some impressive calculations. Below is an example of 53 ^ 53 in Common Lisp (example stolen from the great book <a href="https://www.amazon.com/Land-Lisp-Learn-Program-Game/dp/1593272812/ref=sr_1_1">Land of Lisp</a>).</p>
+<pre><code>&gt; (expt 53 53)  
+24356848165022712132477606520104725518533453128685640844505130879576720609150223301256150373
+</code></pre><h4 id="mullers-recurrence-inclojure-1">Muller’s Recurrence in Clojure</h4>
+<p>How would the previous example of Muller’s Recurrence look in Clojure?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>rec  
+  [y,z]  
+  (- <span style="color:#ae81ff">108</span>  
+     (/  
+      (- <span style="color:#ae81ff">815</span>   
+         (/ <span style="color:#ae81ff">1500</span> z))  
+      y)  
+))
+</code></pre></div><p>The above defines a function rec, which takes two parameters, y and z. Again, here is the formula we used as an example of Muller’s Recurrence.</p>
+<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt=""></p>
+<p>Muller’s Recurrence</p>
+<p>To calculate xi recursively, we can use the formula below, which will print out our results as they get processed.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>recn  
+  [n y z]  
+  (<span style="color:#66d9ef">do </span>(println n y z)) (<span style="color:#66d9ef">if </span>(&lt;= n <span style="color:#ae81ff">0</span>) z (<span style="color:#a6e22e">recn</span> (- n <span style="color:#ae81ff">1</span>) (<span style="color:#a6e22e">rec</span> y z) y)))
+</code></pre></div><p>Since Clojure works with fractions, using fractions as inputs just treats everything as a fraction, avoiding the problem with floating points.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">=&gt; (<span style="color:#a6e22e">recn</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">17</span>/4 <span style="color:#ae81ff">4</span>)  
+<span style="color:#ae81ff">20</span> <span style="color:#ae81ff">17</span>/4 <span style="color:#ae81ff">4</span>  
+<span style="color:#ae81ff">19</span> <span style="color:#ae81ff">76</span>/17 <span style="color:#ae81ff">17</span>/4  
+<span style="color:#ae81ff">18</span> <span style="color:#ae81ff">353</span>/76 <span style="color:#ae81ff">76</span>/17  
+<span style="color:#ae81ff">17</span> <span style="color:#ae81ff">1684</span>/353 <span style="color:#ae81ff">353</span>/76  
+<span style="color:#ae81ff">16</span> <span style="color:#ae81ff">8177</span>/1684 <span style="color:#ae81ff">1684</span>/353  
+<span style="color:#ae81ff">15</span> <span style="color:#ae81ff">40156</span>/8177 <span style="color:#ae81ff">8177</span>/1684  
+<span style="color:#ae81ff">14</span> <span style="color:#ae81ff">198593</span>/40156 <span style="color:#ae81ff">40156</span>/8177  
+<span style="color:#ae81ff">13</span> <span style="color:#ae81ff">986404</span>/198593 <span style="color:#ae81ff">198593</span>/40156  
+<span style="color:#ae81ff">12</span> <span style="color:#ae81ff">4912337</span>/986404 <span style="color:#ae81ff">986404</span>/198593  
+<span style="color:#ae81ff">11</span> <span style="color:#ae81ff">24502636</span>/4912337 <span style="color:#ae81ff">4912337</span>/986404  
+<span style="color:#ae81ff">10</span> <span style="color:#ae81ff">122336033</span>/24502636 <span style="color:#ae81ff">24502636</span>/4912337  
+<span style="color:#ae81ff">9</span> <span style="color:#ae81ff">611148724</span>/122336033 <span style="color:#ae81ff">122336033</span>/24502636  
+<span style="color:#ae81ff">8</span> <span style="color:#ae81ff">3054149297</span>/611148724 <span style="color:#ae81ff">611148724</span>/122336033  
+<span style="color:#ae81ff">7</span> <span style="color:#ae81ff">15265963516</span>/3054149297 <span style="color:#ae81ff">3054149297</span>/611148724  
+<span style="color:#ae81ff">6</span> <span style="color:#ae81ff">76315468673</span>/15265963516 <span style="color:#ae81ff">15265963516</span>/3054149297  
+<span style="color:#ae81ff">5</span> <span style="color:#ae81ff">381534296644</span>/76315468673 <span style="color:#ae81ff">76315468673</span>/15265963516  
+<span style="color:#ae81ff">4</span> <span style="color:#ae81ff">1907542343057</span>/381534296644 <span style="color:#ae81ff">381534296644</span>/76315468673  
+<span style="color:#ae81ff">3</span> <span style="color:#ae81ff">9537324294796</span>/1907542343057 <span style="color:#ae81ff">1907542343057</span>/381534296644  
+<span style="color:#ae81ff">2</span> <span style="color:#ae81ff">47685459212513</span>/9537324294796 <span style="color:#ae81ff">9537324294796</span>/1907542343057  
+<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">238423809278164</span>/47685459212513 <span style="color:#ae81ff">47685459212513</span>/9537324294796  
+<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1192108586037617</span>/238423809278164 <span style="color:#ae81ff">238423809278164</span>/47685459212513  
+<span style="color:#ae81ff">238423809278164</span>/47685459212513
+</code></pre></div><p>Note this example counts down from 20 while the original example counts up to 20.</p>
+<p>If we want to convert that final value to a float, we can do so:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(float **238423809278164/47685459212513**)  
+<span style="color:#ae81ff">4.9999268795046</span>
+</code></pre></div><p>But of course, if you start out with floats, you’ll have the same problem:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">=&gt; (<span style="color:#a6e22e">recn</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">4.25</span> <span style="color:#ae81ff">4</span>)  
+<span style="color:#ae81ff">20</span> <span style="color:#ae81ff">4.25</span> <span style="color:#ae81ff">4</span>  
+<span style="color:#ae81ff">19</span> <span style="color:#ae81ff">4.470588235294116</span> <span style="color:#ae81ff">4.25</span>  
+<span style="color:#ae81ff">18</span> <span style="color:#ae81ff">4.6447368421052175</span> <span style="color:#ae81ff">4.470588235294116</span>  
+<span style="color:#ae81ff">17</span> <span style="color:#ae81ff">4.770538243625083</span> <span style="color:#ae81ff">4.6447368421052175</span>  
+<span style="color:#ae81ff">16</span> <span style="color:#ae81ff">4.855700712568563</span> <span style="color:#ae81ff">4.770538243625083</span>  
+<span style="color:#ae81ff">15</span> <span style="color:#ae81ff">4.91084749866063</span> <span style="color:#ae81ff">4.855700712568563</span>  
+<span style="color:#ae81ff">14</span> <span style="color:#ae81ff">4.945537395530508</span> <span style="color:#ae81ff">4.91084749866063</span>  
+<span style="color:#ae81ff">13</span> <span style="color:#ae81ff">4.966962408040999</span> <span style="color:#ae81ff">4.945537395530508</span>  
+<span style="color:#ae81ff">12</span> <span style="color:#ae81ff">4.980042204293014</span> <span style="color:#ae81ff">4.966962408040999</span>  
+<span style="color:#ae81ff">11</span> <span style="color:#ae81ff">4.987909232795786</span> <span style="color:#ae81ff">4.980042204293014</span>  
+<span style="color:#ae81ff">10</span> <span style="color:#ae81ff">4.991362641314552</span> <span style="color:#ae81ff">4.987909232795786</span>  
+<span style="color:#ae81ff">9</span> <span style="color:#ae81ff">4.967455095552268</span> <span style="color:#ae81ff">4.991362641314552</span>  
+<span style="color:#ae81ff">8</span> <span style="color:#ae81ff">4.42969049830883</span> <span style="color:#ae81ff">4.967455095552268</span>  
+<span style="color:#ae81ff">7</span> <span style="color:#ae81ff">-7.817236578459315</span> <span style="color:#ae81ff">4.42969049830883</span>  
+<span style="color:#ae81ff">6</span> <span style="color:#ae81ff">168.93916767106458</span> <span style="color:#ae81ff">-7.817236578459315</span>  
+<span style="color:#ae81ff">5</span> <span style="color:#ae81ff">102.03996315205927</span> <span style="color:#ae81ff">168.93916767106458</span>  
+<span style="color:#ae81ff">4</span> <span style="color:#ae81ff">100.0999475162497</span> <span style="color:#ae81ff">102.03996315205927</span>  
+<span style="color:#ae81ff">3</span> <span style="color:#ae81ff">100.00499204097244</span> <span style="color:#ae81ff">100.0999475162497</span>  
+<span style="color:#ae81ff">2</span> <span style="color:#ae81ff">100.0002495792373</span> <span style="color:#ae81ff">100.00499204097244</span>  
+<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">100.00001247862016</span> <span style="color:#ae81ff">100.0002495792373</span>  
+<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">100.00000062392161</span> <span style="color:#ae81ff">100.00001247862016</span>  
+<span style="color:#ae81ff">100.00001247862016</span>
+</code></pre></div><p>Lisp’s native handling of fractions is a nice feature that can help you avoid some problems associated with floating point numbers.</p>
+<p>By Branko Blagojevic July 30, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/lisp/">lisp</a>, 
+            
+                <a href="/tags/clojure/">clojure</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Lisp%2c%20Floating%20Points%20and%20Muller%27s%20Recurrence&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-07-30_lisp-floating-points-and-muller-s-recurrence%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-07-30_lisp-floating-points-and-muller-s-recurrence%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

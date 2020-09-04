@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Optimal Bet Size Using Kelly Criterion &middot; Branko Blagojevic</title>
+        <meta name="description" content="Optimal Bet Size Using Kelly Criterion TLDR: When placing a wager, choosing a bet size is as important as an edge. Kelly Criterion is a simple formula that determines the bet size for the highest growth in repeated games. I made a calculator/simulator to play out alternative strategies.
+Suppose I offered you to play a game where we flip coins using a fair coin. If it lands on tails, you lose $1, but if it lands on heads, you win $1.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Optimal Bet Size Using Kelly Criterion">
+<meta property="og:description" content="Optimal Bet Size Using Kelly Criterion TLDR: When placing a wager, choosing a bet size is as important as an edge. Kelly Criterion is a simple formula that determines the bet size for the highest growth in repeated games. I made a calculator/simulator to play out alternative strategies.
+Suppose I offered you to play a game where we flip coins using a fair coin. If it lands on tails, you lose $1, but if it lands on heads, you win $1.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2020-03-09-optimal-bet-size-using-kelly-criterion/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Optimal Bet Size Using Kelly Criterion</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <h1 id="optimal-bet-size-using-kelly-criterion">Optimal Bet Size Using Kelly Criterion</h1>
+<p>TLDR: When placing a wager, choosing a bet size is as important as an edge. Kelly Criterion is a simple formula that determines the bet size for the highest growth in repeated games. I made a <a href="https://kelly-criterion.netlify.com">calculator/simulator</a> to play out alternative strategies.</p>
+<p>Suppose I offered you to play a game where we flip coins using a fair coin. If it lands on tails, you lose $1, but if it lands on heads, you win $1.02. Surely you’d play. But how much would you wager on each flip?</p>
+<p><img src="https://cdn-images-1.medium.com/max/2000/0*WW8HqmWDkJef9-Mj.jpg" alt=""></p>
+<p>Before we get to that, let’s calculate the expected payout of such a game. 50% of the time you’ll make $1.02 and 50% of the time you’d lose $1.</p>
+<pre><code>E = 0.5 * 1.02 + 0.5 * -1 = 0.01
+</code></pre>
+<p>You’d be expecting to make $0.01 on each coin flip.</p>
+<p>Here’s a python function that can serve as the game:</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/5e147dd075040589af8af1af0e72ebdd.js"></script>
+
+<p>For the scenario above, the start would be 100, prob_win would be 0.5, payout_perc would be 1.02 and let’s pick a seed of 42. We just have to choose a wager_perc and num_turns. For num_turns , let’s assume we can always play this game so just pick a large number, like 1 million.</p>
+<p>Below is a helper function that wraps up the play function so we can alter just the wager_perc and seed :</p>
+<pre><code>def game1(wager_perc, seed):
+    return play(
+        bankroll = 100,
+        wager_perc = wager_perc,
+        prob_win = 0.5,
+        payout_perc = 1.02,
+        num_turns = 1000000,
+        seed = seed
+    )
+</code></pre>
+<p>wager_perc is what we’re really solving for. Let’s just pick a number, like 3%.</p>
+<pre><code>game1(wager_perc = 0.03, seed = 42)
+
+&gt; 3.700281203030123e-63
+</code></pre>
+<p>Not only did we not make any money, we lost all our money. The only reason we didn’t go bust is that we didn’t set a minimum bet size, but we effectively have $0. It could have been the seed. Let’s try the first ten seeds:</p>
+<pre><code>print(&quot;seed\t ending balance&quot;)
+for seed in range(0, 10):
+    out = game1(wager_perc = 0.03, seed = seed)
+---------------------------------
+seed	 ending balance
+0	 3.0739016765737524e-79
+1	 3.4882833267497586e-56
+2	 2.144222002800966e-64
+3	 9.763987869593283e-60
+4	 3.4739495942979628e-74
+5	 3.071792897590687e-82
+6	 3.2749187920734726e-67
+7	 1.486847791315467e-75
+8	 5.3204266409249104e-65
+9	 5.655402982815484e-63
+</code></pre>
+<p>We lost money in every scenario, despite having an edge. Here’s where optimal bet size comes into play.</p>
+<p>Enter Kelly Criterion. As per <a href="https://en.wikipedia.org/wiki/Kelly_criterion">Wikipedia</a></p>
+<blockquote>
+<p>[Kelly Criterion] is a formula for bet sizing that leads almost surely to higher wealth compared to any other strategy in the long run (i.e. approaching the limit as the number of bets goes to infinity)</p>
+</blockquote>
+<p>The great thing about the formula is that its very simple and there are some shortcuts that can be made with even odd bets.</p>
+<p><img src="https://cdn-images-1.medium.com/max/2000/1*BIEpgiQAy8OjbJ_0-QVung.png" alt="Kelly Criterion"><em>Kelly Criterion</em></p>
+<ul>
+<li>
+<p><em>f</em> * is the fraction of the current bankroll to wager, i.e. how much to bet</p>
+</li>
+<li>
+<p><em>b</em> is the net odds received on the wager (“<em>b</em> to 1″); in the example above, it would be 1.02</p>
+</li>
+<li>
+<p><em>p</em> is the probability of winning</p>
+</li>
+<li>
+<p><em>q</em> is the probability of losing, which is 1 − <em>p</em></p>
+</li>
+</ul>
+<p>So in the example above, the Kelly Criterion formula would be</p>
+<pre><code>payout_perc = 1.02 # b above
+prob_win = 0.5  # prob win # p above
+
+def kelly(prob_win, payout_perc):
+    return (prob_win * payout_perc - (1 - prob_win)) / payout_perc
+</code></pre>
+<p>Let’s see how it does</p>
+<pre><code>seed	 ending balance
+0	 3.5344345382967407e+19
+1	 1.1996567561250315e+27
+2	 2.493886480093249e+24
+3	 8.28892500677546e+25
+4	 1.5808564995340084e+21
+5	 3.700773593802014e+18
+6	 2.999344683799298e+23
+7	 5.6475800476424215e+20
+8	 1.5818010128591278e+24
+9	 7.262735004222799e+24
+</code></pre>
+<p>That’s a big difference.</p>
+<p>Let’s try some other values:</p>
+<pre><code>kelly(prob_win=0.51, payout_perc=1) # 0
+kelly(prob_win=0.51, payout_perc=1) # 0.02
+kelly(prob_win=0.52, payout_perc=1) # 0.04
+</code></pre>
+<p>If you have no edge, the optimal bet size would be 0. You may notice a pattern too where if you have an even-money bet (i.e. payout percent 1), you should bet twice your edge. For instance, if you have a 51% odds of winning, your edge is 1%, so you should bet 2% of your bankroll on each turn.</p>
+<h2 id="conclusion-and-caveats">Conclusion and Caveats</h2>
+<p>Should you use Kelly Criterion?</p>
+<p>Yes? I suppose it depends on what you’re using right now. In practice, many practitioners use as a rule of thumb of 50% optimal bet size to account for uncertainty in their probability and payout estimations.</p>
+<p>It also depends on your personal risk preference and how willing you are to be down, even with the odds in your favor. For instance, if you have even odds with a 60% probability of winning, Kelly Criterion would tell you to gamble 20% of your payroll. But if you lose 3 times in a row (6.4% chance), you’d be down nearly 50%. You might not have the stomach to keep going.</p>
+<p>The other thing to consider is that Kelly Criterion assumes you can play an infinite number of times. If the expected value is greater than zero and you have one shot, you would be better off betting everything, assuming you’re not adverse to losing all your money. If you had an infinite number of chances, then you should use Kelly Criterion. But in most decisions we make, we have a finite number of chances to play.</p>
+<p>Take for instance a game in which we have even payout and 52% chance of winning. Kelly Criterion says our optimal wager would be 4% and Using the <a href="https://kelly-criterion.netlify.com/">simulator</a> I made, we can see that a simulation of 10 games with 100k steps, our Kelly payout beats 8% wager in all factors.</p>
+<p><img src="https://cdn-images-1.medium.com/max/3184/1*vqsvKHUYZDc2HVrUZYJabg.png" alt="Simulated 10 games with 100k steps, 52% probability winning, even odds, over-aggressive"><em>Simulated 10 games with 100k steps, 52% probability winning, even odds, over-aggressive</em></p>
+<p>But suppose we had a game of only 100 steps (note I set the number of games to 100k to get a more representative sample).</p>
+<p><img src="https://cdn-images-1.medium.com/max/2864/1*Pm2G0N1knQ_dFfFJmnFCKg.png" alt="Simulated 100000 games with 100 steps, 52% probability winning, even odds, over-aggressive"><em>Simulated 100000 games with 100 steps, 52% probability winning, even odds, over-aggressive</em></p>
+<p>Now the results are not so clear. Our median and mean return are significantly higher playing with an 8% wager strategy (360 vs 222 and 137 vs 117, respectively). However, the minimum return is lower and the strategy only made money 46% of the time opposed to 53% of the time.</p>
+<p>So if we had one shot to play a positive expected value game we’d choose 100% wager, and if we had an infinite number of times to play, we’d choose Kelly, then if we had some finite number of times to play we should choose something in-between (pushing us to a more aggressive strategy). This counteracts the factor above that pushes us towards a more conservative strategy, but its worth pointing out.</p>
+<p>There are some <a href="https://www.researchgate.net/publication/284372316_An_Adaptive_Kelly_Betting_Strategy_for_Finite_Repeated_Games">researchers</a> that tried to adjust the formula for a finite number of games, but as a rule of thumb, Kelly’s Criterion can help us make wise decisions when dealing with games of chance.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/finance/">finance</a>, 
+            
+                <a href="/tags/probability/">probability</a>, 
+            
+                <a href="/tags/gambling/">gambling</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Optimal%20Bet%20Size%20Using%20Kelly%20Criterion&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2020-03-09-optimal-bet-size-using-kelly-criterion%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2020-03-09-optimal-bet-size-using-kelly-criterion%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

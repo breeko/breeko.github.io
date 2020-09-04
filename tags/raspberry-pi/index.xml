@@ -13,10 +13,10 @@
     
     <item>
       <title>Offline Object Detection and Tracking on a Raspberry Pi</title>
-      <link>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
+      <link>https://breeko.github.io/blog/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
       <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
+      <guid>https://breeko.github.io/blog/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
       <description>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.
 In my last post I wrote about the YOLO model used for object detection. The most surprising thing was how simple the model is. It’s so simple that it can run offline on a raspberry pi
 In my last post I wrote about the YOLO (You Only Look Once) model used for object detection.</description>
@@ -24,10 +24,10 @@ In my last post I wrote about the YOLO (You Only Look Once) model used for objec
     
     <item>
       <title>How to (actually) easily detect objects with deep learning on raspberry pi</title>
-      <link>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
+      <link>https://breeko.github.io/blog/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
       <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
+      <guid>https://breeko.github.io/blog/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
       <description>YOLO provides state of the art real-time object detection and classification.
 The YOLO image detection model is one of the fastest and most accurate object detection models. Flexible and fast, YOLO is a huge step forward in machine learning.
 I came across a popular post on hackernews titled How to easily Detect Objects with Deep Learning on Raspberry Pi. The article discusses the YOLO object detection model that can be used for real-time object detection and classification.</description>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Nassim Taleb, Loaded Questions and Statistics for Hackers &middot; Branko Blagojevic</title>
+        <meta name="description" content="Nassim Taleb baits financial professionals and students into an elementary mistake in probability. However a simple check could have helped.
+Probability and statistics is hard and not always intuitive. But with modern computing, we can run simulations to get the answers, or at least tell us when we’re way off. Here I describe such methods.
+In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came across a paper Taleb wrote titled “We Don’t Quite Know What We Are Talking About When We Talk About Volatility”.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Nassim Taleb, Loaded Questions and Statistics for Hackers">
+<meta property="og:description" content="Nassim Taleb baits financial professionals and students into an elementary mistake in probability. However a simple check could have helped.
+Probability and statistics is hard and not always intuitive. But with modern computing, we can run simulations to get the answers, or at least tell us when we’re way off. Here I describe such methods.
+In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came across a paper Taleb wrote titled “We Don’t Quite Know What We Are Talking About When We Talk About Volatility”.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Nassim Taleb, Loaded Questions and Statistics for Hackers</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>Nassim Taleb baits financial professionals and students into an elementary mistake in probability. However a simple check could have helped.</p>
+<p>Probability and statistics is hard and not always intuitive. But with modern computing, we can run simulations to get the answers, or at least tell us when we’re way off. Here I describe such methods.</p>
+<p>In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came across a paper Taleb wrote titled “<a href="http://www-stat.wharton.upenn.edu/~steele/Courses/434/434Context/Volatility/ConfusedVolatility.pdf">We Don’t Quite Know What We Are Talking About When We Talk About Volatility</a>”. The paper focuses on the confusion between <em>mean absolute deviation</em> with <em>standard deviation</em> among financial professionals and academics. <em>Mean absolute deviation</em> of a series is the average of the absolute deviations from a central point while <a href="https://en.wikipedia.org/wiki/Standard_deviation"><em>standard deviation</em></a> is something less intuitive. The point is that they could both be used as a measure of dispersion or variation.</p>
+<p>Statistics can be a very abstract discipline, even if its application is not. Sometimes hacking together a few lines of code to experiment is more productive to understanding than diving into probability theory and all of its pitfalls.</p>
+<p>Taleb’s main purpose in life is to mock what he considers pseudo-intellectuals. As an experiment, he asks the question below to a group of financial professionals and students:</p>
+<blockquote>
+<p>A stock (or a fund) has an average return of 0%. It moves on average 1% a day in absolute value; the average up move is 1% and the average down move is 1%. It does not mean that all up moves are 1% — some are .6%, others 1.45%, etc. Assume that we live in the Gaussian world in which the returns (or daily percentage moves) can be safely modeled using a Normal Distribution. Assume that a year has 256 business days. The following questions concern the standard deviation of returns (i.e., of the percentage moves), the “sigma” that is used for volatility in financial applications. What is the daily sigma? What is the yearly sigma?</p>
+</blockquote>
+<p>By giving only one piece of relevant information (moves on average 1% a day in absolute value), he gives one obvious (incorrect) answer (1% <em>standard deviation</em>). The one piece of information is the <em>mean absolute deviation</em> which is different but related to <em>standard deviation</em>.</p>
+<p><img src="/post/resources/img/1*S7-PiDmJVJLkHEG9jZD2ug.png" alt=""></p>
+<p>Considering that the survey is being administered by someone who has built a career <a href="https://en.wikipedia.org/wiki/Nassim_Nicholas_Taleb">antagonizing financial professionals and academics</a>, I would shy away from taking the easy way out. But alas:</p>
+<p><img src="/post/resources/img/0_IbHdmYbtNIwyqHSM.png" alt=""></p>
+<p>Confusing the concepts of <em>mean absolute deviation</em> and <em>standard deviation</em> is sacrosanct to Taleb. Not only that, but nearly everyone underestimates actual <em>standard deviation</em> by at least 25% and even 90% in fat tailed markets.</p>
+<p>He uses the result to affirm his conclusion (and title of his paper) that we don’t quite know what we’re talking about when we talk about volatility. And this even applies to people who should know better, like financial professionals and students of financial engineering. It’s true that in the media complex mathematical concepts are thrown around unintelligibly as buzz words. I imagine if you performed a man on the street survey and asked for a definition of <em>standard deviation</em> the top answers might would be:</p>
+<blockquote>
+<ol>
+<li>No clue</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>How much something moves every day on average</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>…</p>
+</blockquote>
+<blockquote>
+<p>N. Root of the arithmetic mean of the squares of the deviation of each of the class frequencies from the arithmetic mean of the frequency distribution</p>
+</blockquote>
+<p>Financial professionals and financial engineering students should know better, but this is still a tricky question, since only one piece of information is provided (<em>mean absolute deviation</em>) and there exists some function that converts <em>mean absolute deviation</em> to <em>standard deviation</em>. And in general people aren’t good at memorizing functions that cannot easily be derived.</p>
+<p>But the question doesn’t have to be so tricky or even abstract. Using python we can easily verify our initial answer with a few lines of code. In our case, the <em>mean absolute deviation</em> is how much on average something moves in absolute terms. And we’re trying to solve for the <em>standard deviation</em> that would give us a <em>mean absolute deviation</em> of 1. So let’s try our initial guess of 1% <em>standard deviation</em> and calculate the <em>mean absolute deviation.</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+
+random_points <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000000</span>)
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;mean: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>mean(random_points)))  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;standard deviation: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>std(random_points)))  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;mean absolute deviation: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>mean(np<span style="color:#f92672">.</span>absolute(random_points))))
+
+mean: <span style="color:#f92672">-</span><span style="color:#ae81ff">0.0016</span>  
+standard deviation: <span style="color:#ae81ff">1.0002</span>  
+mean absolute deviation: <span style="color:#ae81ff">0.7983</span>
+</code></pre></div><p>The code above creates a million normally distributed points with a standard deviation of 1 and a mean of 0. This gives us a <em>mean absolute deviation</em> of ~0.8. This tells us that <em>standard deviation</em> of 1 would result in a <em>mean absolute deviation</em> of 0.8. If we look at a histogram of the two values, it becomes more obvious.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f, ax <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">5</span>))
+
+ax<span style="color:#f92672">.</span>hist(random_points, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, label<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;returns&#34;</span>], bins<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)  
+ax<span style="color:#f92672">.</span>hist(np<span style="color:#f92672">.</span>absolute(random_points), alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, label<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;absolute returns&#34;</span>], bins<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>)  
+ax<span style="color:#f92672">.</span>axvline(np<span style="color:#f92672">.</span>absolute(random_points)<span style="color:#f92672">.</span>mean(), linestyle<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;dashed&#34;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;red&#34;</span>)
+
+ax<span style="color:#f92672">.</span>set_xticks([<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>])  
+ax<span style="color:#f92672">.</span>legend(prop<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;size&#39;</span>: <span style="color:#ae81ff">10</span>})  
+f<span style="color:#f92672">.</span>tight_layout()
+</code></pre></div><p><img src="/post/resources/img/1*SIIJSW3QE3ZpdX3tKFy4jQ.png" alt=""></p>
+<p>Since we’re trying to solve for a mean absolute deviation of 1, we need to increase the <em>standard deviation</em>. Now we know the relationship 1 <em>standard deviation</em> = 0.8 <em>mean absolute deviation</em>, we can just divide both sides by 0.8. This results in 1.25 (1 / 0.8) <em>standard deviation</em> = 1 <em>mean absolute deviation</em>. Let’s try that.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+
+random_points <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000000</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1.25</span>
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;mean: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>std(random_points)))  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;standard deviation: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>std(random_points)))  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;mean absolute value: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>mean(np<span style="color:#f92672">.</span>absolute(random_points))))
+
+mean: <span style="color:#ae81ff">1.2502</span>  
+standard deviation: <span style="color:#ae81ff">1.2502</span>  
+mean absolute value: <span style="color:#ae81ff">0.9978</span>
+</code></pre></div><p>Sure enough, that lines up with the mathematically derived answer as provided by Taleb:</p>
+<blockquote>
+<p>Our suspicion that there would be considerable confusion was fed by years of hearing options traders make statements of the kind, “an instrument that has a daily standard deviation of 1% should move 1% a day on average”. Not so. In the Gaussian world, where x is a random variable, assuming a mean of 0, in expectation, the ratio of standard deviation to mean deviation should satisfy the following equality ∑| x | x 2 ∑ = 2 π . Since mean absolute deviation is about .8 times the standard deviation, in our problem the daily sigma should be 1.25% and the yearly sigma should be 20% (which is the daily sigma annualized by multiplying by 16, the square root of the number of business days).</p>
+</blockquote>
+<p>And how would we get the annual <em>standard deviation</em>?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+
+<span style="color:#75715e"># Create 1 million random normal points for 256 days  </span>
+random_points_daily <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1000000</span>, <span style="color:#ae81ff">256</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1.25</span>
+
+<span style="color:#75715e"># Convert to percentages:  </span>
+random_points_daily <span style="color:#f92672">/=</span> <span style="color:#ae81ff">100</span> 
+
+<span style="color:#75715e"># Convert to returns:  </span>
+random_returns_daily <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> random_points_daily 
+
+<span style="color:#75715e"># Annualize (take the product of each day for the 1 million points):  </span>
+random_points_annualized <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>product(random_returns_daily,axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>) 
+
+<span style="color:#66d9ef">print</span>(<span style="color:#960050;background-color:#1e0010">“</span>Standard deviation of annualized returns: {:<span style="color:#ae81ff">0.4</span>f}<span style="color:#960050;background-color:#1e0010">”</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>std(random_points_annualized)))
+
+Standard deviation of annualized returns: <span style="color:#ae81ff">0.2019</span>
+</code></pre></div><p>Or, just multiply by square root of 256.</p>
+<p>My point is not that professionals and students don’t need to know statistics, but that it’s crucial to write tests to check our answers. Statistics and probability are tricky and not always intuitive. Consider the definition of <a href="https://en.wikipedia.org/wiki/T-statistic">t-statistic</a>:</p>
+<blockquote>
+<p>The ratio of the departure of the estimated value of a parameter from its hypothesized value to its standard error.</p>
+</blockquote>
+<p>Technically correct, but there are many layers of abstraction to understanding what it effectively means. And to understand that well enough to make an assertion as to its implications is even harder.</p>
+<p>Many times, we care more about ball-park estimates or validating our answers This is best done with experiments with random numbers. Tools like numpy and python make creating straight forward and intuitive tests easy. For more information, I recommend a <a href="https://speakerdeck.com/jakevdp/statistics-for-hackers">great lecture</a> from PyCon on hacking together answers to statistical questions through brute force.</p>
+<p>I flipped a coin 6 times and it landed on 5 heads. How likely is this to happen?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+
+np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+
+num_trials <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000</span>
+
+random_coin_flips <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">2</span>, size<span style="color:#f92672">=</span>(num_trials,<span style="color:#ae81ff">6</span>))
+
+coin_flips_counter <span style="color:#f92672">=</span> [Counter(flip) <span style="color:#66d9ef">for</span> flip <span style="color:#f92672">in</span> random_coin_flips]  
+coin_flips_5_heads <span style="color:#f92672">=</span> sum([<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> flip <span style="color:#f92672">in</span> coin_flips_counter <span style="color:#66d9ef">if</span> flip<span style="color:#f92672">.</span>get(<span style="color:#ae81ff">0</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">5</span>])  
+coin_flips_5_heads_perc <span style="color:#f92672">=</span> coin_flips_5_heads <span style="color:#f92672">/</span> num_trials
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Percent 5 heads: {:0.4f}&#34;</span><span style="color:#f92672">.</span>format(coin_flips_5_heads_perc))
+
+Percent <span style="color:#ae81ff">5</span> heads: <span style="color:#ae81ff">0.0937</span>
+</code></pre></div><p>Actual answer is 6 / 64 of 0.09375, since there are 6 ways to get 5 heads and 64 possible throws (2 ^ 6). But we knew that already.</p>
+<p>HHHHHT<br>
+HHHHTH<br>
+HHHTHH<br>
+HHTHHH<br>
+HTHHHH<br>
+THHHHH</p>
+<p>By Branko Blagojevic on March 12, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/nassim-taleb/">nassim-taleb</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Nassim%20Taleb%2c%20Loaded%20Questions%20and%20Statistics%20for%20Hackers&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

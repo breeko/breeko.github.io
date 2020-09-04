@@ -13,10 +13,10 @@
     
     <item>
       <title>Scala’s Case Class in Python with Case Matching</title>
-      <link>https://breeko.github.io/post/2019-08-19-python-case-classes/</link>
+      <link>https://breeko.github.io/blog/2019-08-19-python-case-classes/</link>
       <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-08-19-python-case-classes/</guid>
+      <guid>https://breeko.github.io/blog/2019-08-19-python-case-classes/</guid>
       <description>I’ve been doing a lot of Scala programming lately. Scala is a statically typed language that compiles to the JVM. Scala doesn’t break away from object oriented programming but has a lot of functional programming features.
 One of my favorite features of Scala is its case classes. Case classes are a lot like regular classes but they’re easier to setup and usually used to model immutable data. They also allow for easy pattern matching.</description>
     </item>

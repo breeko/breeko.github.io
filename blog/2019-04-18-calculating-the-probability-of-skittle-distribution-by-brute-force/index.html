@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Calculating the Probability of Skittle Distribution by Brute Force &middot; Branko Blagojevic</title>
+        <meta name="description" content="A recent blog post caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.
+I wanted to test this his results empirically while also being lazy.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Calculating the Probability of Skittle Distribution by Brute Force">
+<meta property="og:description" content="A recent blog post caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.
+I wanted to test this his results empirically while also being lazy.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Calculating the Probability of Skittle Distribution by Brute Force</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>A <a href="https://medium.com/r/?url=https%3A%2F%2Fpossiblywrong.wordpress.com%2F2019%2F04%2F06%2Ffollow-up-i-found-two-identical-packs-of-skittles-among-468-packs-with-a-total-of-27740-skittles%2F">recent blog post</a> caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.</p>
+<p>I wanted to test this his results empirically while also being lazy. So I setup a simulation in python.</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/69e54a4e77229618efeb468fc97c90bf.js"></script>
+
+<p>The get_bag function returns a bag of skittles with an input of a mean deviation for the number of skittles in the bag:</p>
+<pre><code>&gt; get_bag(2)
+'g:12;o:11;p:16;r:9;y:11'
+</code></pre><p>The find_match function just keeps running trials until it gets a matching set, and then returns the number of trials run.</p>
+<p>Here&rsquo;s the output from my simulation of 1,000 trials:</p>
+<p><img src="/post/resources/img/1_b62qemwuqEI6nfH_0l-UjA.png" alt=""></p>
+<p>The median amount of bags required to find a matching bag was 310. 95% of the trials found a matching bag in 667 trials or less.</p>
+<h3 id="assumptions">Assumptions</h3>
+<p>The author found the average number of skittles per bag was 59.27. He didn&rsquo;t state the standard deviation of the bag size, but from the histogram I guessed it was +/- 2.</p>
+<p>If every bag had exactly 59 skittles, the number of bags required to find a matching bag changes drastically.</p>
+<p><img src="/post/resources/img/1_JvfvUOXnfhq0raRvVUieBg.png" alt=""></p>
+<p>While with a standard deviation of 10, it would have probably taken around 700</p>
+<p><img src="/post/resources/img/1_1szcXFEhxMa80fd08TlP3A.png" alt=""></p>
+<p>I always find probability to be a bit intimidating, so I prefer simulations, especially when I&rsquo;m trying to get a ballpark. We can get the same results without the diabetes.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/probability/">probability</a>, 
+            
+                <a href="/tags/statistics/">statistics</a>, 
+            
+                <a href="/tags/data-science/">data science</a>, 
+            
+                <a href="/tags/python/">python</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Calculating%20the%20Probability%20of%20Skittle%20Distribution%20by%20Brute%c2%a0Force&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

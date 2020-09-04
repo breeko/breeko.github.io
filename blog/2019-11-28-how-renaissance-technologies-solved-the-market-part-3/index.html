@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>How Renaissance Technologies Solved the Market: Part 3 - Incentives &middot; Branko Blagojevic</title>
+        <meta name="description" content="How Renaissance Technologies Solved the Market: Part 3 — Incentives Renaissance Technologies is the most successful hedge fund in history, netting investors an average of 39% a year after fees over the last 3 decades. Renaissance stands out among its peers as by far the best performing fund.
+ One reason is that the incentives Renaissance decided to focus on are different than that of other funds.
+This is part 3 of my thoughts on Renaissance Technologies after reading The Man Who Solved the Market.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="How Renaissance Technologies Solved the Market: Part 3 - Incentives">
+<meta property="og:description" content="How Renaissance Technologies Solved the Market: Part 3 — Incentives Renaissance Technologies is the most successful hedge fund in history, netting investors an average of 39% a year after fees over the last 3 decades. Renaissance stands out among its peers as by far the best performing fund.
+ One reason is that the incentives Renaissance decided to focus on are different than that of other funds.
+This is part 3 of my thoughts on Renaissance Technologies after reading The Man Who Solved the Market.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2019-11-28-how-renaissance-technologies-solved-the-market-part-3/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">How Renaissance Technologies Solved the Market: Part 3 - Incentives</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <h1 id="how-renaissance-technologies-solved-the-market-part-3incentives">How Renaissance Technologies Solved the Market: Part 3 — Incentives</h1>
+<p>Renaissance Technologies is the most successful hedge fund in history, netting investors an average of 39% a year after fees over the last 3 decades. Renaissance stands out among its peers as by far the best performing fund.</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/b2b133e998d20ddcf2b6f2d40aa8f735.js"></script>
+
+<p>One reason is that the incentives Renaissance decided to focus on are different than that of other funds.</p>
+<p>This is part 3 of my thoughts on Renaissance Technologies after reading <a href="https://amzn.to/2rSkOB7">The Man Who Solved the Market</a>. Part 1 discussing the Renaissance data pipeline can be found <a href="https://medium.com/ml-everything/how-renaissance-technologies-solved-the-market-part-1-2814eb271dc3">here</a>. Part 2 discussing the Renaissance unusual practice of hiring from academia can be found <a href="https://medium.com/ml-everything/how-renaissance-technologies-solved-the-market-part-2-hiring-academics-ba95c326b82c">here</a>.</p>
+<h2 id="incentives">Incentives</h2>
+<p>In <a href="https://amzn.to/2OO19dt">Zero to One</a> Peter Thiel considers the following proposition: companies exist to make money, not to lose it. This should be obvious but consider the frame of reference. Do hedge funds exist to make money for investors or the owners? Ideally both, but what if a manager had to choose?</p>
+<p><img src="https://cdn-images-1.medium.com/max/2000/0*-yQIqOQzL5viATTb" alt=""></p>
+<p>Hedge funds generally make fees in two ways: a fixed management fee based on assets under management (AUM) and a performance fee based on a percentage of returns above a certain benchmark. Generally these fees have been 2% and 20%, respectively.</p>
+<p>For instance, if a fund is managing $100 million and makes 20% return while their benchmark made 10%, the total fee would be $4 million:</p>
+<p>Management fee: 0.02 * 100mm = 2mm</p>
+<p>Incentive fee: 0.2 * (0.2 — 0.1) * 100mm = 2mm</p>
+<p>If the fund didn’t beat the benchmark or lost money, they would only make the management fee of $2 million.</p>
+<p>As a manager, what would you optimize for? I’m no expert, but to me it seems easier and cheaper for funds to raise $100 million than it is to beat the market by 10%. In fact, it may not even be possible to beat the market. Very few funds have a consistent record and the <a href="https://en.wikipedia.org/wiki/Efficient-market_hypothesis">efficient market hypothesis</a> suggests that prices reflect all available information, so there is no practical way to find mis-priced assets. So funds generally optimize for managing larger AUM over investing in trying to beat the market. Or they open multiple uncorrelated funds to diversify their revenue stream.</p>
+<p>Renaissance is different. Jim Simons always optimized for performance. Renaissance originally found success in trading futures, currencies and commodities. At the time, these markets followed patterns that were easily discernible to a computer. The strategies employed were trending (price will continue to move in same direction) and mean reversion (price will return to original value). But this market was not large enough to grow the fund and maintain performance. In order to grow, Renaissance needed to find a profitable strategy for stocks.</p>
+<p>Simons was experimenting in the stock market since the late 1980s but the strategy that had worked well on futures was not working on equities:</p>
+<blockquote>
+<p>Simons acted too quickly, it turned out. It soon became clear that the new stock-trading system couldn’t handle much money, undermining Simons’s original purpose in pushing into equities. Renaissance placed a puny $35 million in stocks; when more money was traded, the gains dissipated, much like Frey’s system a couple years earlier. Even worse, Brown and Mercer couldn’t figure out why their system was running into so many problems</p>
+</blockquote>
+<p>Simons persisted however and refused to put in much money until he had solved the problem. Finally, in 1995 one of the early engineering hires, David Magerman, discovered the problem:</p>
+<blockquote>
+<p>Early one evening, his eyes blurry from staring at his computer screen for hours on end, Magerman spotted something odd: A line of simulation code used for Brown and Mercer’s trading system showed the Standard &amp; Poor’s 500 at an unusually low level. This test code appeared to use a figure from back in 1991 that was roughly half the current number. Mercer had written it as a static figure, rather than as a variable that updated with each move in the market.</p>
+</blockquote>
+<p>Once that bug was fixed, the model began performing better.</p>
+<blockquote>
+<p>When Magerman fixed the bug and updated the number, a second problem — an algebraic error — appeared elsewhere in the code. Magerman spent most of the night on it but he thought he solved that one, too. Now the simulator’s algorithms could finally recommend an ideal portfolio for the Nova system to execute, including how much borrowed money should be employed to expand its stock holdings. The resulting portfolio seemed to generate big profits, at least according to Magerman’s calculations.</p>
+</blockquote>
+<p>Only then did Renaissance commit significant capital into the equity markets. The focus on performance originally held the company back in terms of its size, but once the market was cracked, Simons had the confidence to grow the fund while all but guaranteeing strong performance.</p>
+<h2 id="why-hasnt-it-been-replicated">Why Hasn’t It Been Replicated?</h2>
+<p>As mentioned above, its easier to make money by raising AUM than it is actually beating the market. Even funds that purport a quantitative investment strategy similar to that of Renaissance don’t do well:</p>
+<blockquote>
+<p>For all the advantages quant firms have, the investment returns of most of these trading firms haven’t been that much better than those of traditional firms doing old-fashioned research, with Renaissance and a few others the obvious exceptions. In the five years leading up to spring of 2019, quant-focused hedge funds gained about 4.2 percent a year on average, compared with a gain of 3.3 percent for the average hedge fund in the same period. (These figures don’t include results from secretive funds that don’t share their results, like Medallion.)</p>
+</blockquote>
+<p>Another strategy is for funds to offer investors exposure to a certain market in exchange for a fee. For instance, you can buy into funds that invest in shipping containers, which would be difficult to invest in without expertise. The funds performance is clearly tied to the underlying market and is mostly passive. But the fund still gets its relatively large management and performance fees. And with each hedge fund managing multiple funds with different strategies, they can play games with purported returns (e.g. close poor performing funds and benefit from survivorship bias in reporting returns).</p>
+<p>Other quant funds such as Long Term Capital Management (LTCM) hired brilliant people and enjoyed early success but eventually their incentives were perverted as they took on more risk and leverage and expanded to unfamiliar markets:</p>
+<blockquote>
+<p>Mesmerized by LTCM’s all-star team of brainiacs, investors poured money into the fund. After launching in 1994, LTCM gained an average of nearly 50 percent in its first three years, managing close to $7 billion in the summer of 1997, making Simons’s Medallion fund look like a pip-squeak. After rivals expanded their own arbitrage trades, Meriwether’s team shifted to newer strategies, even those the team had little experience with, such as merger-stock trading and Danish mortgages.</p>
+</blockquote>
+<p>Even the smartest people can fall victim to incentives.</p>
+<blockquote>
+<p>After an annual golf outing in the summer of 1997, LTCM’s partners announced that investors would have to withdraw about half their cash as a result of what executives saw as diminishing opportunities in the market. Clients lost their minds, pleading with Meriwether and his colleagues — please, keep our money!</p>
+</blockquote>
+<p>But eventually the fickle, over-extended strategy of LTCM blew up in their faces and Meriwether no longer had the problem of too much capital. Rival fund D.E. Shaw suffered a similar fate:</p>
+<blockquote>
+<p>Then came the market turmoil of the fall of 1998. Within months, D. E. Shaw had suffered over $200 million in losses in its bond portfolio, forcing it to fire 25 percent of its employees and retrench its operations. D. E. Shaw would recover and reemerge as a trading power, but its troubles, along with LTCM’s huge losses, provided lasting lessons for Simons and Renaissance</p>
+</blockquote>
+<p>Bridgewater’s Ray Dalio similarly seems to be selling a <a href="https://www.principles.com/">management philosophy</a> rather than actual returns. He’d rather spend his money on a public relations team to write <a href="https://www.wsj.com/articles/the-worlds-largest-hedge-fund-is-building-an-algorithmic-model-of-its-founders-brain-1482423694">puff pieces</a> on his firm. Most stories have a single throw away line somewhere in the middle that says Bridgewater returns have lagged passive index funds. Or they just focus on returns from Pure Alpha. If those returns aren’t stellar, check out Pure Alpha II, or the All Weather Fund. Something for everyone.</p>
+<p>But who cares about that when Bridgewater is developing an <a href="https://fortune.com/2016/12/24/bridgewater-ray-dalio-algorithm/">artificial brain</a> to mimic its founder’s mediocre decision making. Why would Dalio want to write an algorithm meant to mimic his brain rather than an algorithm that can make investment decisions directly? Because the former is much harder to assess and identify as a fraud. It’s more profitable to sell AI snake oil and pay off journalists not to ask obvious questions.</p>
+<p>Meanwhile Renaissance managed $110 billion and had only 290 employees as of 2015 operating out of a modest office in East Setauket, Long Island. Obviously Renaissance has chosen a different set of incentives to optimize.</p>
+<p>The other important thing to note is that the best performing fund of Renaissance, the Medallion Fund, is available only to employees. The returns are so strong that they forgo growing the fund so that their strategy remains effective.</p>
+<p>In the next part, I will discuss the strategy Renaissance uses.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/finance/">finance</a>, 
+            
+                <a href="/tags/hedge-funds/">hedge funds</a>, 
+            
+                <a href="/tags/stock-market/">stock market</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=How%20Renaissance%20Technologies%20Solved%20the%20Market%3a%20Part%203%20-%20Incentives&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-11-28-how-renaissance-technologies-solved-the-market-part-3%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-11-28-how-renaissance-technologies-solved-the-market-part-3%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

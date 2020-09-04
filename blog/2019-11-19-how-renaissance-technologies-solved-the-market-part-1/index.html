@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>How Renaissance Technologies Solved the Market: Part 1 - Pipeline &middot; Branko Blagojevic</title>
+        <meta name="description" content="The new book The Man Who Solved the Market details Jim Simons and his hedge fund Renaissance Technologies in great detail. Jim Simons is a world renowned mathematician that left academia and started a hedge fund at the age of 40. He went on to become the most successful hedge fund manager and one of the richest people in the world.
+The crown jewel of Renaissance Technologies is the Medallion Fund.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="How Renaissance Technologies Solved the Market: Part 1 - Pipeline">
+<meta property="og:description" content="The new book The Man Who Solved the Market details Jim Simons and his hedge fund Renaissance Technologies in great detail. Jim Simons is a world renowned mathematician that left academia and started a hedge fund at the age of 40. He went on to become the most successful hedge fund manager and one of the richest people in the world.
+The crown jewel of Renaissance Technologies is the Medallion Fund.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2019-11-19-how-renaissance-technologies-solved-the-market-part-1/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">How Renaissance Technologies Solved the Market: Part 1 - Pipeline</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>The new book <a href="https://amzn.to/2rSkOB7">The Man Who Solved the Market</a> details Jim Simons and his hedge fund Renaissance Technologies in great detail. Jim Simons is a world renowned mathematician that left academia and started a hedge fund at the age of 40. He went on to become the most successful hedge fund manager and one of the richest people in the world.</p>
+<p>The crown jewel of Renaissance Technologies is the Medallion Fund. The fund is open only to employees and has outperformed the market for nearly 30 years. The Medallion Fund has grossed over 66.1% average annual return since 1988 netting investors 39.1% average annual return after heft management fees.</p>
+<blockquote>
+<p>If you invested $1,000 into Medallion in 1988, by 2018 you’d have over $23,000,000 after fees.</p>
+</blockquote>
+<script type="application/javascript" src="https://gist.github.com/breeko/1c28168d6d0a7376b59d30f148515b89.js"></script>
+
+<p>Not only are these types of returns abnormal, this is the only hedge fund at significant scale that has consistently beat the market return of index funds for any consistent period of time. In fact, most hedge funds that have profitable years end up losing more in subsequent years. This is because their performance attracts more assets and their strategy deviates or their returns simply revert back to average.</p>
+<p>Renaissance Technologies is very secretive as to its secret sauce, but the <a href="https://amzn.to/2rSkOB7">new book about Simons</a> sheds light into some of the practices Renaissance Technologies employs to consistently outperform peers. This isn’t a full review but I’ll discuss some interesting points that led to the success of Renaissance Technologies, specifically the Medallion Fund. In each post I’ll discuss a new insight from the book and why it hasn’t successfully been replicated.</p>
+<h1 id="data-pipeline-and-simple-strategies-in-commodities">Data Pipeline and Simple Strategies in Commodities</h1>
+<p>From early on, Simons had a goal of algorithmic investing. This was in the late 1980s before big data became a household name and most investment decisions were made over the phone based on gut.</p>
+<blockquote>
+<p>“I don’t want to have to worry about the market every minute. I want models that will make money while I sleep,” Simons said. “A pure system without humans interfering.”</p>
+</blockquote>
+<p>Simons had come from a background of math and cryptography. To him, market prices were just an incredibly noisy series of nearly random events. Simons hired Sandor Straus, a data guru to help him collect historic commodity information:</p>
+<blockquote>
+<p>Piecing together a custom-built database, Straus purchased historic commodity-price data on magnetic tape from an Indiana-based firm called Dunn &amp; Hargitt, then merged it with the historic information others in the firm already had amassed. &hellip; Using an Apple II computer, Straus and others wrote a program to collect and store their growing data trove.</p>
+</blockquote>
+<p>Straus’ was essential to Renaissance Technologies early success in commodities trading. He became somewhat of a data guru ensuring pricing was consistent and accurate, checking his numbers tied out to yearbook data provided by commodity exchanges, Wall Street Journal, other newspapers and anything else he could get his hands on.</p>
+<blockquote>
+<p>Over time, Straus and his colleagues created and discovered additional historical pricing data, helping Ax develop new predictive models relying on Carmona’s suggestions. Some of the weekly stocktrading data they’d later find went back as far as the 1800s, reliable information almost no one else had access to. At the time, the team couldn’t do much with the data, but the ability to search history to see how markets reacted to unusual events would later help Simons’s team build models to profit from market collapses and other unexpected events, helping the firm trounce markets during those periods.</p>
+</blockquote>
+<p>He dove into anomalies and omissions with religious zeal. Commodity markets were relatively simple and Renaissance Technologies found success in deploying simple trading strategies:</p>
+<blockquote>
+<p>Sifting through Straus’s data, Laufer discovered certain recurring trading sequences based on the day of the week. Monday’s price action often followed Friday’s, for example, while Tuesday saw reversions to earlier trends. Laufer also uncovered how the previous day’s trading often can predict the next day’s activity, something he termed the twenty-four-hour effect . The Medallion model began to buy late in the day on a Friday if a clear up-trend existed, for instance, and then sell early Monday, taking advantage of what they called the weekend effect</p>
+</blockquote>
+<p>The fund didn’t spend much time investigating why these trading patterns existed. All that mattered is that they occurred in a predictable and actualizable way.</p>
+<blockquote>
+<p>Here’s what was really unique: The paper didn’t try to identify or predict these states using economic theory or other conventional methods, nor did the researchers seek to address why the market entered certain states. Simons and his colleagues used mathematics to determine the set of states best fitting the observed pricing data; their model then made its bets accordingly. The whys didn’t matter, Simons and his colleagues seemed to suggest, just the strategies to take advantage of the inferred states.</p>
+</blockquote>
+<p>Prices were seen as a Markov model. The current price information reflects the state, encapsulating all the information that came prior to that state and all the beliefs about the future state. If there was a bad crop yield in corn that year, it was reflected in the price. If there are expected tariffs that will be introduced shortly, it was reflected in the price. Essentially, the price is all that matters.</p>
+<p>Since the current price reflects all information prior to that time and all expected future information, the next price point can be derived from just the prior price. That’s an oversimplification, because prices are likely path dependent, but in the early years of Renaissance Technologies, prices were nothing but a series of nearly random numbers. The game was to tease out enough of a pattern to predict what’s going to happen next.</p>
+<p>Renaissance Technologies was composed of nearly all mathematicians, scientists and engineers, so everyone was well aware of the problems with data mining, over-fitting and spurious signals. In short, they were honest with themselves. This is essential when you take such a reductionist view of finance.</p>
+<h1 id="why-hasnt-it-been-replicated">Why Hasn’t It Been Replicated?</h1>
+<p>Big data has obviously caught on, but hedge funds continue to under-perform the market. Even hedge funds focused on quantitative methods don’t fare well. The problem is that building a data pipeline and the infrastructure required is no trivial matter. Renaissance Technologies has over 30 years of experience in building out a pipeline, starting from the simple and commoditized markets for commodities, eventually growing to stocks and complex derivatives.</p>
+<p>Other companies have mastered the data pipeline, but not effectively in the domain of hedge funds. For instance, Google could likely build a hedge fund to rival Renaissance Technologies, but it’s currently not in their interest to do so. The problem is that investing is so multifaceted and the pipeline is just one component.</p>
+<p>The opportunities exploited early on in the commodities markets by Renaissance likely don’t exist anymore, which explains why former employees talk about them. But similar opportunities exist now but require more nuance to capture. Renaissance just got a head start.</p>
+<p>Renaissance Technologies also has a culture of academia. This has other benefits as well, but one of the benefits is that the employees approach the problem with intellectual zeal and proven methods of discovery.</p>
+<p>The next post I’ll write about the culture and employees of Renaissance Technologies and how they contribute to its success.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/finance/">finance</a>, 
+            
+                <a href="/tags/hedge-funds/">hedge funds</a>, 
+            
+                <a href="/tags/stock-market/">stock market</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=How%20Renaissance%20Technologies%20Solved%20the%20Market%3a%20Part%201%20-%20Pipeline&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-11-19-how-renaissance-technologies-solved-the-market-part-1%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-11-19-how-renaissance-technologies-solved-the-market-part-1%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

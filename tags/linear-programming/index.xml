@@ -13,10 +13,10 @@
     
     <item>
       <title>Using Python and Linear Programming to Optimize Fantasy Football Picks</title>
-      <link>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
+      <link>https://breeko.github.io/blog/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
       <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
+      <guid>https://breeko.github.io/blog/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
       <description>Automated optimal fantasy football selection using linear programming
 Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
 I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.</description>

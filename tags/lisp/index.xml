@@ -13,10 +13,10 @@
     
     <item>
       <title>Lisp, Floating Points and Muller&#39;s Recurrence</title>
-      <link>https://breeko.github.io/post/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</link>
+      <link>https://breeko.github.io/blog/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</link>
       <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</guid>
+      <guid>https://breeko.github.io/blog/2018-07-30_lisp-floating-points-and-muller-s-recurrence/</guid>
       <description>Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.
 Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.
 I came across this article about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point.</description>

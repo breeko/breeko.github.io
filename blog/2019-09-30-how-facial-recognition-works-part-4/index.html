@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>How Facial Recognition Works Part 4, Comparing Congressmen to Mugshots &middot; Branko Blagojevic</title>
+        <meta name="description" content="This is part 4 of my series on facial recognition. Part 1 was about face detection, part 2 was about facial landmarks and part 3 was about accuracy over time.
+This post I will compare US congressmen to a public dataset of mugshots. This was inspired by the ACLU claim that Amazon’s face recognition falsely matched 28 members of Congress with mugshots.
+The ACLU post didn&rsquo;t include any source code or source of the mugshot datasets or the congressman dataset.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="How Facial Recognition Works Part 4, Comparing Congressmen to Mugshots">
+<meta property="og:description" content="This is part 4 of my series on facial recognition. Part 1 was about face detection, part 2 was about facial landmarks and part 3 was about accuracy over time.
+This post I will compare US congressmen to a public dataset of mugshots. This was inspired by the ACLU claim that Amazon’s face recognition falsely matched 28 members of Congress with mugshots.
+The ACLU post didn&rsquo;t include any source code or source of the mugshot datasets or the congressman dataset.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2019-09-30-how-facial-recognition-works-part-4/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">How Facial Recognition Works Part 4, Comparing Congressmen to Mugshots</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>This is part 4 of my series on facial recognition. Part 1 was about face detection, part 2 was about facial landmarks and part 3 was about accuracy over time.</p>
+<p>This post I will compare US congressmen to a public dataset of mugshots. This was inspired by the <a href="https://www.aclu.org/blog/privacy-technology/surveillance-technologies/amazons-face-recognition-falsely-matched-28">ACLU claim</a> that Amazon’s face recognition falsely matched 28 members of Congress with mugshots.</p>
+<p>The ACLU post didn&rsquo;t include any source code or source of the mugshot datasets or the congressman dataset. It does note that the mugshot dataset consisted of 25,000 publicly available arrest photos. I found <a href="https://catalog.data.gov/dataset/nist-mugshot-identification-database-mid-nist-special-database-18">NIST special dataset</a> specifically for this purpose. The dataset contains 1573 individuals (cases) 1495 male and 78 female. It has front as well as profiles of the individuals, although I only used the front facing images.</p>
+<p>Below is a sample of a few front-facing mugshots.</p>
+<p><img src="/post/resources/img/nist_sample.png" alt=""></p>
+<p>The Congressmen headshots were taken from <a href="https://en.wikipedia.org/wiki/List_of_current_members_of_the_United_States_House_of_Representatives">List of Congressmembers page</a> in wikipedia. The formatting of the image names were inconsistent so I had to clean them up, and a few of the images were too large to send directly to Rekognition so I found alternative smaller images.</p>
+<p>Below is a sample of a few congress people.</p>
+<p><img src="/post/resources/img/congress_sample.png" alt=""></p>
+<p>The way AWS Rekognition works is that you first create a collection and then upload images to that collection. The service then detects faces in that image and saves only the vector representation of the face. The service does not save your image. Unfortunately AWS does not allow you to access that vector representation since that would allow you to do your own comparison rather than paying for the service.</p>
+<p>The default threshold to be considered a match is 70%. I don&rsquo;t think this is appropriate in real world decision making applications, but it&rsquo;s broad enough to likely include some matches.</p>
+<p>So in total, we had 440 images of congressmen and 1,756 mugshots. How did we do?</p>
+<p>10 mismatches.</p>
+<p><img src="/post/resources/img/congress_mismatch.png" alt=""></p>
+<p>Only one of the matches is greater than 80%.</p>
+<p>I won&rsquo;t comment about similarity but I will say that some look closer than others.</p>
+<h1 id="final-thoughts">Final Thoughts</h1>
+<p>I have been thinking a lot about facial recognition and the potential it has to reshape society. Popular media characterizes the technology as both as an all too powerful technology that will lead to a surveillance state and a primative tool that will lead to many false convictions. I think there are both good and bad reasons to be suspicious of the technology.</p>
+<h2 id="bad-criticism-the-technology-itself-is-bias">Bad criticism: The technology itself is bias</h2>
+<p>From the ACLU article that performed a similar analysis:</p>
+<blockquote>
+<p>Nearly 40 percent of Rekognition’s false matches in our test were of people of color, even though they make up only 20 percent of Congress.</p>
+</blockquote>
+<p>My analysis yielded similar results with the mismatches disproportionately affecting congressmen of color. However, just from a cursory review of the mugshots, people of color were disproportionately represented in the mugshot database, so that&rsquo;s not entirely fair to criticize the facial recognition technology for that. I believe a curated list of mugshots with certain characteristics would result in a similar representation of mismatches. Nothing I have read about the technology suggests that there are inherit bias.</p>
+<h2 id="better-criticism-a-systematic-method-of-identifying-people-of-interest-will-reinforce-our-status-quo-inequalities">Better criticism: A systematic method of identifying people of interest will reinforce our status quo inequalities</h2>
+<p>The process in which facial recognition technology is implemented can be abused. In fact, it&rsquo;s likely to be abused by default. For instance, the simplest implementation of comparing faces with that of convicted criminals will obviously be skewed to the demographic that&rsquo;s most represented in the training dataset.</p>
+<h2 id="bad-criticism-the-technology-is-inaccurate">Bad criticism: The technology is inaccurate</h2>
+<p>There&rsquo;s already <a href="https://www.nist.gov/sites/default/files/documents/2016/12/14/facerecognitionalgorithmssurpasshumans.pdf">evidence</a> that facial recognition technology has surpassed humans. Enough progress has been made and it doesn&rsquo;t seem like we hit a wall. So you can&rsquo;t invalidate the technology based solely on ability unless you throw out much less accurate eye witness accounts.</p>
+<h2 id="better-criticism-due-to-the-large-dataset-available-to-match-against-spurious-matches-an-be-abused">Better criticism: Due to the large dataset available to match against, spurious matches an be abused</h2>
+<p>In the above analyses, I compared 440 images with that of 1,756 mugshots. I performed a total of 772,640 comparisons (440 * 1,756). There were only 10 instances, with relatively low match probabilities. Just stating the match probabilities without the larger context (772k matches performed), a person could gain a false confidence that the results are stronger than they are.</p>
+<p>Playing tricks using statistics is not new. OJ&rsquo;s defense lawyer <a href="http://www.stat.rutgers.edu/home/hcrane/Teaching/582/lectures/chapter5-Bayes.pdf">argued</a> that despite OJ being an abusive husband, it is statistically unlikely that he killed his wife.</p>
+<blockquote>
+<p>Only one in a thousand abusive husbands eventually murder their wives</p>
+</blockquote>
+<p>But this ignores the fact that OJ&rsquo;s wife was murdered. The more pertinent question is what percentage of murdered women were murdered by their abusive ex-husband?</p>
+<p>Similar discretion needs to be applied when using facial recognition. The level of confidence needs to be adjusted for the number of null hypotheses made. My test had 1,756 null hypotheses for each congressman, so we shouldn&rsquo;t make much of an 80% match.</p>
+<p>Overall, facial recognition isn&rsquo;t going anywhere and it does what humans can do, only better. There are potential issues with biases based on the dataset its trained on, but those can be addressed much better than biases inherit in humans. There needs to be some consensus about how to use this technology in a legal setting to prevent these abuses. But all these changes need to happen in institutions and in a legal framework. Attacking the technology is the wrong approach.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/facial-recognition/">facial-recognition</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=How%20Facial%20Recognition%20Works%20Part%204%2c%20Comparing%20Congressmen%20to%20Mugshots&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-09-30-how-facial-recognition-works-part-4%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-09-30-how-facial-recognition-works-part-4%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

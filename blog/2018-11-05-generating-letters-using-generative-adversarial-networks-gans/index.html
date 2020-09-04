@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Generating Letters Using Generative Adversarial Networks (GANs) &middot; Branko Blagojevic</title>
+        <meta name="description" content="A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Generating Letters Using Generative Adversarial Networks (GANs)">
+<meta property="og:description" content="A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
+In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
+In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Generating Letters Using Generative Adversarial Networks (GANs)</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake</p>
+<p>In my <a href="">last post</a> post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.</p>
+<p>In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</p>
+<p>You can skip to the end if you just want to see the outputs, or check out my <a href="https://github.com/breeko/gans-in-action/blob/master/ch3_gan_emnist.ipynb">jupyter notebook</a>.</p>
+<p>Consider a GAN for digits. The generator portion takes random noise and tries to generate a digit that indistinguishable from actual digits. The discriminator tries to distinguish between a fake digit made by the generator and a real digit.</p>
+<p><img src="/post/resources/img/1*XKanAdkjQbg1eDDMF2-4ow.png" alt=""></p>
+<h4 id="relationship-between-generator-and-discriminator">Relationship between generator and discriminator</h4>
+<blockquote>
+<p>A GAN is just a model consisting of two layers: a generator that generates images and a discriminator that tries to determine whether images are real or generated.</p>
+</blockquote>
+<p>The crucial point is that the two models, the generator and discriminator, are linked. You can treat them independently, but that would be a lot harder to train. If un-linked ,the discriminator would just tell the generator that it either believes the image it generated is real or fake and the generator would be left on its own trying to use that to improve the images it generates.</p>
+<p>But when the generator has access to the discriminator’s weights, it’s able to use them to build a better model to trick the discriminator. However, it cannot be allowed to do so by just messing with the discriminator’s weights. It needs to improve by changing its own weights and actually generate images that can trick the discriminator.</p>
+<p>The downside is that since the two models are doing their own thing, the models can develop whatever method they want to do the discriminating and generating. The real goal is to have the generator generate images that can fool humans but we’re stuck with just a discriminator that we’re training along side a generator.</p>
+<h3 id="building-the-generative-adversarial-network">Building the Generative Adversarial Network</h3>
+<p>We’ll be building a GAN to generate letters (A-Z both upper and lower case). The GAN consists of a generator and a discriminator.</p>
+<h4 id="the-generator">The Generator</h4>
+<p>Since our input is 2-dimensional, convolutional layers makes the most sense. The generator will go from some arbitrary input of 100 dimensions and return a 2 dimensional array meant to mimic a letter (28 x 28 x 1). So our input is [None, 100] and our output will be [None, 28, 28, 1].</p>
+<p><em>Convolutional layers</em> consist of an n x n filter. The filter then scans a 2 dimensional array and sets the sum-product of each stride into its output. In the example below, the filter is 3 x 3, the input image is 5 x 5 with a stride of 1 and the output is 3 x 3.</p>
+<figure>
+    <img src="/post/resources/img/1*1ZQThyOaswr6Ul5G-tuXbQ.gif"/> <figcaption>
+            <h4>Convolutional layer</h4>
+        </figcaption>
+</figure>
+
+<p>Below is another visualization of convolutional layers taken from <a href="https://github.com/vdumoulin/conv_arithmetic">Convolutional Arithmetic visualization</a>. In that example, the filter is 3 x 3, the input is 4 x 4 and the stride is 1. The image is not padded so our final output is 2 x 2. Input is blue, output is green.</p>
+<figure>
+    <img src="/post/resources/img/1*cFMF_uWgUFdVRMZAZ0Bfzg.gif"/> <figcaption>
+            <h4>5 x 5 input, 3 x 3 filter, 2 x 2 output (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
+
+<p>A <em>transposed convolution</em> does the opposite. It goes from a filter and output to the input.</p>
+<figure>
+    <img src="/post/resources/img/1*KGrCz7aav02KoGuO6znO0w.gif"/> <figcaption>
+            <h4>2 x 2 input, 3 x 3 filter, 5 x 5 output (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
+
+<p>The above examples have no padding so the input and output dimensions are different. The convolution shrinks the output (5 x 5 -&gt; 2 x 2), while the transposed convolution grows the output (2 x 2 -&gt; 5 x 5). But we can change the padding so that out input and output are the same dimensions. Below is the same convolution except with padding. In that case, the input and output are both the same (5 x 5). A transposed convolution would look exactly the same.</p>
+<figure>
+    <img src="/post/resources/img/1*1okwhewf5KCtIPaFib4XaA.gif"/> <figcaption>
+            <h4>5 x 5 input, 3 x 3 filter, 5 x 5 output, padding of 1 (input is blue, output is green)</h4>
+        </figcaption>
+</figure>
+
+<p>Since we want to generate an image from a flat vector, we need to use transposed convolutions. We also want to up-sample to grow our image in each transposed convolution.</p>
+<p>Our last transposed convolution will result in the same dimension as the image we’re trying to recreate (28 x 28 x 1). We’ll apply a tanh activation to ensure our outputs are between -1 and 1. We’ll also transform our original images to be between -1 and 1 as well.</p>
+<p>Below is the code for our generator.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generator</span>(img_shape, z_dim):  
+    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(z_dim,), name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;noise&#34;</span>)  
+      
+    <span style="color:#75715e"># Dense  </span>
+    x <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">7</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">7</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">256</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_dense&#34;</span>)(inp)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_act&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> BatchNormalization(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_batch_norm&#34;</span>)(x)  
+      
+    x <span style="color:#f92672">=</span> Reshape([<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">256</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_reshape&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.4</span>)(x)  
+    x <span style="color:#f92672">=</span> UpSampling2D(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_up_sample&#34;</span>)(x)
+
+<span style="color:#75715e"># Transposed Convolution  </span>
+    x <span style="color:#f92672">=</span> Conv2DTranspose(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">5</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_conv_1&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_act_1&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> BatchNormalization(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_batch_norm_1&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> UpSampling2D(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_up_sample_1&#34;</span>)(x)
+
+<span style="color:#75715e"># Transposed Convolution  </span>
+    x <span style="color:#f92672">=</span> Conv2DTranspose(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">5</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_conv_2&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_act_2&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> BatchNormalization(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_batch_norm_2&#34;</span>)(x)
+
+<span style="color:#75715e"># Transposed Convolution  </span>
+    x <span style="color:#f92672">=</span> Conv2DTranspose(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">5</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_conv_3&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_act_3&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> BatchNormalization(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_batch_norm_3&#34;</span>)(x)  
+      
+    out <span style="color:#f92672">=</span> Conv2DTranspose(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gen_conv_4&#34;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tanh&#34;</span>)(x)  
+      
+    <span style="color:#66d9ef">return</span> Model(inp, out, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;generator&#34;</span>)
+</code></pre></div><p>Here’s what our generator looks like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">Layer (type)                 Output Shape              Param <span style="color:#75715e">#     </span>
+<span style="color:#f92672">=================================================================</span>  
+noise (InputLayer)           (None, <span style="color:#ae81ff">100</span>)               <span style="color:#ae81ff">0</span>           
+gen_dense (Dense)            (None, <span style="color:#ae81ff">12544</span>)             <span style="color:#ae81ff">1266944</span>     
+gen_act (LeakyReLU)          (None, <span style="color:#ae81ff">12544</span>)             <span style="color:#ae81ff">0</span>           
+gen_batch_norm (BatchNormali (None, <span style="color:#ae81ff">12544</span>)             <span style="color:#ae81ff">50176</span>       
+gen_reshape (Reshape)        (None, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">256</span>)         <span style="color:#ae81ff">0</span>           
+dropout_16 (Dropout)         (None, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">256</span>)         <span style="color:#ae81ff">0</span>           
+gen_up_sample (UpSampling2D) (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">256</span>)       <span style="color:#ae81ff">0</span>           
+gen_conv_1 (Conv2DTranspose) (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">128</span>)       <span style="color:#ae81ff">819328</span>      
+gen_act_1 (LeakyReLU)        (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">128</span>)       <span style="color:#ae81ff">0</span>           
+gen_batch_norm_1 (BatchNorma (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">128</span>)       <span style="color:#ae81ff">512</span>         
+gen_up_sample_1 (UpSampling2 (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">128</span>)       <span style="color:#ae81ff">0</span>           
+gen_conv_2 (Conv2DTranspose) (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">204864</span>      
+gen_act_2 (LeakyReLU)        (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">0</span>           
+gen_batch_norm_2 (BatchNorma (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">256</span>         
+gen_conv_3 (Conv2DTranspose) (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">32</span>)        <span style="color:#ae81ff">51232</span>       
+gen_act_3 (LeakyReLU)        (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">32</span>)        <span style="color:#ae81ff">0</span>           
+gen_batch_norm_3 (BatchNorma (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">32</span>)        <span style="color:#ae81ff">128</span>         
+gen_conv_4 (Conv2DTranspose) (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">1</span>)         <span style="color:#ae81ff">801</span>         
+<span style="color:#f92672">=================================================================</span>  
+Total params: <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">394</span>,<span style="color:#ae81ff">241</span>  
+Trainable params: <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">368</span>,<span style="color:#ae81ff">705</span>  
+Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">536</span>
+</code></pre></div><h4 id="the-discriminator">The Discriminator</h4>
+<p>Our discriminator is similar to the generator except instead of using <em>transposed convolutional</em> layers, we’ll just be using <em>convolutional</em> layers. As we used up-sampling in the generator, we’ll use strides of 2 in our discriminator so we can shrink the output at each convolution.</p>
+<p>Our final output will be a value between 0 and 1 signifying whether the discriminator believes that the image is real or fake. For that we use a sigmoid activation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">discriminator</span>(img_shape):  
+    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>[<span style="color:#f92672">*</span>img_shape, <span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image&#34;</span>)  
+      
+    x <span style="color:#f92672">=</span> Reshape([<span style="color:#f92672">*</span>img_shape, <span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_reshape&#34;</span>)(inp)  
+      
+    x <span style="color:#f92672">=</span> Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">5</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_conv_1&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_act_1&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.4</span>)(x)  
+      
+    x <span style="color:#f92672">=</span> Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">5</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_conv_2&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_act_2&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.4</span>)(x)  
+      
+    x <span style="color:#f92672">=</span> Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">5</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_conv_3&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_act_3&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.4</span>)(x)  
+      
+    x <span style="color:#f92672">=</span> Conv2D(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">5</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;same&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_conv_4&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> LeakyReLU(alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_act_4&#34;</span>)(x)  
+    x <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.4</span>)(x)
+
+x <span style="color:#f92672">=</span> Flatten()(x)
+
+out <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sigmoid&#34;</span>, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;disc_out&#34;</span>)(x)
+
+<span style="color:#66d9ef">return</span> Model(inp, out, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;discriminator&#34;</span>)
+</code></pre></div><p>This is what our discriminator will look like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">_________________________________________________________________  
+_________________________________________________________________  
+Layer (type)                 Output Shape              Param <span style="color:#75715e">#     </span>
+<span style="color:#f92672">=================================================================</span>  
+image (InputLayer)           (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">1</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_reshape (Reshape)       (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">1</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_conv_1 (Conv2D)         (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">1664</span>        
+_________________________________________________________________  
+disc_act_1 (LeakyReLU)       (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+dropout_7 (Dropout)          (None, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">64</span>)        <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_conv_2 (Conv2D)         (None, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">128</span>)         <span style="color:#ae81ff">204928</span>      
+_________________________________________________________________  
+disc_act_2 (LeakyReLU)       (None, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">128</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+dropout_8 (Dropout)          (None, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">128</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_conv_3 (Conv2D)         (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">256</span>)         <span style="color:#ae81ff">819456</span>      
+_________________________________________________________________  
+disc_act_3 (LeakyReLU)       (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">256</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+dropout_9 (Dropout)          (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">256</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_conv_4 (Conv2D)         (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">512</span>)         <span style="color:#ae81ff">3277312</span>     
+_________________________________________________________________  
+disc_act_4 (LeakyReLU)       (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">512</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+dropout_10 (Dropout)         (None, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">512</span>)         <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+flatten_2 (Flatten)          (None, <span style="color:#ae81ff">8192</span>)              <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+disc_out (Dense)             (None, <span style="color:#ae81ff">1</span>)                 <span style="color:#ae81ff">8193</span>        
+<span style="color:#f92672">=================================================================</span>  
+Total params: <span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">311</span>,<span style="color:#ae81ff">553</span>  
+Trainable params: <span style="color:#ae81ff">0</span>  
+Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">311</span>,<span style="color:#ae81ff">553</span>
+</code></pre></div><h4 id="the-generative-adversarial-network">The Generative Adversarial Network</h4>
+<p>Since the generator output is the same as the discriminator input, we can just connect the two to form the GAN.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generative_adversarial_model</span>(img_shape, z_dim):  
+    gen <span style="color:#f92672">=</span> generator(img_shape, z_dim)  
+    disc <span style="color:#f92672">=</span> discriminator(img_shape)  
+      
+    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(<span style="color:#f92672">*</span>gen<span style="color:#f92672">.</span>input_shape[<span style="color:#ae81ff">1</span>:],), name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;image&#34;</span>)  
+    img <span style="color:#f92672">=</span> gen(inp)
+
+    <span style="color:#75715e"># NOTE: We do not want the discriminator to be trainable  </span>
+    disc<span style="color:#f92672">.</span>trainable <span style="color:#f92672">=</span> False
+
+    prediction <span style="color:#f92672">=</span> disc(img)
+
+    gan <span style="color:#f92672">=</span> Model(inp, prediction, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gan&#34;</span>)  
+    gan<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;binary_crossentropy&#34;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;adam&#34;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;accuracy&#34;</span>])
+
+    <span style="color:#66d9ef">return</span> gan
+</code></pre></div><p>The important thing to note is that when we combine the two, we have to make sure the discriminator is not trainable. We don’t want the generator to improve just by messing with the discriminator’s weights.</p>
+<p>Here’s what the final GAN looks like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">_________________________________________________________________  
+Layer (type)                 Output Shape              Param <span style="color:#75715e">#     </span>
+<span style="color:#f92672">=================================================================</span>  
+image (InputLayer)           (None, <span style="color:#ae81ff">100</span>)               <span style="color:#ae81ff">0</span>           
+_________________________________________________________________  
+generator (Model)            (None, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">1</span>)         <span style="color:#ae81ff">2394241</span>     
+_________________________________________________________________  
+discriminator (Model)        (None, <span style="color:#ae81ff">1</span>)                 <span style="color:#ae81ff">4311553</span>     
+<span style="color:#f92672">=================================================================</span>  
+Total params: <span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">705</span>,<span style="color:#ae81ff">794</span>  
+Trainable params: <span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">368</span>,<span style="color:#ae81ff">705</span>  
+Non<span style="color:#f92672">-</span>trainable params: <span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">337</span>,<span style="color:#ae81ff">089</span>
+</code></pre></div><h3 id="training-the-generative-adversarial-network">Training the Generative Adversarial Network</h3>
+<h4 id="unrealistic-generator-output">Unrealistic Generator Output</h4>
+<p>Training a GAN is tricky for a number of reasons. As mentioned earlier, the discriminator will do its own thing in determining whether an image is real or not. So its important to look at the output periodically to make sure its in line with what we think a real image looks like.</p>
+<h4 id="mismatch-between-generator-and-discriminator">Mismatch Between Generator and Discriminator</h4>
+<p>Another issue is that checking whether an image is real or not (discriminator) is a lot easier task than generating a valid looking image from random input (generator). So there’s naturally a mismatch between the generator and discriminator. To address that, we can do several things. One is to make the generator more powerful than the discriminator. The other thing we can do is to train the generator more than the discriminator.</p>
+<p>While we’re training, it’s helpful to see how the generator and discriminator is doing in relationship to each other. We want them to be roughly equal strength during training and train the simultaneously. We’ll switch between training the generator and the discriminator.</p>
+<p>We can put in a criteria to say the generator / discriminator is good enough before we move on to train the discriminator / generator.</p>
+<blockquote>
+<p>Practically speaking, the generator can never get above 50% because if the discriminator was wrong more often than not, it could just simply switch its output to predict the opposite and attain a higher accuracy.</p>
+</blockquote>
+<p>For the same reason, the generator can’t get above 50% accuracy. Let’s say good enough is 20% validation accuracy for the generator and 50% validation accuracy for the discriminator.</p>
+<h4 id="proportional-representation-of-different-characters">Proportional Representation of Different Characters</h4>
+<p>Another problem is that our generator can just learn to create one type of character indistinguishable from actual input. This isn’t that big of a problem since our discriminator can just call all those fake and still do fairly well even though it would be mislabeling a large number of real images. But ignoring classes and distributions as we’ll do does not guarantee out generator will be able to generate all possible characters. It just maps a random input to just about any output that resembles a letter. It’s a bit surprising the amount of diversity we get in the end.</p>
+<h4 id="training">Training</h4>
+<p>Below is the training function we’ll use. It’ll switch between training the GAN, which is essentially just training the generator portion. The input will be a random vector and it will try to fool the discriminator into thinking its real. Remember that we made the discriminator portion of the GAN un-trainable. We’ll then train the discriminator separately.</p>
+<h3 id="results">Results</h3>
+<p>After 1 epoch, we can see the generator is not exactly outputting random noise, but its certainly not a character. Above each image, we can see the discriminator’s output for that particular image. A score of 1.0 means the discriminator is 100% sure its a real image while a score of 0.0 means it thinks there’s a 0% chance of it being real.</p>
+<p>Gen status:  val_loss: 0.69608 val_acc: 0.25000 loss: 0.70158 acc: 0.39844 epochs: 4.</p>
+<p>Disc status: val_loss: 0.18264 val_acc: 0.96875 loss: 0.35883 acc: 0.83594 epochs: 2</p>
+<p><img src="post/resources/img/1*5VkGTcsMkFWx37C3UgcSTg.png" alt=""></p>
+<p>1 iteration</p>
+<p>One thing to note is that the number of batches we used to train the generator was 4 compared to 2 for that of the discriminator. The final validation accuracy was 25% and 97% for the generator and discriminator, respectively.</p>
+<p>As a side note, gen status is collected immediately after the generator is trained, so the actual generator accuracy at the end of the iteration is lower since the discriminator has been trained at the time the statistic was calculated.</p>
+<p>Iteration 2 is similar but we can see the generator is getting better at tricking the discriminator. This back and forth is common when training GANs.</p>
+<p><img src="post/resources/img/1*TK_fvb5c5t-xPhJRVEsbJQ.png" alt=""></p>
+<p>2 iterations</p>
+<p>By the 25th iteration, we can see something sort of resembling letters. We can also see that we trained the generator on 51 batches while only training the discriminator for 36 batches. Despite that, the accuracy on the discriminator is 68%.</p>
+<p>25 iteration.<br>
+Gen status:  val_loss: 0.86473 val_acc: 0.50000 loss: 0.91149 acc: 0.40625 epochs: 51</p>
+<p>Disc status: val_loss: 0.81117 val_acc: 0.68750 loss: 0.53552 acc: 0.74219 epochs: 36</p>
+<p><img src="post/resources/img/1*2JWb_XcYI0knHAIuvnK1Qw.png" alt=""></p>
+<p>25 iterations</p>
+<p>After 500 iterations, the generator is looking somewhat more convincing.</p>
+<p><img src="post/resources/img/1*aEVdoTioChz-SGgKKQmQBA.png" alt=""></p>
+<p>500 iterations</p>
+<p>Let’s review more output values of the generator in comparison to actual images. Again, the percent probability that the discriminator places on the image being real is above the image. <strong>Green titles mean the image is in fact real, while red means the image is generated.</strong></p>
+<p><img src="post/resources/img/1*1G6iplyZeXIVbTaGkCiuFw.png" alt=""></p>
+<p>500 iterations</p>
+<p>So we’re going in the right direction although we’re not there yet. The discriminator is still doing a fairly good job and although the generators output is somewhat believable, some images don’t actually resemble characters, just images generated using similar lines. We should continue training.</p>
+<p>After 5,000 iterations, the output is more convincing.</p>
+<p><img src="post/resources/img/1*QREsSZgDaCXlE31lgDjJBA.png" alt=""></p>
+<p>5,000 iterations</p>
+<p>The output of the generator is considerably better. The discriminator is still correctly marking almost all of the fake images as fakes, but it’s getting a lot of false positives as well. And most importantly, a significant portion of the generated images look as though they are real, at least to me.</p>
+<h3 id="next-steps">Next Steps</h3>
+<p>GANs are incredibly useful but notoriously difficult to train. There has been a lot of work done with stopping criteria and better loss functions. <a href="https://medium.com/@jonathan_hui/gan-wasserstein-gan-wgan-gp-6a1a2aa1b490">Wasserstein GAN (WGAN) and the WGAN-Gradient penalty</a> are objectively better to our model, but they share the same basic structure. I may write my own implementation of WGANs in a future post, or you can see the <a href="https://github.com/eriklindernoren/Keras-GAN/blob/master/wgan/wgan.py">Keras implementation</a>.</p>
+<p>The other difficult part is finding the right model structures, but that’s a common problem in all of machine learning. What makes GANs particularly annoying is that you cannot rely simply on the loss function in determining whether a model structure is suited to the task. But you have to continuously monitor the output. Depending on what you’re training, there may be some ways around it, but in general monitoring the output is a big part of creating useful GANs.</p>
+<p>By Branko Blagojevic November 5, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/gans/">gans</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Generating%20Letters%20Using%20Generative%20Adversarial%20Networks%20%28GANs%29&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-11-05-generating-letters-using-generative-adversarial-networks-gans%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-11-05-generating-letters-using-generative-adversarial-networks-gans%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

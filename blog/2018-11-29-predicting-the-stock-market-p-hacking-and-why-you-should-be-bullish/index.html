@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Predicting the Stock Market, p-Hacking and Why You Should Be Bullish &middot; Branko Blagojevic</title>
+        <meta name="description" content="Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?
+With the rise of stock market volatility in the last few months, there has been a renewed interest in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Predicting the Stock Market, p-Hacking and Why You Should Be Bullish">
+<meta property="og:description" content="Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?
+With the rise of stock market volatility in the last few months, there has been a renewed interest in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Predicting the Stock Market, p-Hacking and Why You Should Be Bullish</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?</p>
+<p>With the rise of stock market volatility in the last few months, there has been a <a href="https://trends.google.com/trends/explore?geo=US&amp;q=stock%20market,%2Fm%2F0cqyw">renewed interest</a> in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money. Or you could just use leverage and exotic instruments to multiply your returns and live passively off your modest savings.</p>
+<p>So let’s take a deep dive into predicting the stock market using data science. We’ll look at the S&amp;P 500, an index of the largest US companies. It’s a broad index that’s a proxy for what people normally call “the market”.</p>
+<p>We’ll want to look at the performance of S&amp;P 500 over the last year and its daily returns. When looking at time series, it’s often useful to look at log values and log returns to normalize the values, but the last two year’s valuations aren’t so volatile, so the log values are similar to the actual values.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> datetime <span style="color:#f92672">as</span> dt  
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt  
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+
+<span style="color:#f92672">%</span>matplotlib inline
+
+stock <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;SPY.csv&#34;</span>, index_col<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Date&#34;</span>)
+
+cutoff <span style="color:#f92672">=</span> len(stock)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>
+
+prices <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>Series(stock<span style="color:#f92672">.</span>Close)  
+log_prices <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>log(prices)
+
+deltas <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>Series(np<span style="color:#f92672">.</span>diff(prices), index<span style="color:#f92672">=</span>stock<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">1</span>:])  
+log_deltas <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>Series(np<span style="color:#f92672">.</span>diff(log_prices), index<span style="color:#f92672">=</span>stock<span style="color:#f92672">.</span>index[<span style="color:#ae81ff">1</span>:])
+
+latest_prices <span style="color:#f92672">=</span> stock<span style="color:#f92672">.</span>Close[cutoff:]  
+latest_log_prices <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>log(latest_prices)  
+latest_log_deltas <span style="color:#f92672">=</span> deltas[cutoff:]
+
+prior_log_deltas <span style="color:#f92672">=</span> log_deltas[:cutoff]  
+prior_log_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(prior_log_deltas)  
+prior_log_std <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>std(prior_log_deltas)
+
+f, axes <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(ncols<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">5</span>))  
+prices<span style="color:#f92672">.</span>plot(ax<span style="color:#f92672">=</span>axes[<span style="color:#ae81ff">0</span>])  
+deltas<span style="color:#f92672">.</span>hist(bins<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>, ax<span style="color:#f92672">=</span>axes[<span style="color:#ae81ff">1</span>])
+
+f<span style="color:#f92672">.</span>autofmt_xdate()  
+f<span style="color:#f92672">.</span>tight_layout()
+</code></pre></div><figure>
+    <img src="/post/resources/img/1*T7Jo_IWF4ivJnQ0ri2oy4w.png"/> <figcaption>
+            <h4>S&amp;P 500 performance over last two years</h4>
+        </figcaption>
+</figure>
+
+<p>Ideally we would like to predict log returns. Some people <a href="https://towardsdatascience.com/using-lstms-for-stock-market-predictions-tensorflow-9e83999d4653">tried</a> to use a neural network, specifically a recurrent neural network to predict market returns. A recurrent neural network is useful for time series data since it considers historic values. But that seems to be overkill. A neural network is unnecessarily complicated. Let’s see if we can fit a simpler model with using just random numbers!</p>
+<h3 id="random-number-generator-as-amodel">Random Number Generator as a Model</h3>
+<p>The <em>predict</em> function below creates a random set of normally distributed daily returns based on the historic standard deviation and mean returns. We set the seed explicitly so we can recreate the best model and use it for forecasting.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict</span>(mean, std, size, seed<span style="color:#f92672">=</span>None):  
+    <span style="color:#e6db74">&#34;&#34;&#34; Returns a normal distribution based on given mean, standard deviation and size&#34;&#34;&#34;</span>  
+    np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(seed)  
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(loc<span style="color:#f92672">=</span>mean, scale<span style="color:#f92672">=</span>std, size<span style="color:#f92672">=</span>size)
+</code></pre></div><p>The <em>apply_returns</em> function just applies our returns to a start price to give us a predicted stock price over time.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">apply_returns</span>(start, returns):  
+    <span style="color:#e6db74">&#34;&#34;&#34; Applies given periodic returns &#34;&#34;&#34;</span>  
+    cur <span style="color:#f92672">=</span> start  
+    prices <span style="color:#f92672">=</span> [start]  
+    <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> returns:  
+        cur <span style="color:#f92672">+=</span> r  
+        prices<span style="color:#f92672">.</span>append(cur)  
+    <span style="color:#66d9ef">return</span> prices
+</code></pre></div><p>And finally, we’ll want to score the returns. There are several possible scores we can use but let’s go with mean squared error (MSE).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">score</span>(actual, prediction):  
+    <span style="color:#75715e"># mean square error  </span>
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>mean(np<span style="color:#f92672">.</span>square(actual <span style="color:#f92672">-</span> prediction))
+</code></pre></div><p>It’s always useful to visualize our predictions to see how good we really are. That’s what <em>compare</em> is for.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compare</span>(prediction, actual):  
+    <span style="color:#75715e"># plots a prediction over the actual series  </span>
+    plt<span style="color:#f92672">.</span>plot(prediction, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;prediction&#34;</span>)  
+    plt<span style="color:#f92672">.</span>plot(actual, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;actual&#34;</span>)  
+    plt<span style="color:#f92672">.</span>legend()
+</code></pre></div><p>Let’s see how a seed of 0 plays out.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">latest_size <span style="color:#f92672">=</span> len(latest_log_prices)  
+predict_deltas <span style="color:#f92672">=</span> predict(prior_log_mean, prior_log_std, latest_size, seed <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) 
+start <span style="color:#f92672">=</span> latest_log_prices[<span style="color:#ae81ff">0</span>]  
+prediction <span style="color:#f92672">=</span> apply_returns(start, predict_deltas)  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;MSE: {:0.08f}&#34;</span><span style="color:#f92672">.</span>format(score(latest_log_prices, prediction)))  
+compare(prediction<span style="color:#f92672">=</span>prediction, actual<span style="color:#f92672">=</span>latest_log_prices<span style="color:#f92672">.</span>values)
+
+MSE: <span style="color:#ae81ff">0.00797138</span>
+</code></pre></div><figure>
+    <img src="/post/resources/img/1*7vrADh1zJ6VppGGlA2XEiw.png"/> <figcaption>
+            <h4>Prediction using a seed of 0</h4>
+        </figcaption>
+</figure>
+
+<p>It’s not great but it’s a start. Our model predicted the rise early on this year, but it definitely overshot. This is the point where we’ll want to tune our model’s seed value to better predict the actual market.</p>
+<p>predict_partial = lambda s: predict(mean = prior_log_deltas_mean, std = prior_log_deltas_std, size = latest_size, seed = s)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">find_best_seed</span>(actual, predict_partial, score, start_seed, end_seed):  
+    best_so_far <span style="color:#f92672">=</span> None  
+    best_score <span style="color:#f92672">=</span> float(<span style="color:#e6db74">&#34;inf&#34;</span>)  
+    start <span style="color:#f92672">=</span> actual[<span style="color:#ae81ff">0</span>]  
+    <span style="color:#66d9ef">for</span> s <span style="color:#f92672">in</span> range(start_seed, end_seed):  
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;r{} / {}&#39;</span><span style="color:#f92672">.</span>format(s, end_seed), end<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>)  
+        predict_deltas <span style="color:#f92672">=</span> predict_partial(s)  
+        predict_prices <span style="color:#f92672">=</span> apply_returns(start, predict_deltas)  
+        predict_score <span style="color:#f92672">=</span> score(actual, predict_prices)  
+        <span style="color:#66d9ef">if</span> predict_score <span style="color:#f92672">&lt;</span> best_score:  
+            best_score <span style="color:#f92672">=</span> predict_score  
+            best_so_far <span style="color:#f92672">=</span> s  
+    <span style="color:#66d9ef">return</span> best_so_far, best_score
+
+best_seed, best_score <span style="color:#f92672">=</span> find_best_seed(latest_log_prices, predict_partial, score, start_seed<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, end_seed<span style="color:#f92672">=</span><span style="color:#ae81ff">500000</span>)  
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;best seed: {} best MSE: {:0.08f}&#34;</span><span style="color:#f92672">.</span>format(best_seed, best_score))
+
+best seed: <span style="color:#ae81ff">68105</span> best MSE: <span style="color:#ae81ff">0.00035640</span>
+</code></pre></div><p>After 500k trials, we decreased our MSE to 0.0003564 from 0.00797! That’s a huge improvement.</p>
+<p>Historic performance is nice, but we really want to see what our magic seed says for the next few months.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">returns <span style="color:#f92672">=</span> predict(mean<span style="color:#f92672">=</span>prior_log_deltas_mean, std<span style="color:#f92672">=</span>prior_log_deltas_std, size<span style="color:#f92672">=</span><span style="color:#ae81ff">400</span>, seed<span style="color:#f92672">=</span>best_seed)
+
+prediction <span style="color:#f92672">=</span> apply_returns(start, returns)  
+compare(prediction, latest_log_prices<span style="color:#f92672">.</span>values)
+
+compare(prediction, log_prices<span style="color:#f92672">.</span>values)
+</code></pre></div><figure>
+    <img src="/post/resources/img/1*Kqex92Cy6S4ZCA7ZQJx-OQ.png"/> <figcaption>
+            <h4>Our model using the best seed</h4>
+        </figcaption>
+</figure>
+
+<p>There you have it. According to our model, the market should begin to pick up and reach new heights by the end of the year.</p>
+<h3 id="p-hacking">p-Hacking</h3>
+<p>Statistical measures such as t-tests and p-values are useful in evaluating relationships between data, but they can be hacked. Anyone can get a statistically significant result by chance if they run enough tests. And you don’t have to report the number of trials and considerations you made prior to achieving a statistically significant result.</p>
+<p><img src="/post/resources/img/0*o9v0395q7faalNSW.png" alt=""></p>
+<p>There has been a bit of a <a href="https://www.apa.org/monitor/2015/10/share-reproducibility.aspx">reproducability crisis</a> where some scientists were not able to replicate some key experiments:</p>
+<blockquote>
+<p>In August, the journal <em>Science</em> published the results of an ambitious initiative called the Reproducibility Project, a collaborative effort coordinated by the nonprofit Center for Open Science. Participants attempted to replicate 100 experimental and correlational psychology studies that had been published in three prominent psychology journals.</p>
+</blockquote>
+<blockquote>
+<p>The results — widely reported in the media — were sobering. Just 39 of the studies were successfully replicated (<em>Science</em>, 2015). Psychology, it seemed, had a credibility problem.</p>
+</blockquote>
+<p>I suspect that much of the reason is that researchers conducted a large number of trials prior to publishing statistically significant results. Or they change various parameters during the trial. This is called <a href="http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf">garden of the forking paths</a> and is not always deliberate.</p>
+<blockquote>
+<p>Researcher degrees of freedom can lead to a multiple comparisons problem, even in settings where researchers perform only a single analysis on their data. The problem is there can be a large number of potential comparisons when the details of data analysis are highly contingent on data, without the researcher having to perform any conscious procedure of fishing or examining multiple p-values</p>
+</blockquote>
+<p>Economic and financial forecasting is particularly susceptible to these biases. I’ve heard stories economists often claim that the N month lag of factor X is an indicator of Y. Why the N month lag? Well, lags of 1 — (N-1) hadn’t worked out.</p>
+<h4 id="avoiding-p-hacking">Avoiding p-Hacking</h4>
+<p>A good way to avoid p-hacking in your own research is to be honest with yourself from the onset. Think through and document everything you want to test. If you want to test 20 different factors, specify the factors before you start testing and consider all 20 factors when evaluating your metrics.</p>
+<p>But most importantly, ask yourself what your model is doing. Neural networks sometimes have the reputations of being black boxes, and in a sense they are. But you should review each step critically. If you’re doing image recognition, observe each layer’s activations and see roughly what the layer is activating based on. If you’re doing reinforcement learning to play games, look at contrived scenarios and see if you can understand roughly how the logic works. If you’re doing natural language processing, consider word vectors in relation to synonyms, antonyms and related words.</p>
+<p>And if you’re doing stock market analysis, ask yourself what you’re actually trying to get out of the model. Why is the Nth lag of some factor a predictor? Why do the prior returns impact the future returns? Why are you considering only the N latest returns? Why are you predicting a return periodicity of [daily, hourly, minute]? Why did you consider the time period from X to Y? Why did you validate up to Z?</p>
+<p>Just feeding stock deltas into a recurrent neural network may achieve the goal of being able to decrease the loss, but with an explanation, you may as well be fitting the values to a random number generator.</p>
+<p>By Branko Blagojevic on November 29, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/finance/">finance</a>, 
+            
+                <a href="/tags/prediction/">prediction</a>, 
+            
+                <a href="/tags/python/">python</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Predicting%20the%20Stock%20Market%2c%20p-Hacking%20and%20Why%20You%20Should%20Be%20Bullish&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

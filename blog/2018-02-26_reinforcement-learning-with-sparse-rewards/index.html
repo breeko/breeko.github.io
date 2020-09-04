@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Reinforcement learning with sparse rewards &middot; Branko Blagojevic</title>
+        <meta name="description" content="This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
+This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
+Reinforcement learning shouldn’t be hard. The idea is simple enough:
+ Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Reinforcement learning with sparse rewards">
+<meta property="og:description" content="This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
+This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
+Reinforcement learning shouldn’t be hard. The idea is simple enough:
+ Try some things randomly and save down the states and the rewards Train a network to predict the reward Use the network to choose the highest reward, allowing for some randomness Continue to train based on those experiences  You’ll read tutorials that get everything to work swimmingly.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-02-26_reinforcement-learning-with-sparse-rewards/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Reinforcement learning with sparse rewards</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…</p>
+<p>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the <a href="">last post</a>) and use the OpenAI environment discussed in an <a href="">earlier post</a>.</p>
+<p>Reinforcement learning shouldn’t be hard. The idea is simple enough:</p>
+<ol>
+<li>Try some things randomly and save down the states and the rewards</li>
+<li>Train a network to predict the reward</li>
+<li>Use the network to choose the highest reward, allowing for some randomness</li>
+<li>Continue to train based on those experiences</li>
+</ol>
+<p>You’ll read tutorials that get everything to work swimmingly. You’ll glance over the hyper-parameters and believe they’re intuitive (why wouldn’t you use a 4 stacked convolutional layers with 4x4 kernels and a step size of 2x2?). Besides, machine learning models are robust and you’re sure other parameters would work similarly well. You take solace in the fact that through emulation you have virtually unlimited amount of training samples. Surely all these great results are just the result of faster GPUs and great machine learning libraries.</p>
+<p>But if you try to solve a problem from scratch or even apply the exact same process to a similar environment you’ll know this is not true.</p>
+<p>Reinforcement learning is hard. There was a <a href="https://www.alexirpan.com/2018/02/14/rl-hard.html">great article</a> about this just last week. Below are the main problems the article mentions and my commentary.</p>
+<ol>
+<li><strong>Inefficiency</strong>: Not a major concern in my opinion. The long run trend of hardware will make this a smaller problem over time. Besides, we should not anthropomorphize what is actually going on. You can teach a human how to move a box from point A to point B with one training example, but not so with a computer. But why should we expect to be able to do so? Reinforcement learning is doing something entirely else, and the fact that its data hungry should not dissuade anyone from its usefulness.</li>
+<li><strong>Difficulty determining reward function and unintended consequences</strong>: It is certainly true that defining rewards is difficult but this is present in human activities as well. One of the hardest things managers, organizations and parents struggle with is setting incentives for others. Managers want to get the most out of their best, but not over-work them. Organizations balance short term and long term goals. Parents try to be both supportive and disciplinary. It would be naive to think there is some kind of intuitive objective function we can just hand over to a machine and have no unintended consequences or trade-offs.</li>
+<li><strong>Local optima</strong>: This is true across all machine learning, but the problem is well defined and well studied. One solution is to train multiple models in tandem and use ensemble methods or a kind of model dropout method or just add more randomness. Faster GPUs make experimentation easier as well, which should help.</li>
+<li><strong>Over-fitting to weird patterns and unstable results</strong>: This problem is the most frustrating for someone just trying to get reinforcement learning to work. This is what I’ll try and discuss in this post.</li>
+</ol>
+<p>My experience has been that your bot will fairly effectively learn based on what its been shown. I have gone down that rabbit-hole of optimizing neural networks, adding and removing layers, adding normalization or dropout, only to realize later that the network is not my problem. Now before I invest too much time into training my model, I check my training examples, I establish a benchmark and I check my predictions. And most importantly, I cut off training as soon as I realize the bot is not learning anything meaningful.</p>
+<h3 id="understand-your-environment-and-check-your-trainingexamples">Understand your environment and check your training examples</h3>
+<p>Ideally we should be able to develop a completely general algorithm to handle any environment, any reward structure and any action space. But in practice this is just not feasible and we need to understand our environment to effectively create useful bots.</p>
+<p>In the <a href="">last post</a>, I spoke about Experience Replay, which is basically a buffer that holds your experiences (state, action taken, reward, next states and whether game is over). Sampling randomly from the buffer is an effective means to get a variety of experiences that get refreshed over time. But many games have sparse rewards, so 99% of your experiences just result in a 0 reward. You model will do great, as it’ll just predict 0 and for the most part, it’ll be right. So you want to focus on examples in which things happened. Here is an example of snake being played randomly on a 20x20 board:</p>
+<p><img src="/post/resources/img/1*EnCstN3ChnE8hfSiF9K3yw.gif" alt=""></p>
+<p>Snake is a custom environment I built for OpenAI and can be <a href="https://github.com/breeko/snake">found here</a>. I’m sure many are familiar with snake but you basically move a blue snake trying to reach the green squares and avoid the ends or your own tail. You grow with every piece of fruit you eat. Here is an example of a longer game:</p>
+<p><img src="/post/resources/img/1*Xggcim-DgmvqJhKJ_DNc2Q.gif" alt=""></p>
+<p>It’s important to know the nature of your environment before you begin trying to learn. In a 20x20 snake, the odds of you getting a reward are very low and most of the time nothing will happen. Rather than try to determine a mathematical solution as to what my expected reward should be, I can just sample a number of games:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter  
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> gym  
+<span style="color:#f92672">import</span> snake
+
+env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#34;Snake-v0&#34;</span>)
+
+num_games <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>  
+num_steps <span style="color:#f92672">=</span> []  
+rewards <span style="color:#f92672">=</span> []
+
+<span style="color:#66d9ef">for</span> num_game <span style="color:#f92672">in</span> range(num_games):  
+    num_step <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>  
+    done <span style="color:#f92672">=</span> False  
+    env<span style="color:#f92672">.</span>reset()  
+    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> done:  
+        num_step <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>  
+        action <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>sample()  
+        state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)  
+        rewards<span style="color:#f92672">.</span>append(reward)  
+          
+    num_steps<span style="color:#f92672">.</span>append(num_step)
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of games played: {}&#34;</span><span style="color:#f92672">.</span>format(num_games))
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Average number of steps: {:0.2f}&#34;</span><span style="color:#f92672">.</span>format(np<span style="color:#f92672">.</span>mean(num_steps)))
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of steps distribution nt10%: {:0.2f} t25%: {:0.2f} t50%: {:0.2f} t75%: {:0.2f} t99%: {:0.2f}&#34;</span><span style="color:#f92672">.</span>format(  
+    <span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>percentile(num_steps, [<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">75</span>, <span style="color:#ae81ff">99</span>])))
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Distribution of rewards: {}&#34;</span><span style="color:#f92672">.</span>format(Counter(rewards)))
+</code></pre></div><p>These are the results:</p>
+<blockquote>
+<p>Number of games played: 1000<br>
+Average number of steps: 34.18<br>
+Number of steps distribution <br>
+ 10%: 5.00 25%: 10.00 50%: 22.00 75%: 48.00 99%: 143.12<br>
+Distribution of rewards: Counter({0: 33123, -1: 1000, 1: 60})</p>
+</blockquote>
+<p>So ~33k steps there is no reward. I have a -1 reward on 1k of them (as expected since I played 1k games). And I got a reward on 60. If we just sample these experiences randomly, we’re obviously going to be very biased towards nothing happening. And it’s not wrong. Most of the time, nothing happens. But we need to try to learn exactly what’s going on in those 60 cases where we received a reward and those 1k times leading up to my death.</p>
+<p>You can separate out the examples in which you have a certain score and sample a number from each score. But this is a bit arbitrary since you’d have to know what your score distribution is, and it may change as your bot learns. The better way is to just sort your experiences based on absolute reward and then draw samples where you’re biased towards the high rewards. Sorting every time we want to sample is not very efficient but for our purposes the performance benefit of adding complexity would be negligible. Below is a modification of the ExperienceReplay class from the <a href="">last post</a> in which unusual experiences are over-sampled.</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/1157a3083c43cd212d3c8175d5934768.js"></script>
+
+<p>When we sample, we sort the buffer by absolute value of rewards where very high or low rewards are in the front. Then we apply a weighting to each one based on the unusual_sample_factor and index.</p>
+<p>So for instance, this is what unusual_sample_factor of 0.9 would look like on 8 samples:</p>
+<p>rewards:        [1, 0, 0, 0, 0, 1, -1, 0]<br>
+sorted rewards: [1, 1, -1, 0, 0, 0, 0, 0]<br>
+probs:          [ 0.18  0.16  0.14  0.13  0.12  0.1   0.09  0.08]</p>
+<p>Depending on how big your experience buffer is and how much you want to favor unusual experiences in your buffer, you could change the unusual_sample_factor. At 1.0, every item is equally likely. As it approaches 0, then the first samples are more likely. There are also other methods that you can use such as weighting the probability by the absolute value of the reward, but this is likely good enough. And the unusual rewards are still equally likely to get discarded as the add function just indiscriminately discards older experiences. You can change this as well.</p>
+<h3 id="reducing-theinterval">Reducing the interval</h3>
+<p>Another useful technique is to reduce the interval at which you sample. Don’t focus on every frame. This works well with games that are not turn based. Also, it’s a practicality for many games. If you’re playing Mario at 60 frames a second, 10 sequential frames will be a lot less useful than 10 frames at 0.5 second intervals.</p>
+<h3 id="bench-marking-performance">Bench-marking performance</h3>
+<p>Run a lot of trials before you begin and record average performance as well as the distribution. If your average reward is 10 +/- 20, then you shouldn’t be too excited seeing scores move around 20–30. Also have more comparable bots. Have a bot that always always outputs the same action. Do one that’s random but biased (e.g. 60% UP, 20% DOWN, 20% LEFT, 20% RIGHT). I would create a separate function that scores a bot and you can just feed it various models. Below is an implementation of a simple function and class that can be used for benchmarking.</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/dcf64da3d27d4119d6a2af36f0716bdb.js"></script>
+
+<p>You would use this by creating feeding a function to the CustomModel and scoring it. See below</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> benchmark <span style="color:#f92672">import</span> CustomModel, test_model
+
+model_random <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random(<span style="color:#ae81ff">4</span>), <span style="color:#e6db74">&#34;random&#34;</span>)  
+model_0 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;always_0&#34;</span>)  
+model_1 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;always_1&#34;</span>)  
+model_2 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">0</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;always_2&#34;</span>)  
+model_3 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;always_3&#34;</span>)  
+model_bias_0 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> [<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bias_0&#34;</span>)  
+model_bias_1 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bias_1&#34;</span>)  
+model_bias_2 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">1</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bias_2&#34;</span>)  
+model_bias_3 <span style="color:#f92672">=</span> CustomModel(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random(<span style="color:#ae81ff">4</span>) <span style="color:#f92672">*</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>], name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bias_3&#34;</span>)
+
+models <span style="color:#f92672">=</span> [  
+    model_random,  
+    model_0,  
+    model_1,  
+    model_2,  
+    model_3,  
+    model_bias_0,  
+    model_bias_1,  
+    model_bias_2,  
+    model_bias_3  
+]
+
+<span style="color:#66d9ef">for</span> model <span style="color:#f92672">in</span> models:  
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;model: {} score: {:0.2f}&#34;</span><span style="color:#f92672">.</span>format(model<span style="color:#f92672">.</span>name, test_model(env, model)))
+</code></pre></div><p>Below I create 9 benchmarks. One chooses randomly, 4 always choose the same direction, and 4 are just biased to one direction. You can create more and use the best score as your benchmark.</p>
+<h3 id="checking-predictions">Checking predictions</h3>
+<p>What is your bot predicting? You can look at loss numbers, and that’s pretty easy to pinpoint when it’s going out of control. But look at your prediction values as well. If your game returns 0 most of the time with a reward of 1 every 10 steps or so (assuming perfect play), then you should expect your predictions to come in between 0 to 1 for the most part. However when you’re bootstrapping as we did in the <a href="">last post</a> rewards can spiral out of control and turn incredibly positive or negative. You can handle this by decreasing the learning rate, or decreasing the frequency in which you update the target network. But most importantly, identify that this is happening early and don’t waste time feeding the model more experiences.</p>
+<h3 id="finally-try-different-neural-network-architectures">Finally try different neural network architectures</h3>
+<p>If you’re getting good training examples, rewards are coming out as expected and your bot is actually getting better, but the loss numbers aren’t decreasing, then you may want to look at trying different architectures. You can try all the normal techniques (dropout, batch normalization, ensemble methods, increasing number of layers or neurons). You may also want to consider using an RNN like GRU or LSTM, which I’ll discuss in a future post. But if your bot is not improving, chances are there is something else going on and tinkering with the model is a waste of time.</p>
+<p>By Branko Blagojevic on February 26, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/reinforcement-learning/">reinforcement-learning</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Reinforcement%20learning%20with%20sparse%20rewards&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-02-26_reinforcement-learning-with-sparse-rewards%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

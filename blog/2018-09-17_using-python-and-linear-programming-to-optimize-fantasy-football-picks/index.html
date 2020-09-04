@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Using Python and Linear Programming to Optimize Fantasy Football Picks &middot; Branko Blagojevic</title>
+        <meta name="description" content="Automated optimal fantasy football selection using linear programming
+Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
+I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Using Python and Linear Programming to Optimize Fantasy Football Picks">
+<meta property="og:description" content="Automated optimal fantasy football selection using linear programming
+Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
+I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">Using Python and Linear Programming to Optimize Fantasy Football Picks</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>Automated optimal fantasy football selection using linear programming</p>
+<p>Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.</p>
+<p>I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.</p>
+<p>The data was very easy to get and I was able to generalize the problem into an optimization problem. I then used <a href="https://pythonhosted.org/PuLP/">PuLP</a> to solve the problem.</p>
+<p>To skip to the code, skip to Fantasy Football Using Linear Programming or check out my <a href="https://github.com/breeko/Fantasy_LP/blob/master/fantasy_lp_final.ipynb">jupyter notebook</a>.</p>
+<h3 id="linear-programming">Linear Programming</h3>
+<p>If you’re familiar with linear programming, feel free to skip this section.</p>
+<blockquote>
+<p>Linear programming is a method to achieve the best outcome of a given function given a series of constraints. The goal and constraints require linear relationships to have the math work in your favor.</p>
+</blockquote>
+<p>For instance, suppose you have flour and eggs from which you can make pasta or unleavened bread to sell. Assume that pasta and bread units are in pounds and we can make partial pounds.</p>
+<pre><code>flour = 30  
+eggs = 40
+
+pasta = flour * 2.5 + egg * 5.0  
+bread = flour * 3.5 + egg * 2.5
+
+pasta_sale_price = 3  
+bread_sale_price = 2.5
+</code></pre><p>Now consider the constraints and objectives.</p>
+<pre><code>Constraints:  
+pasta * 2.5 + bread * 3.5 &lt;= 30 # flour  
+pasta * 5.0 + bread * 2.5 &lt;= 40 # eggs  
+bread &gt;= 0  
+pasta &gt;= 0
+
+Objective Function:  
+maximize pasta * 3 + bread * 2.5
+</code></pre><p>Solve for pasta and bread such that revenue is maximized.</p>
+<p>If we swap out the pasta and bread with x and y, respectively, we can graph all the possible solutions with the following equation:</p>
+<pre><code>2.5x + 3.5y &lt;= 30 and 5.0x + 2.5y &lt;= 40 and x &gt;= 0 and y &gt;= 0
+</code></pre><p>WolframAlpha <a href="https://www.wolframalpha.com/input/?i=2.5x+%2B+3.5y+%3C%3D+30+and+5.0x+%2B+2.5y+%3C%3D+40+and+x+%3E%3D+0+and+y+%3E%3D+0">tells me</a> the chart looks something like this:</p>
+<p><img src="/post/resources/img/0*MlUyWKc4d-b57btP" alt=""></p>
+<blockquote>
+<p>The shaded area is the feasible region. Everything inside the region is sub-optimal. We only care about the edge. Since everything is linear, we can actually get away with only looking at the vertices.</p>
+</blockquote>
+<p>Consider the extremes of putting all resources into making pasta or bread alone:</p>
+<pre><code>100% pasta:   
+  flour_constraint: 2.5x = 30 =&gt; x = 12  
+  egg_constraint: 5.0x = 40 =&gt; x = 8  
+  x = min(flour_constraint, egg_constraint) =&gt; 8  
+  profit = 8 * 3 + 0 * 2.5 =&gt; 24
+
+100% bread:   
+  flour_constraint: 3.5x = 30 =&gt; x = 8.57  
+  egg_constraint: 2.5x = 40 =&gt; x = 16  
+  y = min(flour_constraint, egg_constraint) =&gt; 8.57  
+  profit = 0 * 3 + 8.57 * 2.5 =&gt; 21.42
+</code></pre><p>If you notice, producing solely pasta or bread, we are leaving some ingredients unused. In fact, there is only one point at which we use 100% of all our ingredients: 5.78 units of pasta and 4.44 units of bread (i.e. the final vertex).</p>
+<pre><code>x = 5.78  
+y = 4.44
+
+2.5 * 5.78 + 3.5 * 4.44 = 30 # 100% of flour  
+5.0 * 5.78 + 2.5 * 4.44 = 40 # 100% of eggs
+
+profit = 5.78 * 3 + 4.44 * 2.5 =&gt; 28.44
+</code></pre><p>Making 5.78 pounds of pasta and 4.44 pounds of bread is the best solution, resulting in revenue of $28.44 given our constraints.</p>
+<blockquote>
+<p>Just because we use 100% of the ingredients doesn’t mean that’s necessarily the best choice. In this case it is, but it depends on the objective function. If the sales price of pasta were 10 times that of the bread, then it would make sense to make more pasta even if it means leaving unused ingredients.</p>
+</blockquote>
+<p>This just scratches the surface of linear programming. If we had more variables, we could add more dimensions. In this example we only have 2, but everything generalizes to any number of dimensions. More constraints would just mean a different shape. For instance, we could have made a constraint that said no more than 6 pounds of pasta and that would just be a vertical line at x = 6. Our feasible region would only included the shaded are to the left of that. More examples can be found <a href="https://github.com/coin-or/pulp/tree/master/examples">here</a>.</p>
+<p>We can use these same principles when deciding on our Fantasy Football pool.</p>
+<h3 id="fantasy-football-in-anutshell">Fantasy Football in a Nutshell</h3>
+<p>The fantasy football I experiment with (<a href="https://www.draftkings.com/r/drunko">DraftKings</a>) consists of picking players to make up your team. Your score is a function of the players that you picked. The <a href="https://fantasydata.com/developers/fantasy-scoring-system/nfl">function</a> isn’t so important but it’s based on their real world performance. For instance, 1 point per 25 passing yards, 4 points for a passing touchdown, and so on. You’re limited by a salary cap and positions (1 quarterback, 2 running backs, 3 wide-receivers, 1 tight end, 1 flex and 1 defensive special teams).</p>
+<p>DraftKings makes it easy for people. They give you the average points per game for each player for the season. A general strategy involves going through each position, looking at the best historical performers (most points in the last game), and doing some kind of cost analysis (e.g.absolute points or points / salary). Here some sports fans may let their own biases influence their choices. Also, someone may consider the athlete’s opponent this week. Finally, players try to get as close as possible to their salary cap.</p>
+<h3 id="fantasy-football-using-linear-programming">Fantasy Football Using Linear Programming</h3>
+<p>I’ll be using python, pandas and <a href="https://pythonhosted.org/PuLP/">PuLP</a> to make my decision. We’ll be working off the naive assumption that whatever the person scored last time, he will score this time. We’ll optimize for the highest possible score given our salary and position constraints.</p>
+<p>Note that API results may have changed since I ran this. The value they provide is season average so as games played, this value updates.</p>
+<p>First we have to download and clean up the data a bit.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> urllib<span style="color:#f92672">,</span> json  
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd  
+<span style="color:#f92672">import</span> re  
+<span style="color:#f92672">from</span> itertools <span style="color:#f92672">import</span> permutations  
+<span style="color:#f92672">from</span> pulp <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+LATEST_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;[https://api.draftkings.com/draftgroups/v1/draftgroups/21434/draftables?format=json](https://api.draftkings.com/draftgroups/v1/draftgroups/21434/draftables?format=json)&#34;</span>
+
+response <span style="color:#f92672">=</span> urllib<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>urlopen(LATEST_URL)  
+data <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(response<span style="color:#f92672">.</span>read())  
+current <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame<span style="color:#f92672">.</span>from_dict(data[<span style="color:#e6db74">&#34;draftables&#34;</span>])
+
+<span style="color:#75715e"># Remove players that are out or questionable  </span>
+current <span style="color:#f92672">=</span> current[current<span style="color:#f92672">.</span>status <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;None&#34;</span>]
+</code></pre></div><p>DraftKings has a Flex position that can be filled by any running back, wide receiver or tight end. Generally a player can only fill one role, so we need to add those eligible to the flex position back to our data frame and label them as position “FLEX”.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Add flex position  </span>
+flex <span style="color:#f92672">=</span> current[current<span style="color:#f92672">.</span>position<span style="color:#f92672">.</span>isin([<span style="color:#e6db74">&#34;RB&#34;</span>,<span style="color:#e6db74">&#34;WR&#34;</span>,<span style="color:#e6db74">&#34;TE&#34;</span>])]<span style="color:#f92672">.</span>copy()  
+flex<span style="color:#f92672">.</span>position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FLEX&#34;</span>  
+current <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([current, flex])
+
+The previous points the player scored <span style="color:#f92672">is</span> nested inside a <span style="color:#960050;background-color:#1e0010">“</span>draftStatAttributes<span style="color:#960050;background-color:#1e0010">”</span> field<span style="color:#f92672">.</span> For instance:
+
+<span style="color:#e6db74">&#34;draftStatAttributes&#34;</span>:[{<span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#ae81ff">90</span>,<span style="color:#e6db74">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;46.1&#34;</span>,<span style="color:#e6db74">&#34;sortValue&#34;</span>:<span style="color:#e6db74">&#34;46.1&#34;</span>},{<span style="color:#e6db74">&#34;id&#34;</span>:<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>,<span style="color:#e6db74">&#34;value&#34;</span>:<span style="color:#e6db74">&#34;29th&#34;</span>,<span style="color:#e6db74">&#34;sortValue&#34;</span>:<span style="color:#e6db74">&#34;29&#34;</span>,<span style="color:#e6db74">&#34;quality&#34;</span>:<span style="color:#e6db74">&#34;High&#34;</span>}]
+</code></pre></div><p>For some reason its in a list. What we want is the “<em>value</em>” float in the list. It’s not always the first element so we need to find a float and extract that.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_float</span>(l, key):  
+    <span style="color:#e6db74">&#34;&#34;&#34; Returns first float value from a list of dictionaries based on key. Defaults to 0.0 &#34;&#34;&#34;</span>  
+    <span style="color:#66d9ef">for</span> d <span style="color:#f92672">in</span> l:  
+        <span style="color:#66d9ef">try</span>:  
+            <span style="color:#66d9ef">return</span> float(d<span style="color:#f92672">.</span>get(key))  
+        <span style="color:#66d9ef">except</span>:  
+            <span style="color:#66d9ef">pass</span>  
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0.0</span>
+
+points <span style="color:#f92672">=</span> [get_float(x, <span style="color:#e6db74">&#34;value&#34;</span>) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span>  
+  current<span style="color:#f92672">.</span>draftStatAttributes]  
+current[<span style="color:#e6db74">&#34;points&#34;</span>] <span style="color:#f92672">=</span> points
+</code></pre></div><p>We now have everything we need. A few of the records are duplicated, so we can trim everything down and group by the fields we need: position, displayName, salary and points.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">availables <span style="color:#f92672">=</span> current[[<span style="color:#e6db74">&#34;position&#34;</span>, <span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;salary&#34;</span>,  
+  <span style="color:#e6db74">&#34;points&#34;</span>]]<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#34;position&#34;</span>, <span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;salary&#34;</span>,  
+  <span style="color:#e6db74">&#34;points&#34;</span>])<span style="color:#f92672">.</span>agg(<span style="color:#e6db74">&#34;count&#34;</span>)  
+availables <span style="color:#f92672">=</span> availables<span style="color:#f92672">.</span>reset_index()  
+availables[availables<span style="color:#f92672">.</span>position<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;QB&#34;</span>]<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">15</span>)
+</code></pre></div><figure>
+    <img src="/post/resources/img/1*4vhRxYRwFw6vS5iWcxeVZQ.png"/> <figcaption>
+            <h4>Available quarter backs</h4>
+        </figcaption>
+</figure>
+
+<p>Since we have a constraint on position (i.e. only one QB, two RB, etc), we need to pivot our salaries and points on position. We also need to define the number of each position we will be constrained to.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">salaries <span style="color:#f92672">=</span> {}  
+points <span style="color:#f92672">=</span> {}  
+<span style="color:#66d9ef">for</span> pos <span style="color:#f92672">in</span> availables<span style="color:#f92672">.</span>position<span style="color:#f92672">.</span>unique():  
+    available_pos <span style="color:#f92672">=</span> availables[availables<span style="color:#f92672">.</span>position <span style="color:#f92672">==</span> pos]  
+    salary <span style="color:#f92672">=</span> list(available_pos[[<span style="color:#e6db74">&#34;displayName&#34;</span>,<span style="color:#e6db74">&#34;salary&#34;</span>]]<span style="color:#f92672">.</span>set_index(<span style="color:#e6db74">&#34;displayName&#34;</span>)<span style="color:#f92672">.</span>to_dict()<span style="color:#f92672">.</span>values())[<span style="color:#ae81ff">0</span>]  
+    point <span style="color:#f92672">=</span> list(available_pos[[<span style="color:#e6db74">&#34;displayName&#34;</span>,<span style="color:#e6db74">&#34;points&#34;</span>]]<span style="color:#f92672">.</span>set_index(<span style="color:#e6db74">&#34;displayName&#34;</span>)<span style="color:#f92672">.</span>to_dict()<span style="color:#f92672">.</span>values())[<span style="color:#ae81ff">0</span>]  
+    salaries[pos] <span style="color:#f92672">=</span> salary  
+    points[pos] <span style="color:#f92672">=</span> point
+
+pos_num_available <span style="color:#f92672">=</span> {  
+    <span style="color:#e6db74">&#34;QB&#34;</span>: <span style="color:#ae81ff">1</span>,  
+    <span style="color:#e6db74">&#34;RB&#34;</span>: <span style="color:#ae81ff">2</span>,  
+    <span style="color:#e6db74">&#34;WR&#34;</span>: <span style="color:#ae81ff">3</span>,  
+    <span style="color:#e6db74">&#34;TE&#34;</span>: <span style="color:#ae81ff">1</span>,  
+    <span style="color:#e6db74">&#34;FLEX&#34;</span>: <span style="color:#ae81ff">1</span>,  
+    <span style="color:#e6db74">&#34;DST&#34;</span>: <span style="color:#ae81ff">1</span>  
+}
+</code></pre></div><p>If we look at the <strong>salaries</strong> variable, it’s just a dictionary of player names and salaries pivoted on position. <strong>points</strong> is the same.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">salaries  
+{<span style="color:#e6db74">&#39;QB&#39;</span>: {<span style="color:#e6db74">&#39;AJ McCarron&#39;</span>: <span style="color:#ae81ff">4600</span>,  
+  <span style="color:#e6db74">&#39;Aaron Rodgers&#39;</span>: <span style="color:#ae81ff">6800</span>,  
+  <span style="color:#e6db74">&#39;Alex Smith&#39;</span>: <span style="color:#ae81ff">6000</span>,  
+  <span style="color:#e6db74">&#39;Andrew Luck&#39;</span>: <span style="color:#ae81ff">6200</span>,  
+  <span style="color:#e6db74">&#39;Baker Mayfield&#39;</span>: <span style="color:#ae81ff">4600</span>,  
+  <span style="color:#e6db74">&#39;Ben Roethlisberger&#39;</span>: <span style="color:#ae81ff">6900</span>,  
+  <span style="color:#e6db74">&#39;Blaine Gabbert&#39;</span>: <span style="color:#ae81ff">4700</span>,  
+  <span style="color:#f92672">...</span>}
+</code></pre></div><p>Our salary cap is 50k.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">SALARY_CAP <span style="color:#f92672">=</span> <span style="color:#ae81ff">50000</span>
+</code></pre></div><p>Now we have to define our variables. We want a variable for each position (e.g. QB). There will be an index for each player and the variable will be binary (0 or 1) meant to represent whether the player is included or excluded.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">_vars <span style="color:#f92672">=</span> {k: LpVariable<span style="color:#f92672">.</span>dict(k, v, cat<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Binary&#34;</span>) <span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> points<span style="color:#f92672">.</span>items()}
+</code></pre></div><p>The <strong>_vars</strong> is a dictionary of position and an LpVariable.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">_vars  
+{<span style="color:#e6db74">&#39;QB&#39;</span>: {<span style="color:#e6db74">&#39;AJ McCarron&#39;</span>: QB_AJ_McCarron,  
+  <span style="color:#e6db74">&#39;Aaron Rodgers&#39;</span>: QB_Aaron_Rodgers,  
+  <span style="color:#e6db74">&#39;Alex Smith&#39;</span>: QB_Alex_Smith,  
+  <span style="color:#e6db74">&#39;Andrew Luck&#39;</span>: QB_Andrew_Luck,  
+  <span style="color:#e6db74">&#39;Baker Mayfield&#39;</span>: QB_Baker_Mayfield,  
+  <span style="color:#e6db74">&#39;Ben Roethlisberger&#39;</span>: QB_Ben_Roethlisberger,  
+  <span style="color:#e6db74">&#39;Blaine Gabbert&#39;</span>: QB_Blaine_Gabbert,  
+  <span style="color:#f92672">...</span>}
+</code></pre></div><p>Now we can setup our problem. Our cost will just be our salaries indexed for the player times either 0 (not included) or 1 (included). Same is true for our reward. And finally we have a constraint on the positions available that we had defined earlier.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">prob <span style="color:#f92672">=</span> LpProblem(<span style="color:#e6db74">&#34;Fantasy&#34;</span>, LpMaximize)  
+rewards <span style="color:#f92672">=</span> []  
+costs <span style="color:#f92672">=</span> []  
+position_constraints <span style="color:#f92672">=</span> []
+
+<span style="color:#75715e"># Setting up the reward  </span>
+<span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> _vars<span style="color:#f92672">.</span>items():  
+    costs <span style="color:#f92672">+=</span> lpSum([salaries[k][i] <span style="color:#f92672">*</span> _vars[k][i] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> v])  
+    rewards <span style="color:#f92672">+=</span> lpSum([points[k][i] <span style="color:#f92672">*</span> _vars[k][i] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> v])  
+    prob <span style="color:#f92672">+=</span> lpSum([_vars[k][i] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> v]) <span style="color:#f92672">&lt;=</span> pos_num_available[k]  
+      
+prob <span style="color:#f92672">+=</span> lpSum(rewards)  
+prob <span style="color:#f92672">+=</span> lpSum(costs) <span style="color:#f92672">&lt;=</span> SALARY_CAP
+</code></pre></div><p>Now that everything is setup, we can solve:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">prob<span style="color:#f92672">.</span>solve()
+</code></pre></div><p>The <strong>prob</strong> object is now solved. It has a <em>variables</em> function that has all our variables and each variable has a <em>varValue</em> which will be either 0 or 1. Below is a helper function to display the results.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">summary</span>(prob):  
+    div <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;---------------------------------------n&#39;</span>  
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Variables:n&#34;</span>)  
+    score <span style="color:#f92672">=</span> str(prob<span style="color:#f92672">.</span>objective)  
+    constraints <span style="color:#f92672">=</span> [str(const) <span style="color:#66d9ef">for</span> const <span style="color:#f92672">in</span> prob<span style="color:#f92672">.</span>constraints<span style="color:#f92672">.</span>values()]  
+    <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> prob<span style="color:#f92672">.</span>variables():  
+        score <span style="color:#f92672">=</span> score<span style="color:#f92672">.</span>replace(v<span style="color:#f92672">.</span>name, str(v<span style="color:#f92672">.</span>varValue))  
+        constraints <span style="color:#f92672">=</span> [const<span style="color:#f92672">.</span>replace(v<span style="color:#f92672">.</span>name, str(v<span style="color:#f92672">.</span>varValue)) <span style="color:#66d9ef">for</span> const <span style="color:#f92672">in</span> constraints]  
+        <span style="color:#66d9ef">if</span> v<span style="color:#f92672">.</span>varValue <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>:  
+            <span style="color:#66d9ef">print</span>(v<span style="color:#f92672">.</span>name, <span style="color:#e6db74">&#34;=&#34;</span>, v<span style="color:#f92672">.</span>varValue)  
+    <span style="color:#66d9ef">print</span>(div)  
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Constraints:&#34;</span>)  
+    <span style="color:#66d9ef">for</span> constraint <span style="color:#f92672">in</span> constraints:  
+        constraint_pretty <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34; + &#34;</span><span style="color:#f92672">.</span>join(re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74">&#34;[0-9.]**1.0&#34;</span>, constraint))  
+        <span style="color:#66d9ef">if</span> constraint_pretty <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;&#34;</span>:  
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;{} = {}&#34;</span><span style="color:#f92672">.</span>format(constraint_pretty, eval(constraint_pretty)))  
+    <span style="color:#66d9ef">print</span>(div)  
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Score:&#34;</span>)  
+    score_pretty <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34; + &#34;</span><span style="color:#f92672">.</span>join(re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74">&#34;[0-9.]+*1.0&#34;</span>, score))  
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;{} = {}&#34;</span><span style="color:#f92672">.</span>format(score_pretty, eval(score)))
+</code></pre></div><p>And now for the optimal Fantasy Football picks for the week of 9/10/2018:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">summary(prob)
+
+Variables:  
+  
+DST_Jets_ <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+FLEX_DeSean_Jackson <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+QB_Ryan_Fitzpatrick <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+RB_Alvin_Kamara <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+RB_James_Conner <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+TE_Jared_Cook <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+WR_DeSean_Jackson <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+WR_Randall_Cobb <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+WR_Tyreek_Hill <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  
+<span style="color:#f92672">---------------------------------------</span>  
+  
+Constraints:  
+<span style="color:#ae81ff">2500</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">4900</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">5500</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">9500</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">6700</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">3600</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">4900</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">4600</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">7600</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">49800.0</span>  
+<span style="color:#f92672">---------------------------------------</span>  
+  
+Score:  
+<span style="color:#ae81ff">26.0</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">34.6</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">45.3</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">46.1</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">38.2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">30.0</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">34.6</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">32.2</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">45.3</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1.0</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">332.3</span>
+</code></pre></div><p>Note that since these scores are selected based on results from last week, this is a very optimistic score. We essentially picked the best performers and their scores from last week, which likely contain a lot of outliers. In fact, if you check actual results, you’ll see that this lineup performed terribly this week, but I’ll leave that as an exercise to the reader.</p>
+<p>Full source is available on Github.</p>
+<p><a href="https://github.com/breeko/Fantasy_LP/blob/master/fantasy_lp_final.ipynb" title="https://github.com/breeko/Fantasy_LP/blob/master/fantasy_lp_final.ipynb"><strong>breeko/Fantasy_LP</strong><br>
+_Contribute to breeko/Fantasy_LP development by creating an account on GitHub._github.com</a><a href="https://github.com/breeko/Fantasy_LP/blob/master/fantasy_lp_final.ipynb"></a></p>
+<h3 id="alternative-methods">Alternative Methods</h3>
+<p>How much better is our search versus what most people do? Earlier I said that I would look at the numbers and do a relative kind of comparison, or just pick the top QB in points, then the top RB in points, and so on. That’s called a greedy search. To make it fair, we’ll consider all possible order permutations and pick the best one.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">eval_players</span>(players):  
+    <span style="color:#66d9ef">return</span> sum([current[current<span style="color:#f92672">.</span>displayName <span style="color:#f92672">==</span> player]<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>points <span style="color:#66d9ef">for</span> player <span style="color:#f92672">in</span> players])
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">greedy</span>(val):  
+    remaining <span style="color:#f92672">=</span> SALARY_CAP  
+    positions <span style="color:#f92672">=</span> current<span style="color:#f92672">.</span>position<span style="color:#f92672">.</span>unique()  
+    best_players <span style="color:#f92672">=</span> []  
+    best_so_far <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>float(<span style="color:#e6db74">&#34;inf&#34;</span>)  
+    <span style="color:#66d9ef">for</span> comb_position <span style="color:#f92672">in</span> permutations(positions):  
+        players <span style="color:#f92672">=</span> []  
+        <span style="color:#66d9ef">for</span> pos <span style="color:#f92672">in</span> comb_position:  
+            <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(pos_num_available[pos]):  
+                available <span style="color:#f92672">=</span> current[(<span style="color:#f92672">~</span>current<span style="color:#f92672">.</span>displayName<span style="color:#f92672">.</span>isin(players)) <span style="color:#f92672">&amp;</span>   
+                                 (current<span style="color:#f92672">.</span>position <span style="color:#f92672">==</span> pos) <span style="color:#f92672">&amp;</span>   
+                                 (current<span style="color:#f92672">.</span>salary <span style="color:#f92672">&lt;=</span> remaining)]  
+                <span style="color:#66d9ef">if</span> available<span style="color:#f92672">.</span>size <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:  
+                    best <span style="color:#f92672">=</span> available<span style="color:#f92672">.</span>sort_values(val,ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>iloc[<span style="color:#ae81ff">0</span>]  
+                    players<span style="color:#f92672">.</span>append(best<span style="color:#f92672">.</span>displayName)  
+                    remaining <span style="color:#f92672">-=</span> best<span style="color:#f92672">.</span>salary  
+        cur_eval <span style="color:#f92672">=</span> eval_players(players)  
+        <span style="color:#66d9ef">if</span> cur_eval <span style="color:#f92672">&gt;</span> best_so_far:  
+            best_players <span style="color:#f92672">=</span> players  
+            best_so_far <span style="color:#f92672">=</span> cur_eval  
+    <span style="color:#66d9ef">return</span> best_players
+</code></pre></div><p>How does it do?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">greedy_points <span style="color:#f92672">=</span> greedy(<span style="color:#e6db74">&#34;points&#34;</span>)  
+<span style="color:#66d9ef">print</span>(greedy_points)  
+eval_players(greedy_points)
+
+[<span style="color:#e6db74">&#39;Alvin Kamara&#39;</span>, <span style="color:#e6db74">&#39;James Conner&#39;</span>, <span style="color:#e6db74">&#39;Tyreek Hill&#39;</span>, <span style="color:#e6db74">&#39;Michael Thomas&#39;</span>, <span style="color:#e6db74">&#39;DeSean Jackson&#39;</span>, <span style="color:#e6db74">&#39;Ryan Fitzpatrick&#39;</span>, <span style="color:#e6db74">&#39;Jared Cook&#39;</span>, <span style="color:#e6db74">&#39;Jets &#39;</span>]
+
+<span style="color:#ae81ff">307.5</span>
+</code></pre></div><p>About 25 points behind our optimal choice, which isn’t too bad. If you notice there is only 8 choices since we ran out of money by the time we got to the end. Let’s try a points per salary dollar.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">points_per_dollar <span style="color:#f92672">=</span> current<span style="color:#f92672">.</span>points <span style="color:#f92672">/</span> current<span style="color:#f92672">.</span>salary  
+current[<span style="color:#e6db74">&#34;points_per_dollar&#34;</span>] <span style="color:#f92672">=</span> points_per_dollar  
+greedy_points <span style="color:#f92672">=</span> greedy(<span style="color:#e6db74">&#34;points_per_dollar&#34;</span>)  
+<span style="color:#66d9ef">print</span>(greedy_points)  
+eval_players(greedy_points)
+
+[<span style="color:#e6db74">&#39;James Conner&#39;</span>, <span style="color:#e6db74">&#39;Isaiah Crowell&#39;</span>, <span style="color:#e6db74">&#39;DeSean Jackson&#39;</span>, <span style="color:#e6db74">&#39;Randall Cobb&#39;</span>, <span style="color:#e6db74">&#39;Tyreek Hill&#39;</span>, <span style="color:#e6db74">&#39;Ryan Fitzpatrick&#39;</span>, <span style="color:#e6db74">&#39;Jared Cook&#39;</span>, <span style="color:#e6db74">&#39;Jets &#39;</span>, <span style="color:#e6db74">&#39;Austin Ekeler&#39;</span>]  
+<span style="color:#ae81ff">300.40000000000003</span>
+</code></pre></div><p>Here we got all 9 players, but a lower score. It’s likely due to leaving money on the table and although the bargains are good values, if you have some extra salary, you would do better picking up that more expensive marginal point.</p>
+<h3 id="final-thoughts">Final Thoughts</h3>
+<p>The linear programming method is not likely to bring you into elite status of fantasy football, but it greatly simplifies the problem. The basic assumption we were working on was that the points generated last week will be generated this week. Now all there is left is to solve for how many points we can expect a player to generate. This is a simpler problem that the original problem. We can run a regression, enrich the data with other sources, look at trailing averages or a combination of any number of techniques. The goal is now to predict expected points scored this week. And when we have our numbers, we can run it through this selection method.</p>
+<p>By Branko Blagojevic on September 17, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/fantasy-football/">fantasy-football</a>, 
+            
+                <a href="/tags/sports/">sports</a>, 
+            
+                <a href="/tags/forecasting/">forecasting</a>, 
+            
+                <a href="/tags/linear-programming/">linear-programming</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Using%20Python%20and%20Linear%20Programming%20to%20Optimize%20Fantasy%20Football%20Picks&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

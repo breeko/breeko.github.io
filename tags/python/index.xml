@@ -13,10 +13,10 @@
     
     <item>
       <title>How Facial Recognition Works Part 4, Comparing Congressmen to Mugshots</title>
-      <link>https://breeko.github.io/post/2019-09-30-how-facial-recognition-works-part-4/</link>
+      <link>https://breeko.github.io/blog/2019-09-30-how-facial-recognition-works-part-4/</link>
       <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-09-30-how-facial-recognition-works-part-4/</guid>
+      <guid>https://breeko.github.io/blog/2019-09-30-how-facial-recognition-works-part-4/</guid>
       <description>This is part 4 of my series on facial recognition. Part 1 was about face detection, part 2 was about facial landmarks and part 3 was about accuracy over time.
 This post I will compare US congressmen to a public dataset of mugshots. This was inspired by the ACLU claim that Amazon’s face recognition falsely matched 28 members of Congress with mugshots.
 The ACLU post didn&amp;rsquo;t include any source code or source of the mugshot datasets or the congressman dataset.</description>
@@ -24,20 +24,20 @@ The ACLU post didn&amp;rsquo;t include any source code or source of the mugshot 
     
     <item>
       <title>How Facial Recognition Works Part 3, How a Face Changes Over 10 Years</title>
-      <link>https://breeko.github.io/post/2019-09-23-how-facial-recognition-works-part-3/</link>
+      <link>https://breeko.github.io/blog/2019-09-23-how-facial-recognition-works-part-3/</link>
       <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-09-23-how-facial-recognition-works-part-3/</guid>
+      <guid>https://breeko.github.io/blog/2019-09-23-how-facial-recognition-works-part-3/</guid>
       <description>This is part 3 of a series of posts about facial recognition. In part 1 I discussed facial detection and part 2 I discussed facial landmarks. In this post, I&amp;rsquo;ll go into how accurate some off the shelf facial recognition are and how well they work as a subject ages.
 I found this video of a man (boy?) that took a picture of himself every day over 10 years starting at age 12.</description>
     </item>
     
     <item>
       <title>How Facial Recognition Works Part 2, Facial Landmarks</title>
-      <link>https://breeko.github.io/post/2019-07-16-how-facial-recognition-works-part-2/</link>
+      <link>https://breeko.github.io/blog/2019-07-16-how-facial-recognition-works-part-2/</link>
       <pubDate>Tue, 17 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-07-16-how-facial-recognition-works-part-2/</guid>
+      <guid>https://breeko.github.io/blog/2019-07-16-how-facial-recognition-works-part-2/</guid>
       <description>In my last post I discussed how face detection works. In this post I&amp;rsquo;ll discuss how landmark detection works.
 Python offers some great free libraries for face recognition. Sorry, thats a lie. They offer great wrappers for C++ libraries like dlib. Using face_recognition, we can identify the face locations of an image is as simple as face_recognition.face_locations.
 When talking about what distinguishes one face from another we normally talk about facial landmarks.</description>
@@ -45,59 +45,59 @@ When talking about what distinguishes one face from another we normally talk abo
     
     <item>
       <title>Scala’s Case Class in Python with Case Matching</title>
-      <link>https://breeko.github.io/post/2019-08-19-python-case-classes/</link>
+      <link>https://breeko.github.io/blog/2019-08-19-python-case-classes/</link>
       <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-08-19-python-case-classes/</guid>
+      <guid>https://breeko.github.io/blog/2019-08-19-python-case-classes/</guid>
       <description>I’ve been doing a lot of Scala programming lately. Scala is a statically typed language that compiles to the JVM. Scala doesn’t break away from object oriented programming but has a lot of functional programming features.
 One of my favorite features of Scala is its case classes. Case classes are a lot like regular classes but they’re easier to setup and usually used to model immutable data. They also allow for easy pattern matching.</description>
     </item>
     
     <item>
       <title>How Facial Recognition Works Part 1: Face Detection</title>
-      <link>https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/</link>
+      <link>https://breeko.github.io/blog/2019-07-08-how-facial-recognition-works/</link>
       <pubDate>Mon, 08 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/</guid>
+      <guid>https://breeko.github.io/blog/2019-07-08-how-facial-recognition-works/</guid>
       <description>Much has been written about facial recognition and its role in society. As with a lot of topics concerning artificial intelligence, it is often discussed with an air of mysticism, as though all the all seeing machines can now peer into our souls. Depending on the narrative of the piece, its accuracy is chillingly accurate or appallingly inadequate for use. Amazon got flack for pitching their Reckognition service to law enforcement, San Fransisco banned the technology, and it has even been called racist.</description>
     </item>
     
     <item>
       <title>Calculating the Probability of Skittle Distribution by Brute Force</title>
-      <link>https://breeko.github.io/post/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</link>
+      <link>https://breeko.github.io/blog/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</link>
       <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</guid>
+      <guid>https://breeko.github.io/blog/2019-04-18-calculating-the-probability-of-skittle-distribution-by-brute-force/</guid>
       <description>A recent blog post caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.
 I wanted to test this his results empirically while also being lazy.</description>
     </item>
     
     <item>
       <title>Building an Object Detection API with AWS S3, Rekognition and Lambda</title>
-      <link>https://breeko.github.io/post/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</link>
+      <link>https://breeko.github.io/blog/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</link>
       <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</guid>
+      <guid>https://breeko.github.io/blog/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</guid>
       <description>In a prior post, Offline Object Detection and Tracking on a Raspberry Pi, I wrote an implementation of an offline object detection model. Since that time, aws has begun to offer some great services in that space, so I felt it was time to write about building an online object detection model with aws.
 Use-Case My use-case is the same as the original article: take a picture periodically, process it, and display some information as to the location of given objects over time.</description>
     </item>
     
     <item>
       <title>Predicting the Stock Market, p-Hacking and Why You Should Be Bullish</title>
-      <link>https://breeko.github.io/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</link>
+      <link>https://breeko.github.io/blog/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</guid>
+      <guid>https://breeko.github.io/blog/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</guid>
       <description>Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?
 With the rise of stock market volatility in the last few months, there has been a renewed interest in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money.</description>
     </item>
     
     <item>
       <title>Generating Letters Using Generative Adversarial Networks (GANs)</title>
-      <link>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
+      <link>https://breeko.github.io/blog/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
       <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
+      <guid>https://breeko.github.io/blog/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
       <description>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
 In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
 In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</description>
@@ -105,10 +105,10 @@ In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, G
     
     <item>
       <title>Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding</title>
-      <link>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</link>
+      <link>https://breeko.github.io/blog/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</link>
       <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</guid>
+      <guid>https://breeko.github.io/blog/2018-10-25_another-variational-auto-encoders-explained-post-and-character-encoding/</guid>
       <description>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models
 Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples
 I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.</description>
@@ -116,10 +116,10 @@ I have read a fair number of posts about variational auto encoders but only rece
     
     <item>
       <title>Using Python and Linear Programming to Optimize Fantasy Football Picks</title>
-      <link>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
+      <link>https://breeko.github.io/blog/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</link>
       <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
+      <guid>https://breeko.github.io/blog/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/</guid>
       <description>Automated optimal fantasy football selection using linear programming
 Historical fantasy football information is easily accessible and easy to digest. Use historical points or adjust as you see fit. With python and linear programming we can design the optimal line-up.
 I’m not a big sports fan but I always liked the numbers. That’s why I was interested in Fantasy Football. It struck me as a relatively simple optimization problem. And with the rise of DraftKings and FanDuel, I figured there would be a lot of historical information available.</description>
@@ -127,10 +127,10 @@ I’m not a big sports fan but I always liked the numbers. That’s why I was in
     
     <item>
       <title>Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database</title>
-      <link>https://breeko.github.io/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</link>
+      <link>https://breeko.github.io/blog/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</link>
       <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</guid>
+      <guid>https://breeko.github.io/blog/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</guid>
       <description>Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.
 Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.
 In my last post I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes.</description>
@@ -138,10 +138,10 @@ In my last post I wrote about a few Reddit bots I am working on. One of them, B0
     
     <item>
       <title>Offline Object Detection and Tracking on a Raspberry Pi</title>
-      <link>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
+      <link>https://breeko.github.io/blog/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</link>
       <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
+      <guid>https://breeko.github.io/blog/2018-05-09_offline-object-detection-and-tracking-on-a-raspberry-pi/</guid>
       <description>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.
 In my last post I wrote about the YOLO model used for object detection. The most surprising thing was how simple the model is. It’s so simple that it can run offline on a raspberry pi
 In my last post I wrote about the YOLO (You Only Look Once) model used for object detection.</description>
@@ -149,10 +149,10 @@ In my last post I wrote about the YOLO (You Only Look Once) model used for objec
     
     <item>
       <title>How to (actually) easily detect objects with deep learning on raspberry pi</title>
-      <link>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
+      <link>https://breeko.github.io/blog/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</link>
       <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
+      <guid>https://breeko.github.io/blog/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/</guid>
       <description>YOLO provides state of the art real-time object detection and classification.
 The YOLO image detection model is one of the fastest and most accurate object detection models. Flexible and fast, YOLO is a huge step forward in machine learning.
 I came across a popular post on hackernews titled How to easily Detect Objects with Deep Learning on Raspberry Pi. The article discusses the YOLO object detection model that can be used for real-time object detection and classification.</description>
@@ -160,10 +160,10 @@ I came across a popular post on hackernews titled How to easily Detect Objects w
     
     <item>
       <title>Everything you’ve ever wanted to know about New York City’s restaurant ratings</title>
-      <link>https://breeko.github.io/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</link>
+      <link>https://breeko.github.io/blog/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</link>
       <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</guid>
+      <guid>https://breeko.github.io/blog/2018-03-25_everything-you-ve-ever-wanted-to-know-about-new-york-city-s-restaurant-ratings/</guid>
       <description>What do the food ratings tell us about restaurants and health departments?
 Every restaurant in NYC receives a letter grade by the city. Using this information we can draw insights into safety and where to eat.
 Anyone who’s been to New York City likely noticed the restaurant letter grades on virtually all eating establishments. The letter grades were introduced in 2010 and range from A through C, with A being the highest (best) rating.</description>
@@ -171,10 +171,10 @@ Anyone who’s been to New York City likely noticed the restaurant letter grades
     
     <item>
       <title>Nassim Taleb, Loaded Questions and Statistics for Hackers</title>
-      <link>https://breeko.github.io/post/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</link>
+      <link>https://breeko.github.io/blog/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</link>
       <pubDate>Mon, 12 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</guid>
+      <guid>https://breeko.github.io/blog/2018-03-12_nassim-taleb-loaded-questions-and-statistics-for-hackers/</guid>
       <description>Nassim Taleb baits financial professionals and students into an elementary mistake in probability. However a simple check could have helped.
 Probability and statistics is hard and not always intuitive. But with modern computing, we can run simulations to get the answers, or at least tell us when we’re way off. Here I describe such methods.
 In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came across a paper Taleb wrote titled “We Don’t Quite Know What We Are Talking About When We Talk About Volatility”.</description>
@@ -182,20 +182,20 @@ In anticipation of reading Nassim Taleb’s new book Skin in the Game, I came ac
     
     <item>
       <title>Nassim Taleb, Absorbing Barriers and House Money</title>
-      <link>https://breeko.github.io/post/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</link>
+      <link>https://breeko.github.io/blog/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</guid>
+      <guid>https://breeko.github.io/blog/2018-03-07_nassim-taleb-absorbing-barriers-and-house-money/</guid>
       <description>A recent EconTalk podcast featured Nassim Taleb in which he spoke about his new book Skin in the Game. During the discussion, he criticized…
 A recent EconTalk podcast featured Nassim Taleb in which he spoke about his new book Skin in the Game. During the discussion, he criticized behavioral economists and social scientists for designing “one-shot” type experiments and trying to draw real life insights from the results. When in actuality, the more reasonable scenario is a series of interactions.</description>
     </item>
     
     <item>
       <title>Reinforcement learning with sparse rewards</title>
-      <link>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</link>
+      <link>https://breeko.github.io/blog/2018-02-26_reinforcement-learning-with-sparse-rewards/</link>
       <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-02-26_reinforcement-learning-with-sparse-rewards/</guid>
+      <guid>https://breeko.github.io/blog/2018-02-26_reinforcement-learning-with-sparse-rewards/</guid>
       <description>This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post and use the…
 This is a continuation of a series of posts on reinforcement learning. This will continue the discussion from the last post) and use the OpenAI environment discussed in an earlier post.
 Reinforcement learning shouldn’t be hard. The idea is simple enough:
@@ -204,20 +204,20 @@ Reinforcement learning shouldn’t be hard. The idea is simple enough:
     
     <item>
       <title>Learning from pixels and Deep Q-Networks with Keras</title>
-      <link>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</link>
+      <link>https://breeko.github.io/blog/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</link>
       <pubDate>Tue, 20 Feb 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</guid>
+      <guid>https://breeko.github.io/blog/2018-02-20_learning-from-pixels-and-deep-q-networks-with-keras/</guid>
       <description>This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third…
 This is a continuation of my series on reinforcement learning. I’d recommend the second post if you’re unfamiliar with OpenAI and the third post if you’re unfamiliar with using neural networks to train a policy. This borrows some code and ideas from Arthur Juliani’s post, especially the game environment.</description>
     </item>
     
     <item>
       <title>Policy Based Reinforcement Learning with Keras</title>
-      <link>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</link>
+      <link>https://breeko.github.io/blog/2018-02-12_policy-based-reinforcement-learning-with-keras/</link>
       <pubDate>Mon, 12 Feb 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-02-12_policy-based-reinforcement-learning-with-keras/</guid>
+      <guid>https://breeko.github.io/blog/2018-02-12_policy-based-reinforcement-learning-with-keras/</guid>
       <description>This post will discuss reinforcement learning through policy based agents on an OpenAI environment
 Policy based reinforcement learning is simply training a neural network to remember the actions that worked best in the past. This framework provides incredible flexibility and works across many envs
 This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed on my last post. The next few posts are heavily influenced by Arthur Juliani’s great series on reinforcement learning.</description>
@@ -225,20 +225,20 @@ This post will discuss reinforcement learning through policy based agents. We’
     
     <item>
       <title>Evolutionary Learning Models with OpenAI</title>
-      <link>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</link>
+      <link>https://breeko.github.io/blog/2018-02-05_evolutionary-learning-models-with-openai/</link>
       <pubDate>Mon, 05 Feb 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/</guid>
+      <guid>https://breeko.github.io/blog/2018-02-05_evolutionary-learning-models-with-openai/</guid>
       <description>Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and…
 Evolutionary learning models are a great introduction to machine learning because they’re simple to understand conceptually and surprisingly easy to implement. In this post, I’ll create an evolutionary learning model to use on the OpenAI. The great thing about OpenAI is the simple API and large number of environments to experiment on. So any bot we create in one environment can (in theory) be used on any other environment.</description>
     </item>
     
     <item>
       <title>Tic-Tac-Toe and Connect-4 using Mini-Max</title>
-      <link>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</link>
+      <link>https://breeko.github.io/blog/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</link>
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</guid>
+      <guid>https://breeko.github.io/blog/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/</guid>
       <description>A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to…
 A lot of ink has been spilled about machine learning techniques being used to beat people in games. From Deep Blue (chess) in the 1990s, to AlphaGo (Go) more recently, computers seem to be performing well against their human counterparts. Even games like poker aren’t completely safe from the machine takeover.</description>
     </item>

@@ -13,10 +13,10 @@
     
     <item>
       <title>Using Linear Regression to Make Fantasy Football Picks</title>
-      <link>https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</link>
+      <link>https://breeko.github.io/blog/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</link>
       <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</guid>
+      <guid>https://breeko.github.io/blog/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/</guid>
       <description>Optimize your fantasy football picks with a linear regression in just a few lines of code.
 Using a regression to predict fantasy football performance is easier than you think in R. With a few lines of code, you can predict player performance and optimize your lineup.
 In a prior post, I wrote about using linear programming to optimize your fantasy football picks. Linear programming ensures you pick the best lineup based on some points projections and constraints (e.</description>

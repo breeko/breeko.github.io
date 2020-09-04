@@ -13,10 +13,10 @@
     
     <item>
       <title>Generating Letters Using Generative Adversarial Networks (GANs)</title>
-      <link>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
+      <link>https://breeko.github.io/blog/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</link>
       <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/post/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
+      <guid>https://breeko.github.io/blog/2018-11-05-generating-letters-using-generative-adversarial-networks-gans/</guid>
       <description>A generative adversarial network is a set of competing models that simultaneously learn to generate and discriminate real images from fake
 In my last post post I wrote about variational auto encoders (VAEs). A VAE is composed of an encoder and decoder and can be used to compress and generate data.
 In this post I’ll discuss Generative Adversarial Networks (GANs). Like VAEs, GANs are made up of two models: a generator and a discriminator and can also be used to generate data.</description>

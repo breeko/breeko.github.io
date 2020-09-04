@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>OpenCalc - React Native - Deep Dive (Part 2) &middot; Branko Blagojevic</title>
+        <meta name="description" content="This is part 2 of a 2 part series on OpenCalc, an open-source mobile calculator built with react-native, javascript and flow. The first part dealt with the design and UI components and a previous post addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on iOS and Android.
+  OpenCalc in action   The main controller has a property called brain, which is an instance of CalculatorBrain.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="OpenCalc - React Native - Deep Dive (Part 2)">
+<meta property="og:description" content="This is part 2 of a 2 part series on OpenCalc, an open-source mobile calculator built with react-native, javascript and flow. The first part dealt with the design and UI components and a previous post addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on iOS and Android.
+  OpenCalc in action   The main controller has a property called brain, which is an instance of CalculatorBrain.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2018-07-23_opencalc-react-native-deep-dive-part-2/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">OpenCalc - React Native - Deep Dive (Part 2)</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>This is part 2 of a 2 part series on <a href="https://github.com/breeko/OpenCalc">OpenCalc</a>, an open-source mobile calculator built with react-native, javascript and flow. The <a href="">first part</a> dealt with the design and UI components and a <a href="">previous post</a> addressed writing the app the app market in general. The second part will deal with the calculation and validation. OpenCalc is available on <a href="https://itunes.apple.com/us/app/opencalc/id1403173317">iOS</a> and <a href="https://play.google.com/store/apps/details?id=com.twelve31labs.opencalc&amp;hl=en_US">Android</a>.</p>
+<figure>
+    <img src="/post/resources/img/1*85NUctLtyaArNljuje0vGg.gif"/> <figcaption>
+            <h4>OpenCalc in action</h4>
+        </figcaption>
+</figure>
+
+<p>The main controller has a property called brain, which is an instance of <em>CalculatorBrain.</em> The controller calls the following brain functions:</p>
+<pre><code>brain.clear()        // clears the brains queue  
+brain.setItem(button) // adds an item to the queue  
+brain.deleteLast()   // deletes last item in the queue  
+brain.getDisplay()   // returns text display of queue  
+brain.getResult()    // returns the result from evaluating the queue
+</code></pre><figure>
+    <img src="/post/resources/img/1*WcIRSCauLila-lOqWGQ3-w.jpeg"/> <figcaption>
+            <h4>That’s why testing is important</h4>
+        </figcaption>
+</figure>
+
+<p>The brain’s main purpose is to deal with a queue of <em>Operations. Operations</em> are defined in the <strong>Operations</strong> file.</p>
+<h3 id="operations">Operations</h3>
+<p><a href="https://github.com/breeko/OpenCalc/blob/master/app/core/Operations.js">Operations.js</a> serves many functions related to defining, storing and using Operations. One of the main purposes of the <strong>Operations</strong> file is to define the <em>Operation</em> class.</p>
+<blockquote>
+<p>The Operation class</p>
+</blockquote>
+<p>The <em>Operation</em> constructor is below:</p>
+<pre><code>constructor(  
+    stringVal: string,   
+    operationType: number,   
+    operationSubType: number,   
+    val: any,   
+    priority: ?number,   
+    operationArgs: ?Set&lt;number&gt;  
+  )
+</code></pre><p>The stringVal is just the string representation in the display. The operationType and operationSubType just hold a value to help the Validator determine if an operation is legal and how to handle each. The types and sub-types are just enum values.</p>
+<p>The <em>val</em> is used to store a function related to the operator. The priority is the priority of operations (e.g. <a href="https://www.mathsisfun.com/operation-order-pemdas.html">PEMDAS</a>). For instance, the priority for + and * is 2 and 4, respectively. So when the calculator evaluates 1 + 2 * 3, it knows to do * first as it is the higher priority. Finally, the operationArgs is just a set of enums that store special cases. For instance, pi is a number, but it should be printed as a string rather than the numeric representation.</p>
+<blockquote>
+<p>Storing all the valuations available in the calculator</p>
+</blockquote>
+<p><em>Operations</em> is a dictionary of various operations available to the calculator. It’s easy to add a new operation or change how one works from this screen. Example of an operation :</p>
+<pre><code>'+': Operation(  
+  stringVal = '+',   
+  operationType = OperationType.Operation,   
+  operationSubType = OperationSubType.BinaryOp,   
+  val = function(x, y) { return x + y; },   
+  priority = 2.0  
+)
+</code></pre><p>“+” is an binary operation (has two inputs) who’s value is equal to x + y. It has a priority of 2.0. The key to the dictionary is “+” which is also the text of the button on the calculator view. So the controller passes through the “+” to the brain, who then knows the associated operation to add to its queue.</p>
+<p>The highest and lowest priority items are parenthesis:</p>
+<pre><code>'(': new Operation(
+  '(', OperationType.Parenthesis, OperationSubType.ParenthesisOpen, null, 7.0)
+...
+')': new Operation(
+  ')', OperationType.Parenthesis, OperationSubType.ParenthesisClose, null, -7.0)
+</code></pre><p>Parenthesis are treated separately by the brain. The queue is scanned from left to right and the parenthesis priorities are applied to all values following the parenthesis. So an open/close parenthesis cancel out the priority change.</p>
+<p>For instance, remember that the priority for + and * are 2 and 4, respectively:</p>
+<pre><code>queue:                   1 + 2 * 3  
+original priorities:       2   4  
+original evaluation:     2 * 3 =&gt; + 1 =&gt; 7
+
+queue:                  (1 + 2) * 3  
+original priorities:       2    4  
+parenthesis priorities: 7    -7  
+revised priorities:        9    4  
+revised evaluation:      1 + 2 =&gt; * 3 =&gt; 9
+</code></pre><p>The function <em>evaluateParenthesis</em> in the <em>CalculatorBrain</em> performs this operation are returns a queue with parenthesis removed and operator priorities revised.</p>
+<blockquote>
+<p>Generate new Operation objects</p>
+</blockquote>
+<p>The function <em>newOperation</em> is used by the brain to generate new objects to add to its queue. It takes three inputs and returns an <em>Operation</em>:</p>
+<pre><code>function newOperation(  
+  opString: string,   
+  queue: ?Array&lt;Operation&gt;,   
+  operationArgs: ?Array&lt;number&gt;  
+): Operation { ... }
+</code></pre><p>It gets passed along a queue, which is just an Array of <em>Operation</em> type. This is required because of overloaded operations. The first thing the newOperation function does is check for overloaded operation. An overloaded operation is an operation which can have multiple meanings depending on the prior operation in the queue. For instance, “-” can mean minus or negative. Most calculators have a separate button for minus and negation, but I didn’t want to give up the real estate.</p>
+<p>The only overloaded operation I have is the “-”, which can either be a binaryOp (e.g. 1–2) or a unaryOp (e.g. 1 * -2):</p>
+<pre><code>const OperationsOverloaded = Object.freeze({  
+  '−': Object.freeze({  
+    UnaryOp: 'neg',  
+    BinaryOp: '−'  
+  })  
+});
+
+function getOverloadedOperation(  
+  opString: string,   
+  queue: ?Array&lt;Operation&gt;  
+) {  
+  const opOverload = OperationsOverloaded[opString];  
+  if (opOverload &amp;&amp; queue) {  
+    const lastOp = queue[queue.length - 1];  
+    if (lastOp &amp;&amp; isInArray(  
+          lastOp.operationSubType,   
+          Array(  
+            OperationSubType.Constant,  
+            OperationSubType.ParenthesisClose,  
+            OperationSubType.BackwardUnaryOp)  
+        )  
+      ) { return opOverload.BinaryOp; }  
+    else {  
+      return opOverload.UnaryOp;  
+    }  
+  }  
+  return opString;  
+};
+</code></pre><p>The above <em>getOverloadedOperation</em> function checks the operationSubType of the last operation in the queue. If its a constant, closed parenthesis or backward-unary-op, then it knows from the context that the “-” is a binary-operation (minus). Otherwise its a unary operation (negation).</p>
+<p>Example below:</p>
+<p>What type of operation is &ldquo;-&quot;?</p>
+<pre><code>inputs: 1 {-}   
+queue: [constant]  
+result: binaryOp
+
+inputs: 1 * {-}  
+queue: [constant, binaryOp]  
+result: unaryOp
+</code></pre><blockquote>
+<p>Round to zero</p>
+</blockquote>
+<p>The roundToZero function is a wrapper around geometric operations (e.g. sin, cos, tan). So for instance, the function for the Operation cos maps to:</p>
+<pre><code>function(x) {return roundZero(Math.cos, x)}
+</code></pre><p>This is required since the apps is using javascript Math module and floats for our geometric functions. For instance, Math.sin(Math.PI) === 1.22464e-16. The <em>roundZero</em> function addresses this, although not perfectly. General rounding is handled elsewhere in the app but it only rounds the final result. Besides, pi is represented as an approximation anyway and the value of sin(pi) is actually 0.</p>
+<p>The roundZero function is below:</p>
+<pre><code>function roundZero(func, x) {  
+  const out = func(x);  
+  return (Math.abs(out) &lt; Number.EPSILON) ? 0 : out;  
+}
+</code></pre><h3 id="calculator-brain">Calculator Brain</h3>
+<p>The brain is where most of the heavy lifting takes place. It’s also the largest file, coming in at ~250 lines. The full implementation can be found <a href="https://github.com/breeko/OpenCalc/blob/master/app/core/CalculatorBrain.js">here</a>.</p>
+<p>Despite its length and complexity, the brain only does two things:</p>
+<ol>
+<li>Manages the queue of operations</li>
+<li>Generates displays for the controller based on the queue</li>
+</ol>
+<h4 id="queue-management">Queue management</h4>
+<p>The queue is just an Array of type Operation. The functions that alter the queue are below:</p>
+<pre><code>brain.clear()            // clears the brains queue  
+brain.setItem(button)    // adds an item to the queue  
+brain.deleteLast()       // deletes last item in the queue
+</code></pre><p><em>Clear</em> simply clears the queue. The <em>setItem</em> function appends an Operation to the queue and <em>deleteLast</em> alters the queue by removing the last effective operation from the queue.</p>
+<blockquote>
+<p>Setting items</p>
+</blockquote>
+<p>An item is passed to the brain as a string, based on the text value of the button used to trigger the event. Then the <em>setItem</em> function creates a new <em>Operation</em> value from the function in the <strong>Operations</strong> file discussed in the last section. But depending on the operationType of the Operation, the brain passes the operation to different functions.</p>
+<p>There are four operationTypes that can be passed along: equals, constant, operation and parenthesis. The <em>setItem</em> function checks the operationType and goes out to a separate function that checks the validity of the operation and returns the actual operation to be added to the queue. It then adds this <strong>Operation</strong> to the queue.</p>
+<pre><code>setItem(item: string) {  
+  let op: Operation = newOperation(item, this.queue);  
+  let opToAdd: ?Operation;  
+  let cleared = false;  
+  if (op.operationType == OperationType.Equals) {  
+   opToAdd = this.setEquals(op);  
+   cleared = true;  
+  } else if (op.operationType === OperationType.Constant) {  
+   opToAdd = this.setOperand(op);  
+  } else if (op.operationType === OperationType.Operation) {  
+   opToAdd = this.setOperator(op);  
+  } else if (op.operationType === OperationType.Parenthesis) {  
+   opToAdd = this.setParenthesis(op);  
+  }
+
+if (opToAdd) {  
+   this.queue.push(opToAdd);  
+   if (opToAdd.operationArgs.has(OperationArgs.AddParenthesis)) {  
+    this.queue.push(newOperation('('));  
+   }  
+   this.cleared = cleared;  
+  }  
+ }
+</code></pre><blockquote>
+<p>Setting parenthesis</p>
+</blockquote>
+<p>The <em>setParenthesis</em> function is the simplest of the four. It just goes out to the Validator that determines the validity of the parenthesis and, if valid, it returns the <em>Operation</em> passed in. Parenthesis are not always valid (e.g. a closed parenthesis without an earlier open parenthesis), so determining validity is the <em>Validators</em> job. I’ll speak more about the Validator later.</p>
+<pre><code>setParenthesis(op: Operation) {  
+  if (Validator.validParenthesis(op, this.queue)) {  
+   return op;  
+  }  
+  return null;  
+ }
+</code></pre><blockquote>
+<p>Setting Operator</p>
+</blockquote>
+<p>For setting an operator, we just need to reach out to the Validator and provide the operator and context and determine if the last operator needs to be replaced and if its a valid operator. The last operator may need to be replaced. For instance, if a user types in “1 + *” we would want the final output to be “1 *” as the * was meant to replace the prior + entered.</p>
+<pre><code>setOperator(op: Operation): ?Operation {  
+  if (Validator.replaceOperator(op, this.queue)) {  
+   this.queue.pop();  
+  }
+
+if (Validator.validOperator(op, this.queue)) {  
+   return op;  
+  }  
+ }
+</code></pre><blockquote>
+<p>Setting equals</p>
+</blockquote>
+<p>All the functions go out to the Validator to determine validity of operation and setEquals is no exception. The only time an equals operation is invalid is if the queue length is less than 2. For instance, if you type in “1 =”, the result would be nothing since there are no operations to perform. So allowing an equals would just clear the queue, which is not what we want. Note that this isn’t perfect as you can input “sin(cos(“ and then equals, which would just clear the input.</p>
+<p>Normally though, the equals just evaluates the queue, and places the result in the display field. The way queues are evaluated is through the brain <em>getResult</em> function. The problem with that function is that it returns a string. So our setEquals needs to evaluate the queue, replace the commas and return the result as an operator to be added to the queue. It must also clear the queue.</p>
+<p>I don’t like the fact that I have no function to return a numeric representation of the result, and if I were to do it again, I would add that and let the conversion to string happen elsewhere.</p>
+<pre><code>setEquals(op: Operation): ?Operation {  
+  if (Validator.validEquals(op, this.queue)) {  
+   const strResult: string = this.getResult();  
+   const result: string = strResult.replace(/,/g, '');  
+   const opArgs: Array&lt;number&gt; = new Array(OperationArgs.Cleared);  
+   const opToAdd = newOperation(result, this.queue, opArgs);  
+   this.clear();  
+   return opToAdd;  
+  }  
+ }
+</code></pre><blockquote>
+<p>Setting Operand</p>
+</blockquote>
+<p>An operand is a value that gets operated on (e.g. a constant). Like the other set functions, the <em>setOperand</em> function goes out to the Validator to validate the operator based on its context. Since I consider a decimal point an operand, there could be times where you want to ignore an operation because it’s not valid (e.g. “1.1.”).</p>
+<p>If the operation is valid, then we need to consider the last operation. If the last operation was a constant, we need to append our value to that constant. For instance, if the queue already has a “1” and another “1” gets added, we would want a single Operation in the queue for “11”.</p>
+<p>One exception to this rule is if the queue was just cleared. In the case, we don’t want to append our new constant to the queue constant, but instead replace the original constant and use this one.</p>
+<p>The other exception is if the constant is not parseable. For instance if someone types in “π”  and then “1” we wouldn’t want to see “π1” but just have “1” replace the π.</p>
+<p>Below is the full implementation of <em>setOperand</em>:</p>
+<h4 id="evaluating-thequeue">Evaluating the Queue</h4>
+<p>The calculator also evaluates the queue. This means it takes the queue of operations and calculates the result. This is done through the <em>getResult</em> which returns a string representing the text value of the evaluated operations. <em>getResult</em> is called every time a button is pressed on the calculator. I didn’t bother performing any cacheing or other optimizations because it was unnecessary and I didn’t want to introduce the complexity.</p>
+<p>The first thing getResult does is separate the queue into numbers and operations. Next it evaluates the parenthesis and revises the operations to reflect the surrounding parenthesis. It then calls <em>evaluate</em>, passing along the numbers, operations and any accumulated value.</p>
+<blockquote>
+<p>Evaluate</p>
+</blockquote>
+<p>Evaluate is a recursive function that keeps an accumulator.</p>
+<p>Consider the following input: 1 + 2 * log(3) / 4. The following arrays would be passed along as numbers: [1, 2, 3, 4], ops: [+, *, log, /], acc: None]. <em>evaluate</em> would perform the following steps:</p>
+<ol>
+<li>Zip up the operations with their indexes twice. The first value represents the operation index and the second value represents the number associated with the operation. So in our example, our zipped queue would look like: (0,0,+), (1,1,*), (2, 2, log), (3,3, /). The tuple (0, 0, +) means that the + operation is the 0th operation and operates on the 0th number as its first input.</li>
+<li>The next step is to go through all the ops, look for unary ops and adjust the number indexes of any tuples that follow the unary ops by one. So after doing this, our zipped index looks like (0,0,+), (1,1,*), (2, 2, log), (3,2, /). You can see that the last operation now acts on the 2nd number index.</li>
+<li>Find the max priority operation. If its a unary op and there are two operations with equal priorities, give preference to the right most priority (e.g. sin cos 0 === sin (cos 0)). Otherwise, if priorities are the same for two operations, perform operations from left to right (e.g. 1 * 2 / 3 === (1 * 2) / 3). The highest priority in our example is log.</li>
+<li>Unpack the zipped operations into their components: the operation index, number index and operation. Pop the number and operation out of their respective queues, and try and reference the relevant number(s) based on the the number index. If it’s a unary op, just use the first number index, or if its binary, use both. In our example: log(3) =&gt; 0.477</li>
+<li>Update the accumulator and pass along the accumulated value, remaining numbers/operation arrays back into the evaluate function: numbers: [1, 2, 0.477, 4], operations: [+, -, /], acc: 0.477</li>
+</ol>
+<blockquote>
+<p>Get display</p>
+</blockquote>
+<p>The <em>getDisplay</em> function just maps over the queue and returns the string representation. It also formats the numbers to show commas or scientific notation.</p>
+<p>The brain makes use of the Validator object and a few functions from the Utils file.</p>
+<h3 id="utils">Utils</h3>
+<p>The Utils file has a number of somewhat general functions. Below is the entire list.</p>
+<pre><code>zip                    // e.g. f((a,b), (c,d)) =&gt; ((a,c), (b,d))  
+zipWithIndexTwice      // e.g. f(a,b) =&gt; ((0,0,a), (1,1,b))  
+lastOrNull             // e.g. f([]) =&gt; null  
+isNumeric              // e.g. f(&quot;123.a&quot;) =&gt; False  
+isInArray              // e.g. f(1, [2,3,1]) =&gt; True  
+decimalPlaces          // e.g. f(&quot;123.45&quot;) =&gt; 2  
+multiply               // e.g. f(1.2, 3.45) =&gt; 4.14  
+useExponential         // e.g. f(123456789) =&gt; True  
+numberWithCommas       // e.g. f(123456789) =&gt; 123,456,789
+</code></pre><p>These are mostly straight forward but multiply and numberWithCommas are fairly interesting if not hacky and worth going into.</p>
+<blockquote>
+<p>Multiply</p>
+</blockquote>
+<p>As you may have guessed, the multiply function just takes two number inputs and multiplies them together returning a number.</p>
+<pre><code>export function multiply(a: number, b: number): number {  
+ const aDecimals = decimalPlaces(a.toString());  
+ const bDecimals = decimalPlaces(b.toString());  
+ const maxDecimals = Math.max(aDecimals, bDecimals);  
+ const multiplier = Math.pow(10, maxDecimals);  
+ const divisor = Math.pow(10, (maxDecimals * 2));  
+ const result = (a * multiplier * b * multiplier) / divisor;  
+ return result;  
+}
+</code></pre><p>The multiply function is required to deal with floating point representation by javascript. For instance:</p>
+<pre><code>js&gt; .1*.2  
+0.020000000000000004
+</code></pre><p>There are probably some types to represent decimals, but since this just applies to multiplication I just wrote my own simply multiply function.</p>
+<p>The multiply function can be best described with an example</p>
+<pre><code>multiply(0.1, 0.23)  
+a = 0.1; b = 0.23  
+aDecimals = 1; bDecimals = 2  
+maxDecimal = max(1,2) = 2  
+multiplier = Math.pow(2) = 100  
+divisor = Math.pow(10, 2 * 2) = 10000  
+result = ((0.1 * 100) * (0.23 * 100)) / 10000   
+       = (10 * 23) / 10000  
+       = 230 / 10000  
+       = 0.023
+</code></pre><p>The code is below:</p>
+<pre><code>export function multiply(a: number, b: number): number {  
+ const aDecimals = decimalPlaces(a.toString());  
+ const bDecimals = decimalPlaces(b.toString());  
+ const maxDecimals = Math.max(aDecimals, bDecimals);  
+ const multiplier = Math.pow(10, maxDecimals);  
+ const divisor = Math.pow(10, (maxDecimals * 2));  
+ const result = (a * multiplier * b * multiplier) / divisor;  
+ return result;  
+}
+</code></pre><blockquote>
+<p>Numbers with commas</p>
+</blockquote>
+<p>The <em>numberWithCommas</em> function takes a string input and a round boolean that defaults to true. The function then converts the string back into a number. There is a native javascript <em>toLocaleString</em> but it <a href="https://github.com/facebook/react-native/issues/19410">does not work on Android</a>.</p>
+<p>If the <em>round</em> boolean is set to true, the number is first rounded based on the <em>MaxPrecision</em> in the <strong>Configs</strong> file.</p>
+<p>It then checks whether the number should be displayed as an exponential through the <em>useExponential</em> function. If so, it’ll just return the exponential representation.</p>
+<p>Otherwise, the function splits the string representation by the decimal places. The idea is that we want to add commas only to the number to the left of the decimal place (e.g. 1234.5678 =&gt; 1,234.5678). It then uses a <a href="https://stackoverflow.com/questions/17294959/how-does-b-d3-d-g-work-for-adding-comma-on-numbers">regex</a> to find where commas should go and inserts them accordingly.</p>
+<p>Finally it joins the head (left of decimal) and tail (right of decimal) and returns the string representation.</p>
+<p>The full implementation is below.</p>
+<pre><code>export function numberWithCommas(x: string, round: ?boolean = true) {  
+ const xNumber = Number(x);  
+ const xString = (  
+   round &amp;&amp;  
+   (decimalPlaces(x) &gt; Configs.MaxPrecision)) ?  
+     xNumber.toFixed(Configs.MaxPrecision) : x;  
+   
+const parseRegex: RegExp = /B(?=(d{3})+(?!d))/g  
+ if (useExponential(xNumber)) {  
+  return xNumber.toExponential(Configs.ExponentialDecimalPlaces);  
+ } else {  
+  // toLocaleString does not work in Android  
+  const parts = xString.split(DECIMAL);  
+  const head = parts[0].replace(parseRegex, COMMA) || '0';  
+  const tail = (parts.length &gt; 1) ? parts[1].toString() : '';  
+  const decimalJoin = (xString.indexOf(DECIMAL) &lt; 0) ? '' : DECIMAL;  
+  return head + decimalJoin + tail;  
+ }  
+}
+</code></pre><p>The only major part of the calculator left is the Validator which validates if an input is valid or not based on the queue.</p>
+<h3 id="validator">Validator</h3>
+<p>The <em>Validator</em> object validates the input given the queue. For instance:</p>
+<pre><code>Validator.validOperator(op: &quot;+&quot;, queue: [1, +, 1]) =&gt; True  
+Validator.validOperator(op: &quot;*&quot;, queue: [sin]) =&gt; False
+
+Validator.validDigit(digit: 1, queue: [2]) =&gt; True  
+Validator.validDigit(digit: 1, queue: [2, %]) =&gt; False
+
+Validator.validEquals(op: &quot;=&quot;, queue: [1, +, 1]) =&gt; True  
+Validator.validEquals(op: &quot;=&quot;, queue: [1, +]) =&gt; False
+
+Validator.validParenthesis(op: &quot;)&quot;, queue: [(, 1, +, 1]) =&gt; True  
+Validator.validParenthesis(op: &quot;)&quot;, queue: [1, +, 1]) =&gt; False
+</code></pre><p>If the validator says that an operation is not valid, the brain just ignores the input.</p>
+<p>On one hand, the validator nicely encapsulates the function of validating whether an input is okay. But on the other hand, it’s just a series of if statements based on every conceivable scenario I can imagine. I didn’t sit down and think of all the scenarios, but updated it over time as I found weird inputs that worked or inputs that were proper that didn’t work. It’s tough to understand without examples so I found it useful to write <a href="https://github.com/breeko/OpenCalc/blob/master/app/utils/__tests__/Validator-test.js">tests</a>.</p>
+<p>The other function is <em>replaceOperator</em> which just returns if the last operator in a queue should be replaced based on the operator provided.</p>
+<p>For instance:</p>
+<pre><code>Validator.replaceOperator(op: &quot;*&quot;, queue: [1, +]) =&gt; True  
+Validator.replaceOperator(op: &quot;*&quot;, queue: [1]) =&gt; False
+</code></pre><p>The first example, the * should replace the +. In the second example, it should not. This allows someone to replace the operator they just wrote in without the need to use backspace.</p>
+<p>Full implementation is below.</p>
+<h3 id="final-thoughts">Final Thoughts</h3>
+<p>Writing an natural calculator that mimics <a href="https://play.google.com/store/apps/details?id=com.google.android.calculator&amp;hl=en_US">Google’s calculator</a> is not trivial. The actual evaluation of the queue can be represented rather elegantly through two stacks. Now begin to include orders of operations and it gets a bit more complicated. And when you begin to include a wider range of operations like backward unary operations (e.g. %, !) and overloads (e.g. “-” meaning negative and minus), then it gets more complicated still. And then there are validating entries are valid, floating point representation and appropriate rounding, use of exponentials and string representations of numbers.</p>
+<p>The difficulty explains why many calculators don’t bother with these functions. A few top calculators on the iPad app store don’t even bother validating input so they let you do whacky calculations like “1 + * 4” and just don’t display any result if it doesn’t make sense.</p>
+<p>Overall this experience has led me to greater appreciate the Google calculator. and the developers that designed it. There are great depths to their design that I didn’t even attempt to mimic. For instance, 10,000! works on the Google calculator (the answer is 2.84E+35659). So they are obviously working with a numeric class much larger than anything practical. And the calculator doesn’t really round. For instance, 2/3 results if 0.66666… and you can scroll the result to the right so it becomes …666666666666E-11 and so on, up to an arbitrary level of precision.</p>
+<p>But the most rewarding part would be designing and developing an app from scratch.</p>
+<p>By Branko Blagojevic on July 23, 2018</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/react-native/">react-native</a>, 
+            
+                <a href="/tags/mobile/">mobile</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=OpenCalc%e2%80%8a-%e2%80%8aReact%20Native%e2%80%8a-%e2%80%8aDeep%20Dive%20%28Part%202%29&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-07-23_opencalc-react-native-deep-dive-part-2%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2018-07-23_opencalc-react-native-deep-dive-part-2%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>How Facial Recognition Works Part 2, Facial Landmarks &middot; Branko Blagojevic</title>
+        <meta name="description" content="In my last post I discussed how face detection works. In this post I&rsquo;ll discuss how landmark detection works.
+Python offers some great free libraries for face recognition. Sorry, thats a lie. They offer great wrappers for C&#43;&#43; libraries like dlib. Using face_recognition, we can identify the face locations of an image is as simple as face_recognition.face_locations.
+When talking about what distinguishes one face from another we normally talk about facial landmarks.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="How Facial Recognition Works Part 2, Facial Landmarks">
+<meta property="og:description" content="In my last post I discussed how face detection works. In this post I&rsquo;ll discuss how landmark detection works.
+Python offers some great free libraries for face recognition. Sorry, thats a lie. They offer great wrappers for C&#43;&#43; libraries like dlib. Using face_recognition, we can identify the face locations of an image is as simple as face_recognition.face_locations.
+When talking about what distinguishes one face from another we normally talk about facial landmarks.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/blog/2019-07-16-how-facial-recognition-works-part-2/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container">
+        <header class="post-header">
+    <h1 class="post-title">How Facial Recognition Works Part 2, Facial Landmarks</h1>
+    
+</header>
+
+        <div class="post-content clearfix">
+    
+
+    <p>In my <a href="https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/">last post</a> I discussed how face detection works. In this post I&rsquo;ll discuss how landmark detection works.</p>
+<p>Python offers some great free libraries for face recognition. Sorry, thats a lie. They offer great wrappers for C++ libraries like <a href="http://dlib.net/">dlib</a>. Using <a href="https://github.com/ageitgey/face_recognition">face_recognition</a>, we can identify the face locations of an image is as simple as <code>face_recognition.face_locations</code>.</p>
+<p>When talking about what distinguishes one face from another we normally talk about facial landmarks. For example, one person may have wide set eyes or a big nose. Identifying the location of these landmarks can help us compare faces.</p>
+<p>Consider Prince Harry and William Cumberbatch. One defining difference between their faces is their eye width. In fact, their eyes are so distinguishing that you can probably identify each just from their eyes.</p>
+<pre><code>import face_recognition as fr
+
+harry = fr.load_image_file(&quot;harry.png&quot;)
+cumberbatch = fr.load_image_file(&quot;cumberbatch.png&quot;)
+
+def crop_faces(im, size):
+    &quot;&quot;&quot; Returns cropped faces from an image &quot;&quot;&quot;
+    faces = []
+    locations = fr.face_locations(im)
+    for location in locations:
+        y1, x1, y2, x2 = location
+        x1, x2 = sorted([x1, x2])
+        y1, y2 = sorted([y1, y2])
+        im_cropped = im[y1:y2, x1:x2]
+        im_cropped_resized = cv2.resize(im_cropped, dsize=size)
+        faces.append(im_cropped_resized)
+    return faces
+
+harry_cropped = crop_faces(harry, (500,500))[0]
+cumberbatch_cropped = crop_faces(cumberbatch, (500,500))[0]
+
+fig, axes = plt.subplots(nrows=1, ncols=2)
+fig.set_size_inches(10, 10)
+
+axes[0].imshow(harry_cropped)
+axes[1].imshow(cumberbatch_cropped)
+</code></pre><p><img src="/post/resources/img/harry_cumberbatch_cropped.png" alt=""></p>
+<p>Next you have to identify the landmarks. To do that use, you guessed it, <code>face_recognition.face_landmarks</code>. The landmarks are calculated using Histogram of Oriented Gradients (HOG) feature combined with a linear classifier, an image pyramid and sliding window detection scheme.</p>
+<pre><code>def draw_landmarks(ax, im, color=&quot;r&quot;, size=2, show_original=True):
+    &quot;&quot;&quot; Draws landmarks around an image &quot;&quot;&quot;
+    landmarks = fr.face_landmarks(im)
+    xs = []
+    ys = []
+
+    for landmark in landmarks:
+        for k, v in landmark.items():
+            xs += [x[0] for x in v]
+            ys += [x[1] for x in v]
+
+    if show_original:
+        ax.imshow(im)
+    else:
+        ax.imshow(np.ones(im.shape))
+
+    ax.scatter(x=xs, y=ys, c=color, s=size)
+
+fig, axes = plt.subplots(nrows=1, ncols=2)
+fig.set_size_inches(10, 10)
+
+harry_landmarks = draw_landmarks(axes[0], harry_cropped)
+cumberbatch_landmarks = draw_landmarks(axes[1], cumberbatch_cropped)
+</code></pre><p><img src="/post/resources/img/harry_cumberbatch_landmarks.png" alt=""></p>
+<p>So now we can compare the landmarks. Let&rsquo;s super-impose Harrys facial landmarks to Cumberbatch:</p>
+<pre><code>fig, ax = plt.subplots()
+fig.set_size_inches(5, 5)
+
+harry_landmarks = draw_landmarks(ax, harry_cropped, size=8, show_original=False)
+ax.imshow(cumberbatch_cropped)
+</code></pre><p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks.png" alt=""></p>
+<p>Obviously the landmarks are off, but its partially due to the two images have different rotations. Our facial detection algorithm did a good job at keeping the bridge of the nose in the same relative position, but we need to rotate the image to do a fair comparison.</p>
+<p>Image transformations are pretty mind-bending. I found this resource to be incredibly helpful. To do affine transformations, you simply choose the operation you want, get the respective transformation matrix and perform a dot product on your original image.</p>
+<p>For instance, the scaling, the transformation matrix is::</p>
+<pre><code>cx  0  0 
+ 0  cy 0 
+ 0  0  1
+</code></pre><p>With cx and cy being the percentage you want to scale the x and y parameters, respectively.</p>
+<p>Rotation is a bit most complicated, but the same principal applied:</p>
+<pre><code> cosϴ  sinϴ  0
+-sinϴ  cosϴ  0
+ 0     0     1
+</code></pre><p>With ϴ being the amount in radians you want to rotate.</p>
+<pre><code>def transform(im, radians, translation):
+    # create combined tranformation matrix
+    s = np.sin(radians)
+    c = np.cos(radians)
+    x,y = translation
+
+    T_r = np.array([[c, s, 0], [-s, c, 0], [0, 0, 1]])
+    T_s = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+    T_t = np.array([[1, 0, x], [0, 1, y], [0, 0, 1]])
+    T = T_r @ T_s @ T_t
+    T_inv = np.linalg.inv(T)
+    
+    max_dim = int((y**2 + x**2) ** 0.5) + 1
+
+    y, x, _ = im.shape
+    max_dim = int((y**2 + x**2) ** 0.5) + 1 + max(translation)
+    # 2x scaling requires a tranformation image array 2x the original image
+    im_transformed = np.zeros((max_dim, max_dim, 3), dtype=np.uint8)  
+    for i, row in enumerate(im):  
+        for j, col in enumerate(row):
+            pixel_data = im[i, j, :]
+            input_coords = np.array([i, j, 1])
+            i_out, j_out, _ = T @ input_coords
+            im_transformed[int(round(i_out)), int(round(j_out)), :] = pixel_data
+    im_transformed_cropped = im_transformed[:y, :x, :]
+    return im_transformed_cropped
+
+cumberbatch_transformed = transform(cumberbatch_cropped, 0.1, (0,0))
+plt.imshow(cumberbatch_transformed)
+</code></pre><p><img src="/post/resources/img/cumberbatch_transformed.png" alt=""></p>
+<p>A natural product of the transform is small gaps due to the transform. The easiest way to address that is to use the nearest algorithm to fill those black gaps in, but I won&rsquo;t implement that in this post.</p>
+<p>Now if we compare the landmarks, it&rsquo;s a little bit closer.</p>
+<p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks_transformed.png" alt=""></p>
+<p>Now we can tell that the most striking difference may not be just his eyes, but his nose is also considerably longer and his face is wider.</p>
+<h1 id="how-facial-recognition-actuallyworks">How Facial Recognition Actually Works</h1>
+<p>We essentially transformed someone&rsquo;s face into a numerical representation of points (landmarks). The logical next step to facial recognition would be to compare these landmarks and calculate some kind of landmark distance. But these are just the landmarks that make sense to humans. They may not be that distinguishing, or there may exist some other landmarks that are more distinguishing. So while this technique is useful in capturing different parts of a person&rsquo;s face, they may not be best suited to tell us definitively whether two photos contain the same person.</p>
+<p>Modern machine learning techniques do a similar process of converting a face into a numerical representation. Saying you have a large value in point 61 of your 128 point facial vector representation may not mean anything to us. After we have a numerical representation of the face, we can now use Euclidian distance to measure how different the vector is from some previous vector.</p>
+<p>There is no magical distance that we could use to tell us that two people are the same. We can only measure distances and test their accuracy. For instance, at a distance of 0.5, what percentage of test examples are correct? Packaged facial recognition services often provide the distance as a confidence. The dlib model has a purported 99.38% accuracy on the standard LFW face recognition benchmark using a distance of 0.6.</p>
+<p>In the next post I&rsquo;ll talk about model accuracy and how well the matching algorithm works as a subject ages.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/python/">python</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/facial-recognition/">facial-recognition</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=How%20Facial%20Recognition%20Works%20Part%202%2c%20Facial%20Landmarks&url=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-07-16-how-facial-recognition-works-part-2%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fblog%2f2019-07-16-how-facial-recognition-works-part-2%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+
