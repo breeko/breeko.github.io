@@ -16,7 +16,7 @@
 Use-Case My use-case is the same as the original article: take a picture periodically, process it, and display some information as to the location of given objects over time.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Building an Object Detection API with AWS S3, Rekognition and Lambda">
@@ -127,89 +127,54 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>In a prior post, Offline Object Detection and Tracking on a Raspberry Pi, I wrote an implementation of an offline object detection model. Since that time, aws has begun to offer some great services in that space, so I felt it was time to write about building an online object detection model with aws.</p>
-
+    <p>In a prior post, Offline Object Detection and Tracking on a Raspberry Pi, I wrote an implementation of an offline object detection model. Since that time, aws has begun to offer some great services in that space, so I felt it was time to write about building an online object detection model with aws.</p>
 <h2 id="use-case">Use-Case</h2>
-
 <p>My use-case is the same as the original article: take a picture periodically, process it, and display some information as to the location of given objects over time.</p>
-
-<h2 id="benefits-of-an-online-model">Benefits of an Online Model</h2>
-
+<h2 id="benefits-of-an-onlinemodel">Benefits of an Online Model</h2>
 <p>The most obvious benefit is speed. Speed isn&rsquo;t always important. For my use-case, it&rsquo;s not. But there is some benefit in leveraging a better model thats independent of my application. If we abstract out the image detection, we can plug in different models. The aws rekognition model is more powerful and even provides a hierarchy of the object (e.g. transportation -&gt; vehicle -&gt; car).</p>
-
 <p>The other benefit is reduced complexity. All our hardware will do is take a picture and send it somewhere. If we keep everything local, troubleshooting and active development becomes more difficult.</p>
-
 <p>And finally aws offers services precisely tailored to the task at hand. Tying in other aws services is also simple. Considering the aws free tier of 1k object detections on rekognition, 1mm requests on lambda and 5gb on s3, the added benefits may be worth it.</p>
-
 <h2 id="aws-services">AWS Services</h2>
-
 <p>The easiest way to use aws services in python is through boto3. To use boto3, you have to first setup aws credentials.</p>
-
 <h3 id="s3">S3</h3>
-
 <p>Any data consumed by aws has to pass through an S3 bucket. Fortunately, aws makes it easy to upload to S3 in python.</p>
-
-<pre><code class="language-python">import boto3
-s3_client=boto3.client('s3')
-s3_client.upload_file(&quot;hello-local.jpeg&quot;, &quot;spypy&quot;, &quot;hello.jpeg&quot;)
-</code></pre>
-
-<p>To download</p>
-
-<pre><code class="language-python">s3_client.download_file(&quot;spypy&quot;, &quot;hello.jpeg&quot;, &quot;hello-local.jpeg&quot;)
-</code></pre>
-
-<p>To delete</p>
-
-<pre><code class="language-python">s3_client.delete_object(Bucket=s3_bucket, Key=&quot;hello.jpeg&quot;)
-</code></pre>
-
-<p>We can take an image, upload it to s3, process it with Rekognition, delete the image and return the object information.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> boto3
+s3_client<span style="color:#f92672">=</span>boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;s3&#39;</span>)
+s3_client<span style="color:#f92672">.</span>upload_file(<span style="color:#e6db74">&#34;hello-local.jpeg&#34;</span>, <span style="color:#e6db74">&#34;spypy&#34;</span>, <span style="color:#e6db74">&#34;hello.jpeg&#34;</span>)
+</code></pre></div><p>To download</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">s3_client<span style="color:#f92672">.</span>download_file(<span style="color:#e6db74">&#34;spypy&#34;</span>, <span style="color:#e6db74">&#34;hello.jpeg&#34;</span>, <span style="color:#e6db74">&#34;hello-local.jpeg&#34;</span>)
+</code></pre></div><p>To delete</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">s3_client<span style="color:#f92672">.</span>delete_object(Bucket<span style="color:#f92672">=</span>s3_bucket, Key<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hello.jpeg&#34;</span>)
+</code></pre></div><p>We can take an image, upload it to s3, process it with Rekognition, delete the image and return the object information.</p>
 <h3 id="rekognition">Rekognition</h3>
-
 <p>Rekognition is another service accessible through boto3.</p>
-
-<pre><code class="language-python">import boto3
-rekognition_client=boto3.client('rekognition')
-s3_bucket = &quot;spypy&quot;
-image_name = &quot;hello.jpeg&quot;
-image_s3 = {
-  'S3Object': {
-    'Bucket': s3_bucket, 'Name': image_name
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> boto3
+rekognition_client<span style="color:#f92672">=</span>boto3<span style="color:#f92672">.</span>client(<span style="color:#e6db74">&#39;rekognition&#39;</span>)
+s3_bucket <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;spypy&#34;</span>
+image_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hello.jpeg&#34;</span>
+image_s3 <span style="color:#f92672">=</span> {
+  <span style="color:#e6db74">&#39;S3Object&#39;</span>: {
+    <span style="color:#e6db74">&#39;Bucket&#39;</span>: s3_bucket, <span style="color:#e6db74">&#39;Name&#39;</span>: image_name
   }
 }
-response = rekognition_client.detect_labels(
-  Image=image_s3,
-  MaxLabels=10
+response <span style="color:#f92672">=</span> rekognition_client<span style="color:#f92672">.</span>detect_labels(
+  Image<span style="color:#f92672">=</span>image_s3,
+  MaxLabels<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
 )
-</code></pre>
-
-<p>The service has a number of features including object detection, facial recognition/analysis and text transcription. An online model would allow us to easily extend the functionality of our application by leveraging the Rekognition model.</p>
-
+</code></pre></div><p>The service has a number of features including object detection, facial recognition/analysis and text transcription. An online model would allow us to easily extend the functionality of our application by leveraging the Rekognition model.</p>
 <p>The only downside of Rekognition is that it&rsquo;s quite expensive. The free tier is 1,000 images a month, which sounds good but that only comes out to about ~33 images processed a month. After that, it&rsquo;s $1 for the next 1,000 images. In another post, I&rsquo;ll show how we can use our own model and bypass Rekognition entirely. It&rsquo;ll be slower, more complex and may cost us more in compute time, but considering your use-case it may be worth it.</p>
-
 <h3 id="lamda">Lamda</h3>
-
 <p>Many of aws services are glued together using lambda. Lambda is a server-less platform that charges only for compute time. It&rsquo;s perfect for apis that are seldom run. Even those that are run often, eliminating the need and complexity of maintaining a dedicated server is greatly beneficial. And best of all, it scales up automatically. There is some overhead in spinning up the instance, but for my use-case, speed isn&rsquo;t important.</p>
-
 <p>The lambda handler is the entry point into the function. Lambda passes along event and context parameters. The event value contains the information passed in explicitly into the function.</p>
-
 <p>Below is a simple lambda function:</p>
-
-<pre><code class="language-python">def lambda_handler(event, context):
-    return {
-        &quot;isBase64Encoded&quot;: False,
-        'statusCode': 200,
-        'headers': {},
-        'body': &quot;event: {} context: {}&quot;.format(event, context)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">lambda_handler</span>(event, context):
+    <span style="color:#66d9ef">return</span> {
+        <span style="color:#e6db74">&#34;isBase64Encoded&#34;</span>: False,
+        <span style="color:#e6db74">&#39;statusCode&#39;</span>: <span style="color:#ae81ff">200</span>,
+        <span style="color:#e6db74">&#39;headers&#39;</span>: {},
+        <span style="color:#e6db74">&#39;body&#39;</span>: <span style="color:#e6db74">&#34;event: {} context: {}&#34;</span><span style="color:#f92672">.</span>format(event, context)
 }
-</code></pre>
-
-<p>Once setup, you can test the function and pass in an event dictionary and see the response.</p>
-
+</code></pre></div><p>Once setup, you can test the function and pass in an event dictionary and see the response.</p>
 <pre><code>Test event:
 {
   &quot;key1&quot;: &quot;value1&quot;,
@@ -223,14 +188,9 @@ Output:
   &quot;headers&quot;: {},
   &quot;body&quot;: &quot;event: {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'} context: &lt;__main__.LambdaContext object at 0x7f15f5ce7ef0&gt;&quot;
 }
-</code></pre>
-
-<p>Lambda can be then hooked up to API Gateway. This will expose the Lambda function to a public api.</p>
-
+</code></pre><p>Lambda can be then hooked up to API Gateway. This will expose the Lambda function to a public api.</p>
 <p>If you want to pass in parameters via the api url, you have to turn on Use Lambda Proxy integration on the API Gateway Method Execution setup screen.</p>
-
 <p>When we hit our API, we&rsquo;ll get more information passed into the context parameter:</p>
-
 <pre><code>https://???/dev/empty-python-example
 event: {
     'resource': '/empty-python-example',
@@ -249,10 +209,7 @@ event: {
     'isBase64Encoded': False
 }
 context: &lt;__main__.LambdaContext object at 0x7f0ee1e08ef0&gt;
-</code></pre>
-
-<p>From the event, you can parse the arguments:</p>
-
+</code></pre><p>From the event, you can parse the arguments:</p>
 <pre><code>https://???/dev/empty-python-example?key1=param1
 event: {
     ...
@@ -260,10 +217,7 @@ event: {
     'multiValueQueryStringParameters': {'key1': ['param1']},
     ...
 }
-</code></pre>
-
-<p>The final API will let you pass in a url as a string parameter and return the objects:</p>
-
+</code></pre><p>The final API will let you pass in a url as a string parameter and return the objects:</p>
 <pre><code>https://???/default/spypy-rekognition?urls=https://cdn1.autoexpress.co.uk/sites/autoexpressuk/files/2/22/dsc112-733_0.jpg
 
 [
@@ -367,36 +321,22 @@ event: {
     }
   }
 ]
-</code></pre>
-
-<h2 id="implementation">Implementation</h2>
-
+</code></pre><h2 id="implementation">Implementation</h2>
 <p>The handler function is the entry point to our call. All it does is parse the url parameter and pass it to detect_images_from_urls. The detect_images_from_url downloads the files to an s3 bucket and runs object detection on the files. The easiest way to get aws to perform on images is passing them through an s3 bucket..</p>
-
-<script type="application/javascript" src="//gist.github.com/breeko/f3732001ce9051346926ca0260055001.js"></script>
+<script type="application/javascript" src="https://gist.github.com/breeko/f3732001ce9051346926ca0260055001.js"></script>
 
 <p>Finally there is a helper file that downloads images</p>
-
-<script type="application/javascript" src="//gist.github.com/breeko/cce4fcb2bad77b75bd51c668d1a5ce6f.js"></script>
+<script type="application/javascript" src="https://gist.github.com/breeko/cce4fcb2bad77b75bd51c668d1a5ce6f.js"></script>
 
 <h2 id="next-steps">Next Steps</h2>
-
 <p>There&rsquo;s a lot to explore with aws lambda, and I may write on each individual component:</p>
-
 <h3 id="dependencies">Dependencies</h3>
-
 <p>To include dependencies in you aws lambda functions, you have to ship the libraries as well. Additionally, you can break out the dependencies into a separate aws layer so you can share the same dependencies across multiple functions.</p>
-
 <p>The dependencies can cause some trouble because they can be large. For example, if you want to include tensorflow, that&rsquo;s about 300 MB. Since there&rsquo;s a limit of 250 MB unzipped for each lambda function, that means you can&rsquo;t ship a lambda function that uses tensorflow. There&rsquo;s a way around this however. The idea is to package up run the functionality of your project while monitoring the files referenced in the libraries. Then delete the files that were never referenced. This can reduce the size of your libraries greatly. For instance I got a tensorflow package down to ~125 MB. Another hack is to use the /tmp/ directory to store information. That can hold up to 500 MB.</p>
-
 <p>I wrote a few useful shell scripts to automate this process and get the project ready to be uploaded into aws. I&rsquo;ll write a post about that soon.</p>
-
 <h3 id="outputting-images">Outputting images</h3>
-
 <p>Our functionality can be easily extended to return an image with each object detected:</p>
-
-<p><img src="/post/resources/img/1_YLMByjLj4ocxu6kzvhbgrA.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1_YLMByjLj4ocxu6kzvhbgrA.png" alt=""></p>
 <p>It&rsquo;s a little tricky to get aws API Gateway to return images, but it&rsquo;s possible.</p>
 
 </div>

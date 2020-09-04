@@ -15,7 +15,7 @@
         <meta name="description" content="I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Word Crossword Search in Typescript and React Part 1">
@@ -125,29 +125,19 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.</p>
-
+    <p>I don&rsquo;t normally play mobile games, but I do take the train every day so I&rsquo;m somewhat aware of the mobile game landscape. One game that seems popular is basically a word jumble in the form of a crossword puzzle. One example of such a game is Word Crossword Search. You get a series of letters and try to make to make as many words as you can. The crossword format gives you hints.</p>
 <figure>
     <img src="/post/resources/img/2019-11-02-word_crossword_search.png"/> <figcaption>
             <h4>Word Crossword Search</h4>
         </figcaption>
 </figure>
 
-
 <p>You know that the gameplay must be good that people are willing to put up with the garish style.
 Rather than submit to my desires, I decided I can build the game instead. By the time its complete, I will be thoroughly exhausted about thinking about the idea that I&rsquo;ll no longer be interested in playing.</p>
-
-<h1 id="exploring-common-words">Exploring Common Words</h1>
-
+<h1 id="exploring-commonwords">Exploring Common Words</h1>
 <p>The first step is to find a word list. Most unix systems including osx have a word list under /usr/share/dict/words but there are over 200k words and many are obscure (e.g. abaciscus, abacist, abactinal). I found a list of 5,000 common words although I had to put in an email (throw-away mail works). I made some slight manual changes to the word list (removed duplicates and added word length as a column). I kept all the columns in case I want to reference them later, but my table schema looks like this:</p>
-
 <pre><code>rank   word   len   partOfSpeech   frequency   dispersion
-</code></pre>
-
-<p>I loaded them into an array of Words:</p>
-
+</code></pre><p>I loaded them into an array of Words:</p>
 <pre><code>import fs from 'fs'
 const filename = './common_words.csv'
 const getCommonWords = (filename: string) =&gt; {
@@ -166,87 +156,51 @@ const getCommonWords = (filename: string) =&gt; {
 
 const words = getCommonWords(filename)
 export const allWords = words.map(w =&gt; w.word)
-</code></pre>
-
-<p>Here are the first ten words:</p>
-
+</code></pre><p>Here are the first ten words:</p>
 <pre><code>allWords.slice(0,10) =&gt;
   [ 'the', 'be', 'and', 'of', 'a', 'in', 'to', 'have', 'it', 'I' ]
-</code></pre>
-
-<p>From there I had to build out some general utils to process the array of words. The first function I need is a counter, similar to the counter in python&rsquo;s collection utils.</p>
-
+</code></pre><p>From there I had to build out some general utils to process the array of words. The first function I need is a counter, similar to the counter in python&rsquo;s collection utils.</p>
 <p>In our case, we want to take a word and return a map of characters and their respective counts (e.g. counter(&ldquo;hello&rdquo;) =&gt; {h: 1, e: 1, l: 2, o: 1})</p>
-
 <p>The great thing about typed languages is that you can word on the function signature, and when you decide on that the rest of the work becomes considerably easier.</p>
-
 <figure>
     <img src="/post/resources/img/2019-11-02-static_vs_dynamic_typing.png"/> <figcaption>
             <h4>Static v Dynamic</h4>
         </figcaption>
 </figure>
 
-
-<p>In our case, we want to take in a string and return a Map<string, number>.</p>
-
+<p>In our case, we want to take in a string and return a Map&lt;string, number&gt;.</p>
 <pre><code>export const counter = (word: string): Map&lt;string, number&gt; =&gt; {
     const ct = new Map&lt;string,number&gt;()
     word.split('').forEach(ch =&gt; ct.set(ch, (ct.get(ch) || 0) + 1))
     return ct
 }
-</code></pre>
-
-<p>The next thing we need is the see if a word is a subset of another word. The easiest way to do that is to determine a counter of each word, and see if all the character counts in word1 and less than or equal to the character counts in word2.</p>
-
+</code></pre><p>The next thing we need is the see if a word is a subset of another word. The easiest way to do that is to determine a counter of each word, and see if all the character counts in word1 and less than or equal to the character counts in word2.</p>
 <pre><code>export const subsetWord = (word1: string, word2: string): boolean =&gt; {
     const ct1 = counter(word1)
     const ct2 = counter(word2)
     return Array.from(ct1).every(([k,v]) =&gt; (ct2.get(k) || 0) &gt;= v)
 }
-</code></pre>
-
-<p>The above function iterates through the counter object of word1, tries to get the corresponding character count from word2 and checks if word1 contains more characters than that of word2.</p>
-
+</code></pre><p>The above function iterates through the counter object of word1, tries to get the corresponding character count from word2 and checks if word1 contains more characters than that of word2.</p>
 <pre><code>subsetWord('abe','anabelle') =&gt; true
 subsetWord('sam','anabelle') =&gt; false
-</code></pre>
-
-<p>Now that we have a way to check to see if a word is a subset of another word, we can filter all the words for words that are a subset of a given word.</p>
-
+</code></pre><p>Now that we have a way to check to see if a word is a subset of another word, we can filter all the words for words that are a subset of a given word.</p>
 <pre><code>const getSubsetWords = (word: string, words: string[]): string[] =&gt; 
   words.filter(w =&gt; subsetWord(w, word))
-</code></pre>
-
-<p>To see the subset of the word <code>method</code>:</p>
-
+</code></pre><p>To see the subset of the word <code>method</code>:</p>
 <pre><code>getSubsetWords('method', allWords) =&gt;
   [ 'the', 'to', 'he', 'do', 'them', 'me', 'home', 'oh', 'hot', 'method', 'mode', 'toe', 'dot' ]
-</code></pre>
-
-<p>So let&rsquo;s see what 6 letter common word has the most and least subset common words.</p>
-
+</code></pre><p>So let&rsquo;s see what 6 letter common word has the most and least subset common words.</p>
 <pre><code>const allWords6 = allWords.filter(w =&gt; w.length === 6)
 const subsetWords6 = allWords6.map(w =&gt; [w, getSubsetWords(w, allWords)])
-</code></pre>
-
-<p>You would think that the type of subsetWords6 would be <code>[string, string[]][]</code>, but Typescript infers the more general format <code>[string | string[]][][]</code>. But we can give Typescript a hint and it won&rsquo;t complain. This is common when your maps return arrays.</p>
-
+</code></pre><p>You would think that the type of subsetWords6 would be <code>[string, string[]][]</code>, but Typescript infers the more general format <code>[string | string[]][][]</code>. But we can give Typescript a hint and it won&rsquo;t complain. This is common when your maps return arrays.</p>
 <pre><code>const subsetWords6: [string, string[]][] = allWords6.map(w =&gt; [w, getSubsetWords(w, allWords)])
-</code></pre>
-
-<p>Finally, we need to find the 6 letter word with the largest number of subsetWords. Typescript doesn&rsquo;t have a max that can take in a generic. Math.max also only words on number. But what is a max really? It&rsquo;s just a reduce!</p>
-
+</code></pre><p>Finally, we need to find the 6 letter word with the largest number of subsetWords. Typescript doesn&rsquo;t have a max that can take in a generic. Math.max also only words on number. But what is a max really? It&rsquo;s just a reduce!</p>
 <pre><code>const best = subsetWords6.reduce((a,b) =&gt; (a.length &gt; b.length) ? a : b)
-</code></pre>
-
-<p>Finally lets look at the results:</p>
-
+</code></pre><p>Finally lets look at the results:</p>
 <pre><code>['pistol', 
   ['to', 'it', 'so', 'its', 'lot', 'sit', 'stop', 'oil', 'top', 'list', 'spot', 'lots', 'lip', 'pilot', 'slip', 'soil', 'tip', 'post', 'pot', 'lost', 'split', 'plot', 'pit', 'opt', 'slot', 'spit', 'pistol']]
 [ 'people', [ 'people', 'pop', 'pole', 'peel' ] ]
-</code></pre>
-
-<p>When choosing what words to use, we may want to limit to words that have a certain number of subset words. So we may want to exclude <code>people</code> as that puzzle would be too short.
+</code></pre><p>When choosing what words to use, we may want to limit to words that have a certain number of subset words. So we may want to exclude <code>people</code> as that puzzle would be too short.
 The next step is to figure out how to plot it on a crossword and how to represent that, which I&rsquo;ll cover next time.</p>
 
 </div>

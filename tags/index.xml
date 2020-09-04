@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on ML-Everything</title>
@@ -6,94 +6,40 @@
     <description>Recent content in Tags on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://breeko.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Auto Encoders</title>
-      <link>https://breeko.github.io/tags/auto-encoders/</link>
-      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      <title>gpt3</title>
+      <link>https://breeko.github.io/tags/gpt3/</link>
+      <pubDate>Thu, 03 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/tags/auto-encoders/</guid>
+      <guid>https://breeko.github.io/tags/gpt3/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Clojure</title>
-      <link>https://breeko.github.io/tags/clojure/</link>
-      <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
+      <title>machine-learning</title>
+      <link>https://breeko.github.io/tags/machine-learning/</link>
+      <pubDate>Thu, 03 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/tags/clojure/</guid>
+      <guid>https://breeko.github.io/tags/machine-learning/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Cryptocurrency</title>
-      <link>https://breeko.github.io/tags/cryptocurrency/</link>
-      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
+      <title>npl</title>
+      <link>https://breeko.github.io/tags/npl/</link>
+      <pubDate>Thu, 03 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/tags/cryptocurrency/</guid>
+      <guid>https://breeko.github.io/tags/npl/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Data Science</title>
-      <link>https://breeko.github.io/tags/data-science/</link>
-      <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/data-science/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Database</title>
-      <link>https://breeko.github.io/tags/database/</link>
-      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/database/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Economics</title>
-      <link>https://breeko.github.io/tags/economics/</link>
-      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/economics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Facebook</title>
-      <link>https://breeko.github.io/tags/facebook/</link>
-      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/facebook/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Facial Recognition</title>
-      <link>https://breeko.github.io/tags/facial-recognition/</link>
-      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/facial-recognition/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Fantasy Football</title>
-      <link>https://breeko.github.io/tags/fantasy-football/</link>
-      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/fantasy-football/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Finance</title>
+      <title>finance</title>
       <link>https://breeko.github.io/tags/finance/</link>
       <pubDate>Mon, 09 Mar 2020 00:00:00 +0000</pubDate>
       
@@ -102,25 +48,7 @@
     </item>
     
     <item>
-      <title>Forecasting</title>
-      <link>https://breeko.github.io/tags/forecasting/</link>
-      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/forecasting/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Functional Programming</title>
-      <link>https://breeko.github.io/tags/functional-programming/</link>
-      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/functional-programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gambling</title>
+      <title>gambling</title>
       <link>https://breeko.github.io/tags/gambling/</link>
       <pubDate>Mon, 09 Mar 2020 00:00:00 +0000</pubDate>
       
@@ -129,133 +57,7 @@
     </item>
     
     <item>
-      <title>Game Development</title>
-      <link>https://breeko.github.io/tags/game-development/</link>
-      <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/game-development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gans</title>
-      <link>https://breeko.github.io/tags/gans/</link>
-      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/gans/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hedge Funds</title>
-      <link>https://breeko.github.io/tags/hedge-funds/</link>
-      <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/hedge-funds/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Javascript</title>
-      <link>https://breeko.github.io/tags/javascript/</link>
-      <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Libra</title>
-      <link>https://breeko.github.io/tags/libra/</link>
-      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/libra/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Linear Programming</title>
-      <link>https://breeko.github.io/tags/linear-programming/</link>
-      <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/linear-programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Lisp</title>
-      <link>https://breeko.github.io/tags/lisp/</link>
-      <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/lisp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine Learning</title>
-      <link>https://breeko.github.io/tags/machine-learning/</link>
-      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/machine-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mobile</title>
-      <link>https://breeko.github.io/tags/mobile/</link>
-      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/mobile/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nassim Taleb</title>
-      <link>https://breeko.github.io/tags/nassim-taleb/</link>
-      <pubDate>Mon, 12 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/nassim-taleb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Neural Networks</title>
-      <link>https://breeko.github.io/tags/neural-networks/</link>
-      <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/neural-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>New York</title>
-      <link>https://breeko.github.io/tags/new-york/</link>
-      <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/new-york/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Politics</title>
-      <link>https://breeko.github.io/tags/politics/</link>
-      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/politics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Prediction</title>
-      <link>https://breeko.github.io/tags/prediction/</link>
-      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/prediction/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Probability</title>
+      <title>probability</title>
       <link>https://breeko.github.io/tags/probability/</link>
       <pubDate>Mon, 09 Mar 2020 00:00:00 +0000</pubDate>
       
@@ -264,43 +66,34 @@
     </item>
     
     <item>
-      <title>Python</title>
-      <link>https://breeko.github.io/tags/python/</link>
-      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      <title>economics</title>
+      <link>https://breeko.github.io/tags/economics/</link>
+      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/tags/python/</guid>
+      <guid>https://breeko.github.io/tags/economics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>politics</title>
+      <link>https://breeko.github.io/tags/politics/</link>
+      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/politics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>R</title>
       <link>https://breeko.github.io/tags/r/</link>
-      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>https://breeko.github.io/tags/r/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Raspberry Pi</title>
-      <link>https://breeko.github.io/tags/raspberry-pi/</link>
-      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/raspberry-pi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>React Native</title>
-      <link>https://breeko.github.io/tags/react-native/</link>
-      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/react-native/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Real Estate</title>
+      <title>real-estate</title>
       <link>https://breeko.github.io/tags/real-estate/</link>
       <pubDate>Fri, 28 Feb 2020 00:00:00 +0000</pubDate>
       
@@ -309,79 +102,16 @@
     </item>
     
     <item>
-      <title>Reddit</title>
-      <link>https://breeko.github.io/tags/reddit/</link>
-      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      <title>hedge funds</title>
+      <link>https://breeko.github.io/tags/hedge-funds/</link>
+      <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/tags/reddit/</guid>
+      <guid>https://breeko.github.io/tags/hedge-funds/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Regression</title>
-      <link>https://breeko.github.io/tags/regression/</link>
-      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/regression/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reinforcement Learning</title>
-      <link>https://breeko.github.io/tags/reinforcement-learning/</link>
-      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/reinforcement-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Scala</title>
-      <link>https://breeko.github.io/tags/scala/</link>
-      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/scala/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Singularity</title>
-      <link>https://breeko.github.io/tags/singularity/</link>
-      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/singularity/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Social</title>
-      <link>https://breeko.github.io/tags/social/</link>
-      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/social/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Sports</title>
-      <link>https://breeko.github.io/tags/sports/</link>
-      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/sports/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Statistics</title>
-      <link>https://breeko.github.io/tags/statistics/</link>
-      <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://breeko.github.io/tags/statistics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Stock Market</title>
+      <title>stock market</title>
       <link>https://breeko.github.io/tags/stock-market/</link>
       <pubDate>Thu, 28 Nov 2019 00:00:00 +0000</pubDate>
       
@@ -390,11 +120,299 @@
     </item>
     
     <item>
-      <title>Typescript</title>
+      <title>game-development</title>
+      <link>https://breeko.github.io/tags/game-development/</link>
+      <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/game-development/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>javascript</title>
+      <link>https://breeko.github.io/tags/javascript/</link>
+      <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/javascript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>typescript</title>
       <link>https://breeko.github.io/tags/typescript/</link>
       <pubDate>Sat, 02 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://breeko.github.io/tags/typescript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>facial-recognition</title>
+      <link>https://breeko.github.io/tags/facial-recognition/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/facial-recognition/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://breeko.github.io/tags/python/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>functional programming</title>
+      <link>https://breeko.github.io/tags/functional-programming/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/functional-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>scala</title>
+      <link>https://breeko.github.io/tags/scala/</link>
+      <pubDate>Mon, 19 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cryptocurrency</title>
+      <link>https://breeko.github.io/tags/cryptocurrency/</link>
+      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/cryptocurrency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>facebook</title>
+      <link>https://breeko.github.io/tags/facebook/</link>
+      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/facebook/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>libra</title>
+      <link>https://breeko.github.io/tags/libra/</link>
+      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/libra/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>social</title>
+      <link>https://breeko.github.io/tags/social/</link>
+      <pubDate>Thu, 11 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/social/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>data science</title>
+      <link>https://breeko.github.io/tags/data-science/</link>
+      <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/data-science/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>statistics</title>
+      <link>https://breeko.github.io/tags/statistics/</link>
+      <pubDate>Thu, 18 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/statistics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>neural networks</title>
+      <link>https://breeko.github.io/tags/neural-networks/</link>
+      <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>prediction</title>
+      <link>https://breeko.github.io/tags/prediction/</link>
+      <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/prediction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>fantasy-football</title>
+      <link>https://breeko.github.io/tags/fantasy-football/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/fantasy-football/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>forecasting</title>
+      <link>https://breeko.github.io/tags/forecasting/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/forecasting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sports</title>
+      <link>https://breeko.github.io/tags/sports/</link>
+      <pubDate>Tue, 06 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/sports/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gans</title>
+      <link>https://breeko.github.io/tags/gans/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/gans/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>auto-encoders</title>
+      <link>https://breeko.github.io/tags/auto-encoders/</link>
+      <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/auto-encoders/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>regression</title>
+      <link>https://breeko.github.io/tags/regression/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/regression/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>singularity</title>
+      <link>https://breeko.github.io/tags/singularity/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/singularity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linear-programming</title>
+      <link>https://breeko.github.io/tags/linear-programming/</link>
+      <pubDate>Mon, 17 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/linear-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>database</title>
+      <link>https://breeko.github.io/tags/database/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reddit</title>
+      <link>https://breeko.github.io/tags/reddit/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/reddit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>clojure</title>
+      <link>https://breeko.github.io/tags/clojure/</link>
+      <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/clojure/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lisp</title>
+      <link>https://breeko.github.io/tags/lisp/</link>
+      <pubDate>Mon, 30 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/lisp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mobile</title>
+      <link>https://breeko.github.io/tags/mobile/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/mobile/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>react-native</title>
+      <link>https://breeko.github.io/tags/react-native/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/react-native/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>raspberry-pi</title>
+      <link>https://breeko.github.io/tags/raspberry-pi/</link>
+      <pubDate>Wed, 09 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/raspberry-pi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>new-york</title>
+      <link>https://breeko.github.io/tags/new-york/</link>
+      <pubDate>Sun, 25 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/new-york/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nassim-taleb</title>
+      <link>https://breeko.github.io/tags/nassim-taleb/</link>
+      <pubDate>Mon, 12 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/nassim-taleb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reinforcement-learning</title>
+      <link>https://breeko.github.io/tags/reinforcement-learning/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/tags/reinforcement-learning/</guid>
       <description></description>
     </item>
     

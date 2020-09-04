@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Typescript on ML-Everything</title>
+    <title>typescript on ML-Everything</title>
     <link>https://breeko.github.io/tags/typescript/</link>
-    <description>Recent content in Typescript on ML-Everything</description>
+    <description>Recent content in typescript on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 02 Nov 2019 00:00:00 +0000</lastBuildDate>

@@ -17,7 +17,7 @@ The YOLO image detection model is one of the fastest and most accurate object de
 I came across a popular post on hackernews titled How to easily Detect Objects with Deep Learning on Raspberry Pi. The article discusses the YOLO object detection model that can be used for real-time object detection and classification.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="How to (actually) easily detect objects with deep learning on raspberry pi">
@@ -129,117 +129,65 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>YOLO provides state of the art real-time object detection and classification.</p>
-
+    <p>YOLO provides state of the art real-time object detection and classification.</p>
 <p>The YOLO image detection model is one of the fastest and most accurate object detection models. Flexible and fast, YOLO is a huge step forward in machine learning.</p>
-
 <p>I came across a popular post on hackernews titled <a href="https://medium.com/nanonets/how-to-easily-detect-objects-with-deep-learning-on-raspberrypi-225f29635c74">How to easily Detect Objects with Deep Learning on Raspberry Pi</a>. The article discusses the <a href="https://pjreddie.com/darknet/yolo/">YOLO object detection model</a> that can be used for real-time object detection and classification. The article goes on to discuss the model on a high level and pitch a service, which performs object detection via API.</p>
-
 <p>The article provides a high level overview of the YOLO model, but my reaction after reading the article can be best summarized by a comment from <a href="https://news.ycombinator.com/item?id=16738817">the hackernews post</a>:</p>
-
 <blockquote>
 <p>How to draw an owl, yeah</p>
 </blockquote>
-
-<p><img src="/post/resources/img/1*FsQIZhjcvZTzGFbvwDNMZA.jpeg" alt="" /></p>
-
+<p><img src="/post/resources/img/1*FsQIZhjcvZTzGFbvwDNMZA.jpeg" alt=""></p>
 <p>This is the post I wanted to read on the YOLO model.</p>
-
-<h3 id="you-only-look-once-yolo">You Only Look Once (YOLO)</h3>
-
+<h3 id="you-only-look-onceyolo">You Only Look Once (YOLO)</h3>
 <p>Prior to YOLO, most object detection used sliding windows to detect objects. That basically means that an algorithm scans them image using windows of arbitrary size and checks if there is an object that it detects in there.</p>
-
 <figure>
     <img src="/post/resources/img/1*KCpy3xvBTeX5xTRwB1baCA.gif"/> <figcaption>
             <h4>Sliding window scanning an image</h4>
         </figcaption>
 </figure>
 
-
 <p>The problem with the sliding window is that the window size has to be determined, and in order to be able to detect objects of different sizes, there likely has to be several window sizes. Not to mention the inefficiency of having to scan over the same area multiple times. For these reasons, sliding windows make real-time object detection impractical and inflexible.</p>
-
 <p>YOLO takes a different approach. The YOLO model takes the image as an input and outputs a series of coordinates for objects with their respective confidence levels and class probabilities.</p>
-
-<p><img src="/post/resources/img/1*oOD2qLugrH-oc6EEKLzdBg.jpeg" alt="" /></p>
-
+<p><img src="/post/resources/img/1*oOD2qLugrH-oc6EEKLzdBg.jpeg" alt=""></p>
 <p>The technical details of the internal workings of the model aren’t as important as understanding the output. But if you must know, here is the architecture of YOLO v1:</p>
-
-<p><img src="/post/resources/img/1*3C96huh7s0TDV_Ym3xDkFA.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*3C96huh7s0TDV_Ym3xDkFA.png" alt=""></p>
 <p>The output of the YOLO v3 model is a convolutional layer shaped (19, 19, 425). The (19, 19) are the number of squares that the image is divided into. The last unit (425) is a concatenation of each bonding box parameters, confidence intervals and class probabilities.</p>
-
 <p>A bounding box is defined by 5 parameters: x, y, width, height and confidence value. The number of classes ( C ) will be a one-hot vector with as many classes the network was trained on (in this case 80). And the number of bounding boxes ( B ) is set at the time of training (in this case 5 — see Clustering Box Dimensions with Anchors). So the 425 size in the output layer is (B * (5 + C)) or (5 * (5 + 80)) or 425. The output can then be parsed and filtered based on class and confidence. From there, you can determine what confidence level you want to consider a match. Changing this value changes how many objects get detected. Below shows a threshold of 0:</p>
-
-<p><img src="/post/resources/img/1*lhHNjXmWbrGCbDsm2xUgaA.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*lhHNjXmWbrGCbDsm2xUgaA.png" alt=""></p>
 <p>The YOLO model has a few interesting characteristics worth diving into.</p>
-
 <h4 id="offsets">Offsets</h4>
-
 <p>Rather than predicting the absolute coordinates of the bounding box, YOLO predicts offsets based on the grid square. It uses a sigmoid function to keep the x and y offsets between 0 and 1 with (0, 0) being the top left of the square and (1, 1) being the bottom right. Without this constraint, any bounding box center can end up at any point in the image, regardless where it came from.</p>
-
-<p><img src="/post/resources/img/1*X6JR9wmPTYXhDE3Pw_X7AA.png" alt="" /></p>
-
-<h4 id="clustering-box-dimensions-with-anchors">Clustering Box Dimensions with Anchors</h4>
-
+<p><img src="/post/resources/img/1*X6JR9wmPTYXhDE3Pw_X7AA.png" alt=""></p>
+<h4 id="clustering-box-dimensions-withanchors">Clustering Box Dimensions with Anchors</h4>
 <p>In order to assist in learning the correct dimensions for each box, YOLO provides some initial values (anchors). As mentioned above, there are 5 bounding boxes for each output. The outputs for the height and width of these values is multiplied by its respective anchors to determine final box dimensions. Here are the anchors:</p>
-
-<pre><code class="language-python">array([[0.57273 , 0.677385],  
-       [1.87446 , 2.06253 ],  
-       [3.33843 , 5.47434 ],  
-       [7.88282 , 3.52778 ],  
-       [9.77052 , 9.16828 ]])
-</code></pre>
-
-<p>In order to determine the anchor values to use, the team used k-means clustering to calculate relative objects dimensions. They chose to use 5 clusters as a trade-off between performance and complexity.</p>
-
-<p><img src="/post/resources/img/1*eb6lyL-V-gioEc2y816tqA.png" alt="" /></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">array([[<span style="color:#ae81ff">0.57273</span> , <span style="color:#ae81ff">0.677385</span>],  
+       [<span style="color:#ae81ff">1.87446</span> , <span style="color:#ae81ff">2.06253</span> ],  
+       [<span style="color:#ae81ff">3.33843</span> , <span style="color:#ae81ff">5.47434</span> ],  
+       [<span style="color:#ae81ff">7.88282</span> , <span style="color:#ae81ff">3.52778</span> ],  
+       [<span style="color:#ae81ff">9.77052</span> , <span style="color:#ae81ff">9.16828</span> ]])
+</code></pre></div><p>In order to determine the anchor values to use, the team used k-means clustering to calculate relative objects dimensions. They chose to use 5 clusters as a trade-off between performance and complexity.</p>
+<p><img src="/post/resources/img/1*eb6lyL-V-gioEc2y816tqA.png" alt=""></p>
 <h4 id="multi-scale-training">Multi-Scale Training</h4>
-
 <p>As with most detection methods, YOLO uses pre-trained layers from ImageNet. Using pre-trained convolutional layers saves a lot of time as it lets a model match simple edges and basic features without starting from scratch. But most pre-trained networks are trained on images with dimensions less than 256 x 256, while YOLO uses an input 448 x 448, although this is flexible. In order to adjust for the larger image dimensions, the base pre-trained network is fine-tuned and trained for 10 epochs on the larger image size.</p>
-
 <p>Since the YOLO model uses only convolutional layers, this allows the input to change. While training, the team changed input dimensions every 10 batches. Since the model down-samples by a factor of 32, they used image dimensions that are multiples of 32, with the smallest being 320 x 320 and the largest 608 x 608. This helped build a more robust model.</p>
-
 <h4 id="training-for-classification-and-detection">Training for Classification and Detection</h4>
-
 <p>During training, the team mixed both detection and classification data sets. Different loss functions were used for each during back-propagation depending on the task. This allowed the model to learn from a much larger dataset. However, the data sets contain differences in how they label objects. For instance, detection data sets have general labels, like “dog” or “boat”. But ImageNet has more specific classifications like “Norfolk Terrier”. So the team used WordNet, a language database that structures words and how they relate. So a “Norfolk terrier” and “Yorkshire terrier” are both hyponyms of “terrier” which is a type of “hunting dog” which is a type of “dog”, and so on.</p>
-
-<p><img src="/post/resources/img/1*gcEDL9S2n2kRP6MPJPphbw.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*gcEDL9S2n2kRP6MPJPphbw.png" alt=""></p>
 <p>Using joint training, YOLO leans to find objects based on the COCO dataset and then classifies them using data from ImageNet.</p>
-
 <h3 id="running-yolo">Running YOLO</h3>
-
 <p>Real-time object detection requires a GPU, but detecting objects on a single image is possible on a CPU due to the efficiencies discussed. The <a href="https://pjreddie.com/darknet/yolo/">YOLO site</a> provides a good guide:</p>
-
 <pre><code>git clone https://github.com/pjreddie/darknetcd darknetmakewget https://pjreddie.com/media/files/yolov3.weights./darknet detect cfg/yolov3.cfg yolov3.weights data/dog.jpg
-</code></pre>
-
-<p>There is also a <a href="https://pjreddie.com/darknet/tiny-darknet/">mini version</a> with weights that are only 4.8 MB, that can supposedly run on a raspberry pi, but I haven’t gotten it to work.</p>
-
+</code></pre><p>There is also a <a href="https://pjreddie.com/darknet/tiny-darknet/">mini version</a> with weights that are only 4.8 MB, that can supposedly run on a raspberry pi, but I haven’t gotten it to work.</p>
 <p>If you want to hook it up to a system that does more than draws bounding boxes, you’ll have to do some work. However, if you understand how to parse the output, then it wouldn’t be difficult. <a href="https://modeldepot.io/mikeshi/yolov2/overview">Model Depot</a> has a great guide on how to load the model and a link to the weights. I may write a future post about hooking up this model to do basic object location tracking.</p>
-
 <h3 id="final-thoughts">Final Thoughts</h3>
-
 <p>The most impressive thing about YOLO is the fact that it works. The architecture makes sense to me. It has everything you’d expect in a modern image classification architecture: convolutional 2d layers, leaky relu, batch normalization and max pooling. In fact, much of the model is a fine-tuned version of Darknet-19. However, YOLO does have some creative touches.</p>
-
 <p>I was impressed by the idea of dividing up the image and learning bounding box offsets and size. Also the idea of anchors to assist in learning bounding box dimensions was very clever. The larger output trades off size/complexity for an increase in speed.</p>
-
 <p>But probably the most impressive thing is the loss function. The model only manages to learn what you want it to learn with an effective loss function. With simple image classification models, you can use a simple loss function like categorical cross entropy loss. But with this type of model, you have to be creative. I would argue that an effective loss function is much more important than the exact architecture. In fact, YOLO has models that are trained on fewer layers that provide similar accuracy with decreased complexity and processing power required.</p>
-
 <p>Jeremy Howard from Fast.ai spoke about this as well. Determining loss functions is more of an art than a science. It pains me to think how much time the YOLO team likely spent on determining the right loss function to achieve good results. And they also had to balance how much to weight each loss when training on the two different data sets (COCO and ImageNet).</p>
-
 <p>I wasn’t able to dig into the loss function from YOLO v3, but here is the loss function for version 1:</p>
-
-<p><img src="/post/resources/img/1*XqYcN2ATPFYHm-QDyUQsQQ.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*XqYcN2ATPFYHm-QDyUQsQQ.png" alt=""></p>
 <p>I also found the integration with WordNet particularly impressive. I’m not sure if technique was developed by the YOLO team, but it is likely to be copied going forward.</p>
-
 <p>The YOLO model is very impressive in both performance and ingenuity. But most surprisingly, it is also intuitive.</p>
-
 <p>By Branko Blagojevic on April 5, 2018</p>
 
 </div>

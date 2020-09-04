@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Reinforcement Learning on ML-Everything</title>
+    <title>reinforcement-learning on ML-Everything</title>
     <link>https://breeko.github.io/tags/reinforcement-learning/</link>
-    <description>Recent content in Reinforcement Learning on ML-Everything</description>
+    <description>Recent content in reinforcement-learning on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>

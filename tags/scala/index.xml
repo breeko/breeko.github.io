@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Scala on ML-Everything</title>
+    <title>scala on ML-Everything</title>
     <link>https://breeko.github.io/tags/scala/</link>
-    <description>Recent content in Scala on ML-Everything</description>
+    <description>Recent content in scala on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 19 Aug 2019 00:00:00 +0000</lastBuildDate>

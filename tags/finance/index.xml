@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Finance on ML-Everything</title>
+    <title>finance on ML-Everything</title>
     <link>https://breeko.github.io/tags/finance/</link>
-    <description>Recent content in Finance on ML-Everything</description>
+    <description>Recent content in finance on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 09 Mar 2020 00:00:00 +0000</lastBuildDate>
@@ -50,7 +50,8 @@ This is part 3 of my thoughts on Renaissance Technologies after reading The Man 
       
       <guid>https://breeko.github.io/post/2019-11-20-how-renaissance-technologies-solved-the-market-part-2/</guid>
       <description>Renaissance Technologies is the most successful hedge fund in history, averaging nearly 40% annual net returns over the last 30 years. The book The Man Who Solved the Market discusses the fund and its founder Jim Simons in depth.
-This is part 2 on a series discussing the book. Part 1 discussed the Renaissance’s data pipeline. This part will discuss Renaissance’s unusual practice of hiring almost exclusively from academia.</description>
+This is part 2 on a series discussing the book. Part 1 discussed the Renaissance’s data pipeline. This part will discuss Renaissance’s unusual practice of hiring almost exclusively from academia.
+Academia Simons was a successful mathematician prior to starting Renaissance at the age of 40.</description>
     </item>
     
     <item>

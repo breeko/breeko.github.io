@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Gans on ML-Everything</title>
+    <title>gans on ML-Everything</title>
     <link>https://breeko.github.io/tags/gans/</link>
-    <description>Recent content in Gans on ML-Everything</description>
+    <description>Recent content in gans on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 05 Nov 2018 00:00:00 +0000</lastBuildDate>

@@ -17,7 +17,7 @@ Floating point representations can lead to some strange results. Lisp and Clojur
 I came across this article about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Lisp, Floating Points and Muller&#39;s Recurrence">
@@ -129,30 +129,17 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.</p>
-
+    <p>Floating point number representations are annoying to work with. Lisp and by extension Clojure deal with them by using fractions instead.</p>
 <p>Floating point representations can lead to some strange results. Lisp and Clojure have fraction representations built in, helping avoid many of the problems with floats.</p>
-
 <p>I came across <a href="https://medium.com/@bellmar/is-cobol-holding-you-hostage-with-math-5498c0eb428b">this article</a> about why the IRS has had trouble to break away from Cobol. The article argues that a big reason is due to Cobol’s native support of fixed point as opposed to floating point. Below is a quick recap of the article and the problem with floating points.</p>
-
 <h4 id="the-problem-with-floating-point-representation">The problem with floating point representation</h4>
-
 <p>The nature of floating point representations results in some unexpected values. For instance, in python if you try to add 0.1 and 0.2 you get the result below.</p>
-
 <pre><code>&gt;&gt;&gt; 0.1 + 0.2  
 0.30000000000000004
-</code></pre>
-
-<p>The dangerous thing about this is that it crops up in unexpected places and during recursion can build up to drastically deviate from the expected result. Muller’s Recurrence is a prime example.</p>
-
-<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt="" /></p>
-
+</code></pre><p>The dangerous thing about this is that it crops up in unexpected places and during recursion can build up to drastically deviate from the expected result. Muller’s Recurrence is a prime example.</p>
+<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt=""></p>
 <p>Example of Muller’s Recurrence</p>
-
 <p>If you were to compare the results as i goes from 0 to 19 using floating vs fixed points, you would get the results below.</p>
-
 <pre><code>i  | floating pt    | fixed pt  
 -- | -------------- | ---------------------------  
 0  | 4              | 4  
@@ -175,137 +162,94 @@ if (!doNotTrack) {
 17 | 100.099947516  | 4.9996602467866575821700634  
 18 | 100.004992041  | 4.9997713526716167817979714  
 19 | 100.000249579  | 4.9993671517118171375788238
-</code></pre>
-
-<p>For more discussion, visit the <a href="https://medium.com/@bellmar/is-cobol-holding-you-hostage-with-math-5498c0eb428b">original article</a>. It goes more in depth and I recommend reading it.</p>
-
-<h4 id="muller-s-recurrence-in-clojure">Muller’s Recurrence in Clojure</h4>
-
-<p>I’ve been dabbling in lisp and Clojure over the last few weeks (Clojure is a dialect of lisp). One of the cool things about lisp is that it handles fractions natively. For example, when doing integer division the results are represented as fractions. 1 divided by 10 is the fraction <sup>1</sup>&frasl;<sub>10</sub>. And operations on fractions work as expected.</p>
-
-<pre><code class="language-clojure">(/ 1 10) =&gt; 1/10  
-(+ 1/10 2/10) =&gt; 3/10
-</code></pre>
-
-<p>Of course you can still do floating point calculations.</p>
-
-<pre><code class="language-clojure">(/ 1 10.0)  =&gt; 0.1  
-(+ 0.1 0.2) =&gt; 0.30000000000000004
-</code></pre>
-
-<p>As a quick side-note, lisp has a syntax different from most modern programming languages.</p>
-
+</code></pre><p>For more discussion, visit the <a href="https://medium.com/@bellmar/is-cobol-holding-you-hostage-with-math-5498c0eb428b">original article</a>. It goes more in depth and I recommend reading it.</p>
+<h4 id="mullers-recurrence-inclojure">Muller’s Recurrence in Clojure</h4>
+<p>I’ve been dabbling in lisp and Clojure over the last few weeks (Clojure is a dialect of lisp). One of the cool things about lisp is that it handles fractions natively. For example, when doing integer division the results are represented as fractions. 1 divided by 10 is the fraction 1/10. And operations on fractions work as expected.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(/ <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">10</span>) =&gt; <span style="color:#ae81ff">1</span>/10  
+(+ <span style="color:#ae81ff">1</span>/10 <span style="color:#ae81ff">2</span>/10) =&gt; <span style="color:#ae81ff">3</span>/10
+</code></pre></div><p>Of course you can still do floating point calculations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(/ <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">10.0</span>)  =&gt; <span style="color:#ae81ff">0.1</span>  
+(+ <span style="color:#ae81ff">0.1</span> <span style="color:#ae81ff">0.2</span>) =&gt; <span style="color:#ae81ff">0.30000000000000004</span>
+</code></pre></div><p>As a quick side-note, lisp has a syntax different from most modern programming languages.</p>
 <p>Most languages:</p>
-
 <pre><code>function(arg1, arg2, ..., argn)  
-</code></pre>
-
-<p>e.g. sum(1, 2)</p>
-
+</code></pre><p>e.g. sum(1, 2)</p>
 <p>Lisp</p>
-
 <pre><code>(function-name arg1 arg2 ... argn)  
-</code></pre>
-
-<p>e.g. (sum 1 2)</p>
-
+</code></pre><p>e.g. (sum 1 2)</p>
 <p>In general, lisp handles numbers very well and can do some impressive calculations. Below is an example of 53 ^ 53 in Common Lisp (example stolen from the great book <a href="https://www.amazon.com/Land-Lisp-Learn-Program-Game/dp/1593272812/ref=sr_1_1">Land of Lisp</a>).</p>
-
 <pre><code>&gt; (expt 53 53)  
 24356848165022712132477606520104725518533453128685640844505130879576720609150223301256150373
-</code></pre>
-
-<h4 id="muller-s-recurrence-in-clojure-1">Muller’s Recurrence in Clojure</h4>
-
+</code></pre><h4 id="mullers-recurrence-inclojure-1">Muller’s Recurrence in Clojure</h4>
 <p>How would the previous example of Muller’s Recurrence look in Clojure?</p>
-
-<pre><code class="language-clojure">(defn rec  
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>rec  
   [y,z]  
-  (- 108  
+  (- <span style="color:#ae81ff">108</span>  
      (/  
-      (- 815   
-         (/ 1500 z))  
+      (- <span style="color:#ae81ff">815</span>   
+         (/ <span style="color:#ae81ff">1500</span> z))  
       y)  
 ))
-</code></pre>
-
-<p>The above defines a function rec, which takes two parameters, y and z. Again, here is the formula we used as an example of Muller’s Recurrence.</p>
-
-<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt="" /></p>
-
+</code></pre></div><p>The above defines a function rec, which takes two parameters, y and z. Again, here is the formula we used as an example of Muller’s Recurrence.</p>
+<p><img src="/post/resources/img/1*2v87YedN_QU2DBLZtI8fTQ.png" alt=""></p>
 <p>Muller’s Recurrence</p>
-
 <p>To calculate xi recursively, we can use the formula below, which will print out our results as they get processed.</p>
-
-<pre><code class="language-clojure">(defn recn  
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(<span style="color:#66d9ef">defn </span>recn  
   [n y z]  
-  (do (println n y z)) (if (&lt;= n 0) z (recn (- n 1) (rec y z) y)))
-</code></pre>
-
-<p>Since Clojure works with fractions, using fractions as inputs just treats everything as a fraction, avoiding the problem with floating points.</p>
-
-<pre><code class="language-clojure">=&gt; (recn 20 17/4 4)  
-20 17/4 4  
-19 76/17 17/4  
-18 353/76 76/17  
-17 1684/353 353/76  
-16 8177/1684 1684/353  
-15 40156/8177 8177/1684  
-14 198593/40156 40156/8177  
-13 986404/198593 198593/40156  
-12 4912337/986404 986404/198593  
-11 24502636/4912337 4912337/986404  
-10 122336033/24502636 24502636/4912337  
-9 611148724/122336033 122336033/24502636  
-8 3054149297/611148724 611148724/122336033  
-7 15265963516/3054149297 3054149297/611148724  
-6 76315468673/15265963516 15265963516/3054149297  
-5 381534296644/76315468673 76315468673/15265963516  
-4 1907542343057/381534296644 381534296644/76315468673  
-3 9537324294796/1907542343057 1907542343057/381534296644  
-2 47685459212513/9537324294796 9537324294796/1907542343057  
-1 238423809278164/47685459212513 47685459212513/9537324294796  
-0 1192108586037617/238423809278164 238423809278164/47685459212513  
-238423809278164/47685459212513
-</code></pre>
-
-<p>Note this example counts down from 20 while the original example counts up to 20.</p>
-
+  (<span style="color:#66d9ef">do </span>(println n y z)) (<span style="color:#66d9ef">if </span>(&lt;= n <span style="color:#ae81ff">0</span>) z (<span style="color:#a6e22e">recn</span> (- n <span style="color:#ae81ff">1</span>) (<span style="color:#a6e22e">rec</span> y z) y)))
+</code></pre></div><p>Since Clojure works with fractions, using fractions as inputs just treats everything as a fraction, avoiding the problem with floating points.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">=&gt; (<span style="color:#a6e22e">recn</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">17</span>/4 <span style="color:#ae81ff">4</span>)  
+<span style="color:#ae81ff">20</span> <span style="color:#ae81ff">17</span>/4 <span style="color:#ae81ff">4</span>  
+<span style="color:#ae81ff">19</span> <span style="color:#ae81ff">76</span>/17 <span style="color:#ae81ff">17</span>/4  
+<span style="color:#ae81ff">18</span> <span style="color:#ae81ff">353</span>/76 <span style="color:#ae81ff">76</span>/17  
+<span style="color:#ae81ff">17</span> <span style="color:#ae81ff">1684</span>/353 <span style="color:#ae81ff">353</span>/76  
+<span style="color:#ae81ff">16</span> <span style="color:#ae81ff">8177</span>/1684 <span style="color:#ae81ff">1684</span>/353  
+<span style="color:#ae81ff">15</span> <span style="color:#ae81ff">40156</span>/8177 <span style="color:#ae81ff">8177</span>/1684  
+<span style="color:#ae81ff">14</span> <span style="color:#ae81ff">198593</span>/40156 <span style="color:#ae81ff">40156</span>/8177  
+<span style="color:#ae81ff">13</span> <span style="color:#ae81ff">986404</span>/198593 <span style="color:#ae81ff">198593</span>/40156  
+<span style="color:#ae81ff">12</span> <span style="color:#ae81ff">4912337</span>/986404 <span style="color:#ae81ff">986404</span>/198593  
+<span style="color:#ae81ff">11</span> <span style="color:#ae81ff">24502636</span>/4912337 <span style="color:#ae81ff">4912337</span>/986404  
+<span style="color:#ae81ff">10</span> <span style="color:#ae81ff">122336033</span>/24502636 <span style="color:#ae81ff">24502636</span>/4912337  
+<span style="color:#ae81ff">9</span> <span style="color:#ae81ff">611148724</span>/122336033 <span style="color:#ae81ff">122336033</span>/24502636  
+<span style="color:#ae81ff">8</span> <span style="color:#ae81ff">3054149297</span>/611148724 <span style="color:#ae81ff">611148724</span>/122336033  
+<span style="color:#ae81ff">7</span> <span style="color:#ae81ff">15265963516</span>/3054149297 <span style="color:#ae81ff">3054149297</span>/611148724  
+<span style="color:#ae81ff">6</span> <span style="color:#ae81ff">76315468673</span>/15265963516 <span style="color:#ae81ff">15265963516</span>/3054149297  
+<span style="color:#ae81ff">5</span> <span style="color:#ae81ff">381534296644</span>/76315468673 <span style="color:#ae81ff">76315468673</span>/15265963516  
+<span style="color:#ae81ff">4</span> <span style="color:#ae81ff">1907542343057</span>/381534296644 <span style="color:#ae81ff">381534296644</span>/76315468673  
+<span style="color:#ae81ff">3</span> <span style="color:#ae81ff">9537324294796</span>/1907542343057 <span style="color:#ae81ff">1907542343057</span>/381534296644  
+<span style="color:#ae81ff">2</span> <span style="color:#ae81ff">47685459212513</span>/9537324294796 <span style="color:#ae81ff">9537324294796</span>/1907542343057  
+<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">238423809278164</span>/47685459212513 <span style="color:#ae81ff">47685459212513</span>/9537324294796  
+<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">1192108586037617</span>/238423809278164 <span style="color:#ae81ff">238423809278164</span>/47685459212513  
+<span style="color:#ae81ff">238423809278164</span>/47685459212513
+</code></pre></div><p>Note this example counts down from 20 while the original example counts up to 20.</p>
 <p>If we want to convert that final value to a float, we can do so:</p>
-
-<pre><code class="language-clojure">(float **238423809278164/47685459212513**)  
-4.9999268795046
-</code></pre>
-
-<p>But of course, if you start out with floats, you’ll have the same problem:</p>
-
-<pre><code class="language-clojure">=&gt; (recn 20 4.25 4)  
-20 4.25 4  
-19 4.470588235294116 4.25  
-18 4.6447368421052175 4.470588235294116  
-17 4.770538243625083 4.6447368421052175  
-16 4.855700712568563 4.770538243625083  
-15 4.91084749866063 4.855700712568563  
-14 4.945537395530508 4.91084749866063  
-13 4.966962408040999 4.945537395530508  
-12 4.980042204293014 4.966962408040999  
-11 4.987909232795786 4.980042204293014  
-10 4.991362641314552 4.987909232795786  
-9 4.967455095552268 4.991362641314552  
-8 4.42969049830883 4.967455095552268  
-7 -7.817236578459315 4.42969049830883  
-6 168.93916767106458 -7.817236578459315  
-5 102.03996315205927 168.93916767106458  
-4 100.0999475162497 102.03996315205927  
-3 100.00499204097244 100.0999475162497  
-2 100.0002495792373 100.00499204097244  
-1 100.00001247862016 100.0002495792373  
-0 100.00000062392161 100.00001247862016  
-100.00001247862016
-</code></pre>
-
-<p>Lisp’s native handling of fractions is a nice feature that can help you avoid some problems associated with floating point numbers.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">(float **238423809278164/47685459212513**)  
+<span style="color:#ae81ff">4.9999268795046</span>
+</code></pre></div><p>But of course, if you start out with floats, you’ll have the same problem:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-clojure" data-lang="clojure">=&gt; (<span style="color:#a6e22e">recn</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">4.25</span> <span style="color:#ae81ff">4</span>)  
+<span style="color:#ae81ff">20</span> <span style="color:#ae81ff">4.25</span> <span style="color:#ae81ff">4</span>  
+<span style="color:#ae81ff">19</span> <span style="color:#ae81ff">4.470588235294116</span> <span style="color:#ae81ff">4.25</span>  
+<span style="color:#ae81ff">18</span> <span style="color:#ae81ff">4.6447368421052175</span> <span style="color:#ae81ff">4.470588235294116</span>  
+<span style="color:#ae81ff">17</span> <span style="color:#ae81ff">4.770538243625083</span> <span style="color:#ae81ff">4.6447368421052175</span>  
+<span style="color:#ae81ff">16</span> <span style="color:#ae81ff">4.855700712568563</span> <span style="color:#ae81ff">4.770538243625083</span>  
+<span style="color:#ae81ff">15</span> <span style="color:#ae81ff">4.91084749866063</span> <span style="color:#ae81ff">4.855700712568563</span>  
+<span style="color:#ae81ff">14</span> <span style="color:#ae81ff">4.945537395530508</span> <span style="color:#ae81ff">4.91084749866063</span>  
+<span style="color:#ae81ff">13</span> <span style="color:#ae81ff">4.966962408040999</span> <span style="color:#ae81ff">4.945537395530508</span>  
+<span style="color:#ae81ff">12</span> <span style="color:#ae81ff">4.980042204293014</span> <span style="color:#ae81ff">4.966962408040999</span>  
+<span style="color:#ae81ff">11</span> <span style="color:#ae81ff">4.987909232795786</span> <span style="color:#ae81ff">4.980042204293014</span>  
+<span style="color:#ae81ff">10</span> <span style="color:#ae81ff">4.991362641314552</span> <span style="color:#ae81ff">4.987909232795786</span>  
+<span style="color:#ae81ff">9</span> <span style="color:#ae81ff">4.967455095552268</span> <span style="color:#ae81ff">4.991362641314552</span>  
+<span style="color:#ae81ff">8</span> <span style="color:#ae81ff">4.42969049830883</span> <span style="color:#ae81ff">4.967455095552268</span>  
+<span style="color:#ae81ff">7</span> <span style="color:#ae81ff">-7.817236578459315</span> <span style="color:#ae81ff">4.42969049830883</span>  
+<span style="color:#ae81ff">6</span> <span style="color:#ae81ff">168.93916767106458</span> <span style="color:#ae81ff">-7.817236578459315</span>  
+<span style="color:#ae81ff">5</span> <span style="color:#ae81ff">102.03996315205927</span> <span style="color:#ae81ff">168.93916767106458</span>  
+<span style="color:#ae81ff">4</span> <span style="color:#ae81ff">100.0999475162497</span> <span style="color:#ae81ff">102.03996315205927</span>  
+<span style="color:#ae81ff">3</span> <span style="color:#ae81ff">100.00499204097244</span> <span style="color:#ae81ff">100.0999475162497</span>  
+<span style="color:#ae81ff">2</span> <span style="color:#ae81ff">100.0002495792373</span> <span style="color:#ae81ff">100.00499204097244</span>  
+<span style="color:#ae81ff">1</span> <span style="color:#ae81ff">100.00001247862016</span> <span style="color:#ae81ff">100.0002495792373</span>  
+<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">100.00000062392161</span> <span style="color:#ae81ff">100.00001247862016</span>  
+<span style="color:#ae81ff">100.00001247862016</span>
+</code></pre></div><p>Lisp’s native handling of fractions is a nice feature that can help you avoid some problems associated with floating point numbers.</p>
 <p>By Branko Blagojevic July 30, 2018</p>
 
 </div>

@@ -17,7 +17,7 @@ Variational Auto Encoders are used to learn probability distribution function of
 I have read a fair number of posts about variational auto encoders but only recently did I try my hand in generating my own.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Another &#39;Variational Auto Encoders Explained&#39; Post and Character Encoding">
@@ -129,175 +129,121 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models</p>
-
+    <p>Variational Auto Encoders are simpler than they appear and are the building blocks of generative models</p>
 <p>Variational Auto Encoders are used to learn probability distribution function of images. By viewing their latent space we can see what’s really going on and use it to generate our own examples</p>
-
 <p>I have read a <a href="https://towardsdatascience.com/variational-auto-encoders-fc701b9fc569">fair</a> <a href="http://kvfrans.com/variational-autoencoders-explained/">number</a> of <a href="http://anotherdatum.com/vae.html">posts</a> about variational auto encoders but only recently did I try my hand in generating my own. I’ve been going through the early access edition of <a href="https://www.manning.com/books/gans-in-action">GANs in Action</a> by Manning.</p>
-
 <p>An <strong>auto-encoder</strong> deconstructs (or encodes) some data into a hidden representation with the goal of losing as little information as possible. Its performance is measured by how well it can reconstruct (decode) the data based on its internal representation.</p>
-
 <figure>
     <img src="/post/resources/img/0*sukoan_LqtFKllCW.jpg"/> 
 </figure>
 
-
 <p>The cool thing about auto-encoders is that they are unsupervised. Nowhere in the example above did we tell the encoder the number is a 2. So we can use them to create a structure on a data set without the need for labels. We can then use that structure for supervised training. We also don’t tell it how to encode the data. We just provide a structure for the encoder and decoder, and measure how well its doing based on how much information is lost in the process.</p>
-
 <p>A <strong>variational auto-encoder (VAE)</strong> is an auto-encoder, except instead of learning a compressed representation, it learns a probability distribution of the data:</p>
-
 <figure>
     <img src="/post/resources/img/0*qVSTI1FNmySZkjLj.png"/> 
 </figure>
 
-
 <p>This is the point at which most explanations get all hand-wavy and spill a few words about latent space. But all this means is that the compressed representation will be a mean and standard deviation, representing a normal distribution. When we connect it to the decoder, we’ll want to take a noise sample using the mean and variance. This is the <strong>μ + Σ * ε</strong> from the graph above. This just means that when we decode, we’ll use the mean and add the standard deviation multiplied by some random normal value.</p>
-
-<pre><code class="language-python">def sampling(args):  
-    z_mean, z_log_var = args  
-    epsilon = K.random_normal(shape=(latent_dim,), mean=0.0)  
-    return z_mean + K.exp(z_log_var/2.0) * epsilon
-</code></pre>
-
-<p>The other interesting thing about auto-encoders is that you can inject your own values into the process and generate output. From there you can map out a latent space and see the internal representation of our model.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sampling</span>(args):  
+    z_mean, z_log_var <span style="color:#f92672">=</span> args  
+    epsilon <span style="color:#f92672">=</span> K<span style="color:#f92672">.</span>random_normal(shape<span style="color:#f92672">=</span>(latent_dim,), mean<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0</span>)  
+    <span style="color:#66d9ef">return</span> z_mean <span style="color:#f92672">+</span> K<span style="color:#f92672">.</span>exp(z_log_var<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span>) <span style="color:#f92672">*</span> epsilon
+</code></pre></div><p>The other interesting thing about auto-encoders is that you can inject your own values into the process and generate output. From there you can map out a latent space and see the internal representation of our model.</p>
 <h4 id="implementation">Implementation</h4>
-
 <p>Most posts use the mnist handwritten numeric digit data set but we’ll use <a href="https://www.nist.gov/itl/iad/image-group/emnist-dataset">emnist</a>, the handwritten character data set instead. Someone on <a href="https://www.kaggle.com/crawford/emnist">Kaggle</a> conveniently transformed the dataset into a csv. I’ve excluded some function definitions. My full code can be found <a href="https://github.com/breeko/gans-in-action/blob/master/ch2_vae_emnist.ipynb">here</a>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">%</span>matplotlib inline  
+<span style="color:#f92672">import</span> imageio  
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt  
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np  
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 
-<pre><code class="language-python">%matplotlib inline  
-import imageio  
-import matplotlib.pyplot as plt  
-import numpy as np  
-import pandas as pd
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
 
-from PIL import Image
+train <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;emnist-letters-train.csv&#34;</span>, header<span style="color:#f92672">=</span>None)  
+test <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;emnist-letters-test.csv&#34;</span>, header<span style="color:#f92672">=</span>None)
 
-train = pd.read_csv(&quot;emnist-letters-train.csv&quot;, header=None)  
-test = pd.read_csv(&quot;emnist-letters-test.csv&quot;, header=None)
+mappings <span style="color:#f92672">=</span> {}  
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;emnist-letters-mapping.txt&#34;</span>) <span style="color:#66d9ef">as</span> f:  
+    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> f<span style="color:#f92672">.</span>readlines():  
+        code, lower, upper <span style="color:#f92672">=</span> line<span style="color:#f92672">.</span>split()  
+        mappings[int(code)] <span style="color:#f92672">=</span> chr(int(lower))
 
-mappings = {}  
-with open(&quot;emnist-letters-mapping.txt&quot;) as f:  
-    for line in f.readlines():  
-        code, lower, upper = line.split()  
-        mappings[int(code)] = chr(int(lower))
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">display_images</span>(imgs, names, max_imgs<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):  
+    <span style="color:#e6db74">&#34;&#34;&#34; Displays images and their corresponding names&#34;&#34;&#34;</span>  
+    <span style="color:#f92672">...</span>
 
-def display_images(imgs, names, max_imgs=100):  
-    &quot;&quot;&quot; Displays images and their corresponding names&quot;&quot;&quot;  
-    ...
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_emnist</span>(arr, mappings):  
+    <span style="color:#e6db74">&#34;&#34;&#34; Process emnist letters &#34;&#34;&#34;</span>  
+    <span style="color:#f92672">...</span>
 
-def process_emnist(arr, mappings):  
-    &quot;&quot;&quot; Process emnist letters &quot;&quot;&quot;  
-    ...
+X_train, y_train <span style="color:#f92672">=</span> process_emnist(train, mappings)  
+X_test, y_test <span style="color:#f92672">=</span> process_emnist(test, mappings)
 
-X_train, y_train = process_emnist(train, mappings)  
-X_test, y_test = process_emnist(test, mappings)
-
-display_images(X_train[:10],y_train[:10])
-</code></pre>
-
-<figure>
+display_images(X_train[:<span style="color:#ae81ff">10</span>],y_train[:<span style="color:#ae81ff">10</span>])
+</code></pre></div><figure>
     <img src="/post/resources/img/1*CN1UvZ0zVxwxnjFtZ6qwvA.png"/> 
 </figure>
 
-
 <p>Our training set is (88800, 28, 28) representing 88,800 letters from A to Z in either upper or lower case.</p>
-
 <p>Below we create the VAE.</p>
-
 <p>A variational auto encoder is just an encoder that feeds a decoder and encodes to a probability density function. We define the models independently and then define the VAE as the combined model. The function returns two models: one for training and one for evaluation. The only difference is that for training, the final layer is hooked up to the sampling layer. But when we want to display our results, we should not include the noise. That model is vae_eval and is just connected to the z_mean layer.</p>
-
 <figure>
     <img src="/post/resources/img/1*prdo82JCMc6Ph7LT3jw0qw.png"/> 
 </figure>
 
-
 <p>The final layer of the encoder is the sampling layer which we defined ourselves and wrapped in a Lambda layer. The mean and var layers are used for the loss function which tracks how far away our probability distribution in our encoding is from a mean of 0 and a standard deviation of 1. The mean layer is also used when we want to see our results.</p>
-
 <figure>
     <img src="/post/resources/img/1*vuzoh3WH7g--FFB4xrZg8A.png"/> <figcaption>
             <h4>Decoder</h4>
         </figcaption>
 </figure>
 
-
 <p>The decoder is relatively straight forward. It takes an input of 2 representing our latent dimensions. It then reconstructs the image.</p>
-
 <figure>
     <img src="/post/resources/img/1*p9K6qNpa40BSrdZDsoRqmA.png"/> 
 </figure>
 
-
 <p>Variational Auto Encoder</p>
-
 <p>The VAE is just the two combined. Note that the encoder returns both the mean latent value and a noisy sampling of the latent space. We’ll train on the noisy model and display our results on just the mean.</p>
-
 <p>All that’s left is to fit the model.</p>
-
-<pre><code class="language-python">vae_train.fit(
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vae_train<span style="color:#f92672">.</span>fit(
     X_train,
     X_train,
-    shuffle=True,
-    epochs=epochs,
-    batch_size=batch_size,
-    validation_data=(X_test,X_test), 
-    verbose=1,
-    callbacks=[EarlyStopping(patience=4)]
+    shuffle<span style="color:#f92672">=</span>True,
+    epochs<span style="color:#f92672">=</span>epochs,
+    batch_size<span style="color:#f92672">=</span>batch_size,
+    validation_data<span style="color:#f92672">=</span>(X_test,X_test), 
+    verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+    callbacks<span style="color:#f92672">=</span>[EarlyStopping(patience<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>)]
     )
-</code></pre>
-
-<p>Let’s see how it did.</p>
-
+</code></pre></div><p>Let’s see how it did.</p>
 <figure>
     <img src="/post/resources/img/1*wrT-bOKuW92N_516DnEBNQ.png"/> 
 </figure>
 
-
 <p>Not great. The problem is that our representation isn’t deep enough. Ideally we would want to use convolutional layers to get a deeper understanding of the letters and edges.</p>
-
 <p>Let’s see how the latent space looks. We can do so by getting the decoder and feeding it a series of values and seeing what it comes up with. To get the encoder and decoder, we can just reference the second and third layers of the VAE.</p>
-
 <figure>
     <img src="/post/resources/img/1*ojaoXMKy5eIbqt4Fx3PAoA.png"/> 
 </figure>
 
-
 <p>Latent space</p>
-
 <p>It looks crowded. There is some semblance of Ms in the bottom left and Is in the top right. By comparison, here’s how the same analysis looks on numeric digits:</p>
-
-<div stlye="text-align:center">
-    <img style="display:inline-block;" src="/post/resources/img/1*QArAhQbz79lFWo-2nn47zw.png">
-    <img style="display:inline-block;" src="/post/resources/img/1*kGLQUIfLkFNcp9kj-KxEVQ.png">
-</div>
-
+<!-- raw HTML omitted -->
 <p>Latent space of a VAE trained on digits</p>
-
 <p>In the latent space you can see something representing nearly all the digits. However, the VAE is still having some trouble distinguishing between 4s, 7s and 9s due to their similarity in shape.</p>
-
 <p>We can increase our latent space by adding more latent dimensions (currently 2). However if we go above 2 layers, we lose the ability to easily represent the latent space as a grid. The other way is to limit our training set to just a subset of the original set. Below I train the vae only on the vowels.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">filter_char</span>(X, y, chars):  
+    <span style="color:#66d9ef">if</span> type(chars) <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> list:  
+        chars <span style="color:#f92672">=</span> [chars]  
+    idxs, chs <span style="color:#f92672">=</span> zip(<span style="color:#f92672">*</span>[(idx, ch) <span style="color:#66d9ef">for</span> idx, ch <span style="color:#f92672">in</span> enumerate(y) <span style="color:#66d9ef">if</span> ch <span style="color:#f92672">in</span> chars])  
+    <span style="color:#66d9ef">return</span> X[np<span style="color:#f92672">.</span>array(idxs)], chs
 
-<pre><code class="language-python">def filter_char(X, y, chars):  
-    if type(chars) is not list:  
-        chars = [chars]  
-    idxs, chs = zip(*[(idx, ch) for idx, ch in enumerate(y) if ch in chars])  
-    return X[np.array(idxs)], chs
-
-X_train_vowels, y_train_vowels = filter_char(X_train, y_train, [&quot;A&quot;,&quot;E&quot;,&quot;I&quot;,&quot;O&quot;,&quot;U&quot;])  
-X_test_vowels, y_test_vowels = filter_char(X_test, y_test, [&quot;A&quot;,&quot;E&quot;,&quot;I&quot;,&quot;O&quot;,&quot;U&quot;])
-</code></pre>
-
-<div stly="text-align:center">
-    <img style="display:inline-block;" src="/post/resources/img/1*zEJVVG-XqmUlpD9ILjt61w.png">
-    <img style="display:inline-block;" src="/post/resources/img/1*wbJi6Bd7oghNq6wf6UAUzA.png">
-</div>
-
+X_train_vowels, y_train_vowels <span style="color:#f92672">=</span> filter_char(X_train, y_train, [<span style="color:#e6db74">&#34;A&#34;</span>,<span style="color:#e6db74">&#34;E&#34;</span>,<span style="color:#e6db74">&#34;I&#34;</span>,<span style="color:#e6db74">&#34;O&#34;</span>,<span style="color:#e6db74">&#34;U&#34;</span>])  
+X_test_vowels, y_test_vowels <span style="color:#f92672">=</span> filter_char(X_test, y_test, [<span style="color:#e6db74">&#34;A&#34;</span>,<span style="color:#e6db74">&#34;E&#34;</span>,<span style="color:#e6db74">&#34;I&#34;</span>,<span style="color:#e6db74">&#34;O&#34;</span>,<span style="color:#e6db74">&#34;U&#34;</span>])
+</code></pre></div><!-- raw HTML omitted -->
 <p>This is much better with a clearer distinction between each vowel, although the model does get some letters confused.</p>
-
 <p>The next step would be to build a bigger model ideally one using convolutional layers, which is the more natural way to represent images. Another option would be to increase our latent space dimensions. We’re currently using only 2 dimensions and the nice thing about that is that we can represent the output in a 2d grid to evaluate. But more dimensions would allow for a richer representation and better performance.</p>
-
 <p>By Branko Blagojevic on October 25, 2018</p>
 
 </div>

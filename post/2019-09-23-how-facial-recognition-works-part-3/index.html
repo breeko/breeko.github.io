@@ -16,7 +16,7 @@
 I found this video of a man (boy?) that took a picture of himself every day over 10 years starting at age 12.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="How Facial Recognition Works Part 3, How a Face Changes Over 10 Years">
@@ -127,26 +127,15 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>This is part 3 of a series of posts about facial recognition. In part 1 I discussed facial detection and part 2 I discussed facial landmarks. In this post, I&rsquo;ll go into how accurate some off the shelf facial recognition are and how well they work as a subject ages.</p>
-
+    <p>This is part 3 of a series of posts about facial recognition. In part 1 I discussed facial detection and part 2 I discussed facial landmarks. In this post, I&rsquo;ll go into how accurate some off the shelf facial recognition are and how well they work as a subject ages.</p>
 <p>I found <a href="https://www.youtube.com/watch?v=65nfbW-27ps">this video</a> of a man (boy?) that took a picture of himself every day over 10 years starting at age 12. Here are the first few frames and their landmarks.</p>
-
-<p><img src="/post/resources/img/twelve_to_married.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married.png" alt=""></p>
 <p>I wanted to check how his face vectors changed over time and how our 0.6 threshold would do over so many years. <strong>Note that detection is done using only the first and earliest picture of the person to identify every face from that point on</strong>. I used the <a href="http://www.dlib.net">dlib</a> facial recognition package through <a href="https://github.com/ageitgey/face_recognition">face_recognition</a> python wrapper. I used a distance of 0.6 which purportedly has an accuracy rate of 99.38%.</p>
-
 <p>Below is a graph of all the images and the arbitrary 0.6 cutoff noted as a red line.</p>
-
-<p><img src="/post/resources/img/twelve_to_married_diffs.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_diffs.png" alt=""></p>
 <p>Overall it&rsquo;s pretty good with 5% mismatch and 10% no face found, although not the 99.38% accuracy purported. But much of that is due to an imperfect dataset. The difference does grow over time as we would expect. Lets take a look at some of the errors</p>
-
-<p><img src="/post/resources/img/twelve_to_married_worst.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_worst.png" alt=""></p>
 <p>Out of the worst 16</p>
-
 <ul>
 <li>2 are wearing sunglasses</li>
 <li>1 is the subject in green-face</li>
@@ -154,39 +143,22 @@ if (!doNotTrack) {
 <li>1 is his wife (fiancé?)</li>
 <li>4 are multiple people</li>
 </ul>
-
 <p>Datasets used in machine learning tend to be very curated and clean. Tests on real world images usually result in much lower accuracy. The <a href="http://vis-www.cs.umass.edu/lfw/#explore">LRW face recognition benchmark</a> is no different.</p>
-
 <p>Let&rsquo;s take a look at the best matches (lowest distances).</p>
-
-<p><img src="/post/resources/img/twelve_to_married_best.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_best.png" alt=""></p>
 <p>The first one is the single image we used to detect all subsequent images which explains why the difference is 0. The other matches have a reddish hue which may play a part in the strong match. And the lowest differences are (understandably) while the subject was young.</p>
-
 <p>Finally, let&rsquo;s take a look at the 100 or so images that found no face.</p>
-
-<p><img src="/post/resources/img/twelve_to_married_no_match.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_no_match.png" alt=""></p>
 <p>There are a little harder to analyze. There are certainly some lighting issues in a few of them, but overall these are clearly faces. It may have something to do with the redness of the subjects eyes and the contrast of the red eyes with the overall red hue of the image.</p>
-
 <h1 id="aws-rekognition">AWS Rekognition</h1>
-
 <p>I ran the same test using AWS Rekognition service. The service lets you upload two images and see if it comes up with a match to a certain level of confidence. I set the confidence to 70% and all but 4 correctly matched.</p>
-
-<p><img src="/post/resources/img/twelve_to_married_diffs_aws.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_diffs_aws.png" alt=""></p>
 <p>The only 4 that didn&rsquo;t match with a confidence of 70% or more can be seen below:</p>
-
-<p><img src="/post/resources/img/twelve_to_married_no_match_aws.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_no_match_aws.png" alt=""></p>
 <p>And the images which did mach but with a low confidence can be seen below:</p>
-
-<p><img src="/post/resources/img/twelve_to_married_worst_aws.png" alt="" /></p>
-
+<p><img src="/post/resources/img/twelve_to_married_worst_aws.png" alt=""></p>
 <p>Again, glasses and lighting appear to be the main things that throw off the recognition algorithm.</p>
-
 <p>Overall the AWS service is much stronger that the dlib model which is understandable. Again it&rsquo;s important to note that the similarity is based off a single image of the subject at twelve years old. </p>
-
 <p>In the next part I&rsquo;ll look at the other side of the coin, spurious face matches. I&rsquo;ll try to compare recreate the ACLU claim that AWS Rekognition falsely identified 28 congressmen as convicted felons.</p>
 
 </div>

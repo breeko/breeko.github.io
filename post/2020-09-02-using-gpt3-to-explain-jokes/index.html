@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<html prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Using GPT-3 to Explain Jokes &middot; Branko Blagojevic</title>
+        <meta name="description" content="Using GPT-3 to Explain Jokes There’s a Reddit bot that explains jokes. Well, that’s not exactly true, because its too good to be a bot and is curiously selective. Often times, the explanation is funnier than the joke. It hasn’t been active in about a year, but here’s an example:
+My wife and I went on our honeymoon to Australia. Unfortunately, I had to dial the help line. &quot;G&#39;day this is Tim, you&#39;ve reached the Aussie help line.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.68.3" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Using GPT-3 to Explain Jokes">
+<meta property="og:description" content="Using GPT-3 to Explain Jokes There’s a Reddit bot that explains jokes. Well, that’s not exactly true, because its too good to be a bot and is curiously selective. Often times, the explanation is funnier than the joke. It hasn’t been active in about a year, but here’s an example:
+My wife and I went on our honeymoon to Australia. Unfortunately, I had to dial the help line. &quot;G&#39;day this is Tim, you&#39;ve reached the Aussie help line.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://breeko.github.io/post/2020-09-02-using-gpt3-to-explain-jokes/">
+        <link rel="stylesheet" href="https://breeko.github.io/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-58509378-4', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://breeko.github.io/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Github" title="Github" href="https://github.com/breeko">
+                                <i class="fa fa-github-alt"></i>
+                            </a>
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:branko.blagojevic@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+    <li class="site-nav-item">
+        <a title="Tags" href="/tags">Tags</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Using GPT-3 to Explain Jokes</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-09-02" itemprop="datePublished">Wed, Sep 2, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">Branko Blagojevic</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <h1 id="using-gpt-3-to-explain-jokes">Using GPT-3 to Explain Jokes</h1>
+<p>There’s a Reddit bot that explains jokes. Well, that’s not exactly true, because its too good to be a bot and is curiously selective. Often times, the explanation is funnier than the joke. It hasn’t been active in about a year, but here’s an example:</p>
+<pre><code>My wife and I went on our honeymoon to Australia. Unfortunately, I had to dial the help line.
+
+&quot;G'day this is Tim, you've reached the Aussie help line. How can we help ya?&quot;
+
+I told him, &quot;We were in the ocean and my wife was stung by a jellyfish on her lady parts. Her vagina is completely swollen shut. It's our honeymoon, and well....ya know.&quot;
+
+The guy on the help line replies, &quot;Ah, bummer mate!&quot;
+
+I say, &quot;I hadn't thought of that! Thanks for the advice. You've saved my honeymoon!&quot;
+</code></pre>
+<p>Explanation:</p>
+<pre><code>**Bummer** can mean **unfortunate** or **anal intercourse**.
+</code></pre>
+<p>Pretty good.</p>
+<p>This explanation was from 3 years, and if you follow natural language processing, you’d know that NLP was no-where near this level of comprehension at that time. Even models that were fine tuned for joke explanation would have difficulty explaining a joke like this. For one, its pretty long and layered. Consider the inferences in the jokes: Australian slang for bummer as a double entendre, expectation of intercourse during a honeymoon, types of sexual intercourse available. It’s a complicated joke for a machine to parse.</p>
+<p>But its 2020, and gpt-3 has moved the needle on what we expect from NLP.</p>
+<p><img src="https://cdn-images-1.medium.com/max/2000/0*IWBw3MEe7jC8zq6x.png" alt=""></p>
+<h2 id="gpt-3-as-a-joke-explainer">GPT-3 as a Joke Explainer</h2>
+<p>The way GPT-3, and all language models that I’ve seen work, is that they try to predict the next group of characters. They can then recursively feed the output back into itself and predict the next groups of characters.</p>
+<p>For instance, consider the phrase “<strong>I love</strong>”. The most likely word that comes after that based on a corpus of english text is probably “you”. So it becomes “I love you”. Then you can feed in “I love you” and the next token would likely be “I love you, too” and so on.</p>
+<p>So to get a joke explainer bot, we have to prime the model with some joke explanations. GPT-3 is incredible that it requires very little in terms of priming to be able to continue the pattern. Here is the input text I used to prime GPT-3</p>
+<pre><code>**Joke**: Three men are on a boat. They have four cigarettes, but nothing to light them with. So they throw a cigarette overboard and the whole boat becomes a cigarette lighter.
+
+**Explained**: Lighter can mean a device that creates fire or less heavy.
+
+**Joke**: Where did Noah keep the Bees? In the Ark-Hives.
+
+**Explained**: Ark hives sounds like archives.
+</code></pre>
+<p>Note that there is no reason I picked these two, apart from the fact that I thought they were pretty good and short. I didn’t try any other ones but I encourage people to try other primes. As you see below, I think they serve their purpose.</p>
+<p>Now I’m able to put in a joke and get an explanation. Here’s one that GPT-3 nailed:</p>
+<pre><code>**Joke**: If you could have dinner with any historical figure, who would you choose? &quot;Gandhi. Why him? &quot;More food for me.&quot;
+
+**Explained**: Gandhi was a famous Indian leader who was known for his hunger strikes.
+</code></pre>
+<p>The joke explained reddit bot had said “<strong>Gandhi</strong> was stereotypically perceived to engage in <strong>hunger strikes</strong>.”</p>
+<p>Here’s another one, not as good:</p>
+<pre><code>**Joke**: I've got one thing to say to all you motherfuckers. Happy Father's day
+
+**Explained**:  Motherfucker is a word that is used to insult someone.
+</code></pre>
+<p>I’m sorry, the answer we were looking for was “<strong>Fathers</strong> are stereotypically perceived to have <strong>intercourse</strong> with <strong>mothers</strong>.”</p>
+<p>How about a blonde joke?</p>
+<pre><code>**Joke**: Blonde gets caught speeding. The cop is also a blonde.
+
+Cop: “Let me see your driver’s license.”
+
+Driver: “What’s that?”
+
+Cop: “A square thing with your picture on it.”
+
+Blonde fumbles through her purse, finds a mirror, sees herself in it, and hands it to the cop. Cop looks at it, hands it back and says, “I’m gonna let you go without a ticket. I didn’t know you were a cop.”
+
+**Explained**: A mirror is a square thing with your picture on it.
+</code></pre>
+<p>Or maybe a pop culture reference with a play on words?</p>
+<pre><code>**Joke**: The only two white actors in Black Panther are Martin Freeman, who played Bilbo Baggins, and Andy Serkis who played Gollum. They're the Tolkien white guys.
+
+**Explained**: Martin Freeman played Bilbo Baggins in the Hobbit movies. Andy Serkis played Gollum in the Lord of the Rings movies.
+</code></pre>
+<p>These are all somewhat plausible. I’m most impressed how the model actually does the correct thing in terms of trying to explain the joke. It doesn’t always get the joke or the point, but its doing something right.</p>
+<p>And what about out Aussie joke from the start of the article? Here’s the joke again with the GPT-3 explanation:</p>
+<pre><code>**Joke**: My wife and I went on our honeymoon to Australia. Unfortunately, I had to dial the help line.
+
+&quot;G'day this is Tim, you've reached the Aussie help line. How can we help ya?&quot;
+
+I told him, &quot;We were in the ocean and my wife was stung by a jellyfish on her lady parts. Her vagina is completely swollen shut. It's our honeymoon, and well....ya know.&quot;
+
+The guy on the help line replies, &quot;Ah, bummer mate!&quot;
+
+I say, &quot;I hadn't thought of that! Thanks for the advice. You've saved my honeymoon!&quot;
+
+**Explained**:  G'day is a greeting in Australia.
+</code></pre>
+<p>This is understandable. But let’s see if we can do better.</p>
+<p>I mentioned at the start of the post that models work by trying to predict the most likely set of characters following a particular input. But it doesn’t have to take <em>the most</em> likely, it can allow for some randomness. In NLP, they call this “temperature”. The higher the temperature, the more randomness. All the explanations above were made with a temperature of 0, meaning the model took the most likely path. But let’s see some alternative answers to the Aussie joke using a temperate of 0.9:</p>
+<pre><code>Explained: G'day means Hello. Mate means friend. See the Australian stereotypes in play here?
+
+Explained: It's just a joke about how Australia is international slang for a secluded, remote location.
+
+Explained: Aussie slang. G'day is a greeting, mate is friend, you've reached is you are the correct person/company to reach, ya know is you understand something, bummer is a slang term for something bad has happened, the distended part of the male or female genitalia is a beehive, its ok is a word used to convey sympathy and concern. So the guy was saying too bad you called me, but I sympathized with you on the phone.
+</code></pre>
+<p>I like the third one because its trying so hard. It understands that its something to do with Aussie slang and sex but can’t quite get it. It even throws in a new angle with explaining what beehive is. But it doesn’t quite work.</p>
+<p>But my personal favorite has to be:</p>
+<pre><code>Explained:  Australia + honeymoon + penis + swollen vagina = Aussie joke.
+</code></pre>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/gpt3/">gpt3</a>, 
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/npl/">npl</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+            <a class="icon-twitter" href="https://twitter.com/share?text=Using%20GPT-3%20to%20Explain%20Jokes&url=https%3a%2f%2fbreeko.github.io%2fpost%2f2020-09-02-using-gpt3-to-explain-jokes%2f"
+                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fa fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+        
+
+        
+            <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fbreeko.github.io%2fpost%2f2020-09-02-using-gpt3-to-explain-jokes%2f"
+                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                <i class="fa fa-facebook"></i>
+                <span class="hidden">Facebook</span>
+            </a>
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="ML-Everything" href="https://breeko.github.io/">ML-Everything</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://breeko.github.io/js/jquery-1.11.3.min.js"></script>
+        <script src="https://breeko.github.io/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="https://breeko.github.io/js/scripts.js"></script>
+    </body>
+</html>
+

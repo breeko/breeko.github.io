@@ -17,7 +17,7 @@ My latest obsession has been writing bots for Reddit. Reddit is an online forum 
 What’s nice about Reddit is the sheer volume of content.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Reddit Bots, Drinking from the Fire Hose and Image Colorization">
@@ -129,81 +129,59 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>My latest obsession has been writing bots for Reddit. Reddit is an online forum that hosts a range of topics, everything from news and…</p>
-
+    <p>My latest obsession has been writing bots for Reddit. Reddit is an online forum that hosts a range of topics, everything from news and…</p>
 <p>My latest obsession has been writing bots for <a href="https://www.reddit.com">Reddit</a>. Reddit is an online forum that hosts a range of topics, everything from <a href="https://www.reddit.com/r/news">news</a> and <a href="https://www.reddit.com/r/politics/">politics</a> to <a href="https://www.reddit.com/r/disneyvacation/">strange, possibly nsfw captions to WikiHow images</a>. But mostly, it’s just <a href="https://www.reddit.com/r/dankmemes/">memes</a>.</p>
-
 <p>What’s nice about Reddit is the sheer volume of content. <a href="https://www.statista.com/statistics/443332/reddit-monthly-visitors/">Apparently 6% of internet users in the US used the social network</a>, so its a treasure trove of user generated content. But the best part is the Reddit API, specifically <a href="https://praw.readthedocs.io/en/latest/">PRAW</a>, the python API wrapper. PRAW does all the rate limiting for you and lets you drink from the proverbial fire hose by streaming every post or comment posted to the site live. That’s around <a href="https://expandedramblings.com/index.php/reddit-stats/">11mm monthly posts 2.8mm daily comments</a>. And you can scrape them all with:</p>
-
-<pre><code class="language-python">for c in r.subreddit(&quot;all&quot;).stream.comments(pause_after=-1):  
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> r<span style="color:#f92672">.</span>subreddit(<span style="color:#e6db74">&#34;all&#34;</span>)<span style="color:#f92672">.</span>stream<span style="color:#f92672">.</span>comments(pause_after<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>):  
   do_something(c)
-</code></pre>
-
-<p>Well, not exactly. I do notice comments fly under the radar and don’t trigger my bots correctly, which I think is due to the internal workings of PRAW rate limiting or latency on my end.</p>
-
+</code></pre></div><p>Well, not exactly. I do notice comments fly under the radar and don’t trigger my bots correctly, which I think is due to the internal workings of PRAW rate limiting or latency on my end.</p>
 <p>And adding app authorization is as simple as Settings -&gt; App Authorization -&gt; Create Application.</p>
-
-<p><img src="/post/resources/img/1*zzO7iwPIk5YegL6Muk7UhQ.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*zzO7iwPIk5YegL6Muk7UhQ.png" alt=""></p>
 <p>Don’t worry, only name and redirect uri are actually required and redirect uri can be localhost</p>
-
 <p>Create as many apps as you want. Create as many account as you want with one email.</p>
-
 <blockquote>
 <p>Ease of access and a good API play no small role in Reddit’s success.</p>
 </blockquote>
-
 <p>API doesn’t just benefit people like me, but also the hundreds of moderators making sure everyone stays in line. Reddit de-centralized the moderation process, <a href="https://en.wikipedia.org/wiki/Reddit#Controversies">although controversies still exist</a>.</p>
-
-<h4 id="drinking-from-the-fire-hose">Drinking From the Fire Hose</h4>
-
+<h4 id="drinking-from-the-firehose">Drinking From the Fire Hose</h4>
 <p>Despite the ease of the API, some boiler plate is required. As with most things involving web-scraping, it mostly includes wrapping everything up in a try-except and logging. When you’re drinking from the fire hose and you start to choke, you just have to step back for a second and keep going.</p>
-
 <p>I wrote a simple bot platform that I’ll eventually write a post on. It allows me to write a bot. Here is an <a href="https://www.reddit.com/user/repliesnice">example of a bot</a> that replies “Nice” to comments that have at least 2 consecutive replies of “Nice” (don’t ask, it’s a Reddit thing).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> bot <span style="color:#f92672">import</span> Bot  
+<span style="color:#f92672">import</span> re  
+<span style="color:#f92672">from</span> utils.utils <span style="color:#f92672">import</span> get_commented_posts  
+<span style="color:#f92672">from</span> praw.models.reddit.comment <span style="color:#f92672">import</span> Comment
 
-<pre><code class="language-python">from bot import Bot  
-import re  
-from utils.utils import get_commented_posts  
-from praw.models.reddit.comment import Comment
+NAME <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RepliesNice&#34;</span>
 
-NAME = &quot;RepliesNice&quot;
+already_commented <span style="color:#f92672">=</span> get_commented_posts(<span style="color:#e6db74">&#34;logs/{}.log&#34;</span><span style="color:#f92672">.</span>format(NAME))  
+NICE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Nice&#34;</span>  
+ACCEPTABLE_NICE <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;Nice&#34;</span>, <span style="color:#e6db74">&#34;Nice.&#34;</span>}
 
-already_commented = get_commented_posts(&quot;logs/{}.log&quot;.format(NAME))  
-NICE = &quot;Nice&quot;  
-ACCEPTABLE_NICE = {&quot;Nice&quot;, &quot;Nice.&quot;}
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">action</span>(p, c, test):  
+ <span style="color:#66d9ef">global</span> already_commented  
+ already_commented <span style="color:#f92672">=</span> already_commented<span style="color:#f92672">.</span>union(set([p<span style="color:#f92672">.</span>id]))  
+ <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> test:  
+  r <span style="color:#f92672">=</span> c<span style="color:#f92672">.</span>reply(NICE)  
+  r<span style="color:#f92672">.</span>disable_inbox_replies()  
+ <span style="color:#66d9ef">return</span> NICE
 
-def action(p, c, test):  
- global already_commented  
- already_commented = already_commented.union(set([p.id]))  
- if not test:  
-  r = c.reply(NICE)  
-  r.disable_inbox_replies()  
- return NICE
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_comment_body</span>(comment):  
+ <span style="color:#66d9ef">if</span> type(comment) <span style="color:#f92672">is</span> Comment:  
+  <span style="color:#66d9ef">return</span> comment<span style="color:#f92672">.</span>body
 
-def get_comment_body(comment):  
- if type(comment) is Comment:  
-  return comment.body
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_bot</span>():  
+ bot <span style="color:#f92672">=</span> Bot(NAME)  
+ bot<span style="color:#f92672">.</span>is_valid_post <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> p : <span style="color:#f92672">not</span> p<span style="color:#f92672">.</span>archived <span style="color:#f92672">and</span> p<span style="color:#f92672">.</span>id <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> already_commented   
+ bot<span style="color:#f92672">.</span>is_valid_comment <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> c: c<span style="color:#f92672">.</span>body <span style="color:#f92672">in</span> ACCEPTABLE_NICE <span style="color:#f92672">and</span> get_comment_body(c<span style="color:#f92672">.</span>parent()) <span style="color:#f92672">in</span> ACCEPTABLE_NICE  
+ bot<span style="color:#f92672">.</span>action <span style="color:#f92672">=</span> action  
+ <span style="color:#66d9ef">return</span> bot
 
-def get_bot():  
- bot = Bot(NAME)  
- bot.is_valid_post = lambda p : not p.archived and p.id not in already_commented   
- bot.is_valid_comment = lambda c: c.body in ACCEPTABLE_NICE and get_comment_body(c.parent()) in ACCEPTABLE_NICE  
- bot.action = action  
- return bot
-
-if __name__ == &quot;__main__&quot;:  
- bot = get_bot()  
- bot.monitor_comments_live(&quot;all&quot;)
-</code></pre>
-
-<p>Here’s the bot in action reaping some of that sweet, sweet Reddit karma</p>
-
-<p><img src="/post/resources/img/1*Qojk3kpWoaLi7MxTLhZn0w.png" alt="" /></p>
-
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:  
+ bot <span style="color:#f92672">=</span> get_bot()  
+ bot<span style="color:#f92672">.</span>monitor_comments_live(<span style="color:#e6db74">&#34;all&#34;</span>)
+</code></pre></div><p>Here’s the bot in action reaping some of that sweet, sweet Reddit karma</p>
+<p><img src="/post/resources/img/1*Qojk3kpWoaLi7MxTLhZn0w.png" alt=""></p>
 <p>Other bots include</p>
-
 <ol>
 <li><a href="https://www.reddit.com/user/___alexa___">A bot that is triggered by “Alexa play [song]” and returns a YouTube link</a></li>
 <li><a href="https://www.reddit.com/user/b0trank">A bot that’s triggered by “[Good|Bad] bot” and tracks votes</a> and <a href="https://botrank.pastimes.eu/">accompanying website</a></li>
@@ -211,100 +189,63 @@ if __name__ == &quot;__main__&quot;:
 <li><a href="https://www.reddit.com/user/zoom-in-enhance">A bot that enhances images</a> (currently offline)</li>
 <li>A bot that downloads comments for nefarious nlp purposes</li>
 </ol>
-
 <h3 id="colorizer-bot">Colorizer Bot</h3>
-
 <p>My favorite bot is the <a href="https://www.reddit.com/user/addedcolor">colorizer bot</a>, which trolls subreddits <a href="https://www.reddit.com/r/pics">pics</a>, <a href="https://www.reddit.com/r/images">images</a>, <a href="https://www.reddit.com/r/OldSchoolCool/">oldschoolschool</a>, and <a href="https://www.reddit.com/r/historyporn">historyporn</a> — recently banned on historyporn :-(</p>
-
 <p>The bot is based on the <a href="https://github.com/richzhang/colorization">Colorful Image Colorization</a> repo. The bot downloads every image posted on these subreddits, checks if they’re black and white and if so spins up a docker image to process the image and uploads it to imgur. The bot can also be triggered from outside subreddits by the keyword “colorize”.</p>
-
 <p><a href="https://www.reddit.com/r/funny/comments/9cvgrn/genderspecific_colors_when_youre_expecting/e5dvq2w/?context=3">Here’s an example</a> of FDR as a boy:</p>
-
 <figure>
     <img src="/post/resources/img/1*JxGy6Xbu8s2qT7zkPzEyAQ.png"/> <figcaption>
             <h4>FDR as a boy. A very pretty boy</h4>
         </figcaption>
 </figure>
 
-
 <p>The results are hit-or-miss. One problem is that many of the images processed are black and white because they’re old, and the neural network was trained on modern images.</p>
-
-<p><img src="post/resources/img/1*e1NB_2JKVscPC3muY1r8Ww.png" alt="" /></p>
-
+<p><img src="post/resources/img/1*e1NB_2JKVscPC3muY1r8Ww.png" alt=""></p>
 <p>Practically every modern image that just had its color removed came out great.</p>
-
-<p><img src="post/resources/img/1*Z2qiR5JoyPgKReQaXmYAAg.png" alt="" /></p>
-
-<p><img src="post/resources/img/1*5wGnxBx8Y0SgFeeWSt-9fw.png" alt="" /></p>
-
-<p><img src="post/resources/img/1*oLsHI9-OK28wnqi0c4ADYA.png" alt="" /></p>
-
+<p><img src="post/resources/img/1*Z2qiR5JoyPgKReQaXmYAAg.png" alt=""></p>
+<p><img src="post/resources/img/1*5wGnxBx8Y0SgFeeWSt-9fw.png" alt=""></p>
+<p><img src="post/resources/img/1*oLsHI9-OK28wnqi0c4ADYA.png" alt=""></p>
 <p>The solution to this would be to tweak the model on more colorized historical images, and of course there’s a <a href="https://www.reddit.com/r/colorizedhistory">subreddit for that</a>. If only there were an easy way to write a bot to gather and process all those submissions…</p>
-
 <blockquote>
 <p>Your model is only as good as its training data.</p>
 </blockquote>
-
 <p>The other problem is that the criteria of back and white is <a href="https://www.reddit.com/r/fireemblem/comments/9cywej/i_drew_my_fiance_and_i_as_a_malig_knight_and/e5e5wep/?context=3">not fool-proof</a>.</p>
-
-<p><img src="/post/resources/img/1*DcVZ7sAjNvYJrk42QJ3Rqg.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*DcVZ7sAjNvYJrk42QJ3Rqg.png" alt=""></p>
 <p>To fix that perhaps I could compare the similarity of the original and finalized image and ensure that something more than a light shading of a persons hair was made. But I actually like these happy little accidents.</p>
-
 <h3 id="more-bots">More Bots</h3>
-
 <p>I’ll continue working on new and novel bots and post my bot management system when I clean it up. The biggest obstacle is developing useful bots and rather than novelty bots. If you look at the <a href="https://botrank.pastimes.eu/">most popular bots</a>, you’ll see a lot of them are very niche. The other problem is triggering the bots. Many of the most popular bots have keywords that people purposely trigger, which proves their utility. But the trigger can only become known with popularity. So it’s a bit of chicken and the egg problem. You can harp on to a common expression, as I did with “Alexa, play [song]” or just troll an entire subreddit. But post too much and you’ll get banned.</p>
-
 <p>Here are some ideas for future bots I may or may not work on:</p>
-
 <ol>
 <li>Bullshit Bot — Checks comments for declarative statements (e.g. I was born in [location]) and cross references them with other statements from that users history, and if they conflict, calls bullshit</li>
 <li>Enhance! Bot — Triggered by Enhance! Enhances image resolution. The problem with this one is that it takes more resources that my server can’t support just yet. I’m considering creating an aws lambda instance to process all my image processing bots</li>
 <li>Turing Bot — Just a chat bot that replies selectively based on similar threads that it has processed. It can be trained to have a particular sentiment or be tailor made for a particular group of subreddits</li>
 <li>Joke Explain Bot — A bot that explains jokes. There was a “<a href="https://www.reddit.com/r/Jokes/comments/3k067g/jokeexplainbot/">bot</a>” that did this although it was almost certainly someone manually explaining jokes trying to pass off as a bot.</li>
 </ol>
-
 <p>Example:</p>
-
 <p>I always park in handicapped spaces at the hospital, just to test their patients</p>
-
 <p>Explanation:</p>
-
 <p><strong>Patients</strong> sounds like <strong>patience</strong>.</p>
-
 <p>Or another:</p>
-
-<p>A nun at a Catholic School was asking her 10 year old students what they wanted to be when they grew up.<br />
+<p>A nun at a Catholic School was asking her 10 year old students what they wanted to be when they grew up.<br>
 “Susie, what do you want to be when you grow up?”</p>
-
 <p>Susie said “I want to be a doctor.”</p>
-
 <p>“Very nice,” the nun said. “Jenny what do you want to be when you grow up?”</p>
-
 <p>Jenny said “I want to be a teacher.”</p>
-
 <p>“Excellent answer,” the nun replied. “Martha what are you going to be when you grow up.”</p>
-
 <p>Martha replies “I want to be a prostitute.”</p>
-
 <p>Hearing that the nun faints.</p>
-
 <p>The little girls all rush forward to the nun laying on the ground and try to help her. Shortly the nun regains consciousness And says in a weak voice “Martha what did you just say you wanted to be when you grew up?”</p>
-
 <p>Martha says “I said I wanted to be a prostitute.”</p>
-
 <p>“Oh thank goodness,” the nun said “for a moment I thought you said you wanted to be a Protestant.”</p>
+<pre><code>
+Explanation
 
-<p>```</p>
+**Catholics** are stereotypically perceived to dislike **Protestants**.
 
-<p>Explanation</p>
+This can _probably_ be done with a neural network, but it is likely not a trivial problem and may have to be limited in scope. Either way, if it can be done, Reddit would be the perfect place to train and launch.
 
-<p><strong>Catholics</strong> are stereotypically perceived to dislike <strong>Protestants</strong>.</p>
-
-<p>This can <em>probably</em> be done with a neural network, but it is likely not a trivial problem and may have to be limited in scope. Either way, if it can be done, Reddit would be the perfect place to train and launch.</p>
-
-<p>By Branko Blagojevic on September 7, 2018</p>
-
+By Branko Blagojevic on September 7, 2018
+</code></pre>
 </div>
 
         <footer class="post-footer clearfix">

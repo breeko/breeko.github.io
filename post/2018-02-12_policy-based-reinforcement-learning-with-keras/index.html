@@ -17,7 +17,7 @@ Policy based reinforcement learning is simply training a neural network to remem
 This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed on my last post. The next few posts are heavily influenced by Arthur Juliani’s great series on reinforcement learning.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Policy Based Reinforcement Learning with Keras">
@@ -130,59 +130,39 @@ if (!doNotTrack) {
     
 
     <p>This post will discuss reinforcement learning through policy based agents on an OpenAI environment</p>
-
 <p>Policy based reinforcement learning is simply training a neural network to remember the actions that worked best in the past. This framework provides incredible flexibility and works across many envs</p>
-
 <p>This post will discuss reinforcement learning through policy based agents. We’ll be using OpenAI’s gym environment which I discussed <a href="https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/">on my last post</a>. The next few posts are heavily influenced by Arthur Juliani’s <a href="https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0">great series</a> on reinforcement learning. You can find his take on policy based agents <a href="https://medium.com/@awjuliani/super-simple-reinforcement-learning-tutorial-part-2-ded33892c724">here</a>.</p>
-
 <p>Everything available here can be found on my <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow">github page</a> under <a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/blob/master/Part%202%20-%20Policy-based%20Agents%20with%20Keras.ipynb">Part 2 — Policy-based Agents with Keras</a>.</p>
-
 <p>Also, you can check out <a href="https://breeko.github.io/post/2018-01-29_tic-tac-toe-and-connect-4-using-mini-max/">part 1</a> and <a href="https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/">part 2</a> of my series on reinforcement learning</p>
-
 <p>Policy based methods train a model to look at a state and determine the best long term action based on that state. The basic setup is as follows:</p>
-
 <ol>
 <li>Play a game more or less randomly, recording the performance</li>
 <li>Rank your performance relative to other times you’ve played the game</li>
 <li>Train a model to mimic the actions in which you had a high score</li>
 <li>Test your model</li>
 </ol>
-
 <p>That’s all there is to it. Let’s go through each step in detail.</p>
-
 <p><strong>Step 1</strong> is to play more or less randomly. I say more or less because you do want to use your model. The idea is that you want to act randomly but you also want to explore new areas that your bot will eventually experience. There is a trade-off between acting completely randomly (exploration) and using the bot (exploitation), also known as variance (exploration) and bias (exploitation). Arthur Juliani has a <a href="https://medium.com/mlreview/making-sense-of-the-bias-variance-trade-off-in-deep-reinforcement-learning-79cf1e83d565">great post</a> on the trade-off which I recommend for more information.</p>
-
 <p>There are a number of ways you can handle the issue. One is simply to sometimes choose a random action and other times choose the model’s best predicted output. When you start training, you’d likely want to be more in favor of random actions, but as your bot get’s better, you should favor more what the model suggests and only sometimes act randomly.</p>
-
 <p>Another way is to look at the strength of the models convictions. If the model predicts a score of .5001 and .4999 for action 1 and 2, respectively, you may as well guess. But if the score is 0.999 and 0.001, then you should probably go with action 1 since action 2 is likely a dead end and doesn’t need to be pursued.</p>
-
 <p>There are other ways, and you can get creative, but for my bot I choose the second approach.</p>
-
 <p><strong>Step 2</strong> involves ranking relative performance. Here you encounter the problem of attribution. Suppose you die or achieve a very large negative reward. Some actions preceding that moment are likely to blame, but you cannot be sure what action caused your downfall. The final move right before that moment is likely to have contributed, the action before is also likely but maybe less so, and so on. Same thing is true if you make a great move. It may be due to a move you made long before the actual reward.</p>
-
 <p>Here we want to take a score and discount it. So if we have a game that rewards us one point for being alive, and we were alive for 4 turns, our reward would look like [1,1,1,1]. And suppose we had 4 actions [A,B,C,D]. Our discounted reward for action A should be the sum of 100% of the first reward, % of second reward, % of third reward, and % of fourth reward. We want to put greater weight on reward 2 than reward 4 since action A more likely had a greater influence on reward 2. So here we can use a present value of the rewards:</p>
-
-<pre><code class="language-python">def discount_rewards(r, gamma=0.99):  
- “””Takes 1d float array of rewards and computes discounted reward  
- e.g. f([1, 1, 1, 1], 0.99) -&gt; [3.94, 2.97, 1.99, 1.0]  
- “””  
- prior = 0  
- out = []  
- for val in r:  
-   new_val = val + prior * gamma  
-   out.append(new_val)  
-   prior = new_val   
-return np.array(out[::-1])
-</code></pre>
-
-<p>Now we have a discounted reward for a given episode. But we want relative performance. So in the example above, just, because our last move gave us a reward of 1, we know the average return is ~2.45, so a reward of 1 isn’t that good. Furthermore, we can look at other episodes, and perhaps other games we had much higher average score. So we want to normalize the returns. This can be done by subtracting the discounted rewards by the mean of the batch and dividing by the standard deviation.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">discount_rewards</span>(r, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.99</span>):  
+ <span style="color:#960050;background-color:#1e0010">“””</span>Takes <span style="color:#ae81ff">1</span>d float array of rewards <span style="color:#f92672">and</span> computes discounted reward  
+ e<span style="color:#f92672">.</span>g<span style="color:#f92672">.</span> f([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">0.99</span>) <span style="color:#f92672">-&gt;</span> [<span style="color:#ae81ff">3.94</span>, <span style="color:#ae81ff">2.97</span>, <span style="color:#ae81ff">1.99</span>, <span style="color:#ae81ff">1.0</span>]  
+ <span style="color:#960050;background-color:#1e0010">“””</span>  
+ prior <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>  
+ out <span style="color:#f92672">=</span> []  
+ <span style="color:#66d9ef">for</span> val <span style="color:#f92672">in</span> r:  
+   new_val <span style="color:#f92672">=</span> val <span style="color:#f92672">+</span> prior <span style="color:#f92672">*</span> gamma  
+   out<span style="color:#f92672">.</span>append(new_val)  
+   prior <span style="color:#f92672">=</span> new_val   
+<span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>array(out[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</code></pre></div><p>Now we have a discounted reward for a given episode. But we want relative performance. So in the example above, just, because our last move gave us a reward of 1, we know the average return is ~2.45, so a reward of 1 isn’t that good. Furthermore, we can look at other episodes, and perhaps other games we had much higher average score. So we want to normalize the returns. This can be done by subtracting the discounted rewards by the mean of the batch and dividing by the standard deviation.</p>
 <p><strong>Step 3</strong> involves nudging our model to mimic the moves that gave us relatively high scores and discourage the moves that gave us the relatively low scores. Let’s talk a little about the model we’ll use.</p>
-
 <p>The model is similar to the model I described in <a href="https://breeko.github.io/post/2018-02-05_evolutionary-learning-models-with-openai/">part 2</a>. It’s a neural network that takes in some input representing the state, multiplies it by some numbers, runs it through some activation function (e.g. relu, or just flooring the output at 0), and comes up with a few numbers that represent how good each action is. In the case of CartPole, our state is represented by 4 numbers, I chose to have 8 neurons, and we can take one of 2 actions.</p>
-
 <p>Our neural network will look like this:</p>
-
 <pre><code>Layer (type)                 Output Shape              Param #     
 =================================================================  
 input_x (InputLayer)         (None, 4)                 0           
@@ -195,61 +175,37 @@ Total params: 48
 Trainable params: 48  
 Non-trainable params: 0  
 _______________________________________________________________
-</code></pre>
-
-<p>We take in a state (4 numbers) and output 2 numbers, one for each action. The final layer we’ll apply a softmax, which simply means that the two numbers will add up to one based on their relative size. So if we the output is [20,30], then the softmax will be [0.4, 0.6]. This is useful because when we use the model to decide what action to take, we can use the final layer as a probability distribution. The final output just represents how strong each move is relative to the other moves.</p>
-
+</code></pre><p>We take in a state (4 numbers) and output 2 numbers, one for each action. The final layer we’ll apply a softmax, which simply means that the two numbers will add up to one based on their relative size. So if we the output is [20,30], then the softmax will be [0.4, 0.6]. This is useful because when we use the model to decide what action to take, we can use the final layer as a probability distribution. The final output just represents how strong each move is relative to the other moves.</p>
 <p>Now that we have a model to decide what action to make, we have to train that model. In step 2 we tracked the states and relative performance of the action given the state. Now we have to teach our model to predict the good actions and try something else on the bad actions. Our Keras model can learn things on its own, but we have to define what its goal should be. This can be done by writing a custom loss function for our model and Keras will look to minimize that loss. Below is our custom loss function</p>
-
-<pre><code class="language-python">def custom_loss(y_true, y_pred):  
-        log_lik = K.log(y_true * (y_true - y_pred) + (1 - y_true) * (y_true + y_pred))  
-        return K.mean(log_lik * adv, keepdims=True)
-</code></pre>
-
-<p>The log_lik is just a fancy way of asking did I guess correctly? y_true is given, and y_pred is what I guessed.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">custom_loss</span>(y_true, y_pred):  
+        log_lik <span style="color:#f92672">=</span> K<span style="color:#f92672">.</span>log(y_true <span style="color:#f92672">*</span> (y_true <span style="color:#f92672">-</span> y_pred) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> y_true) <span style="color:#f92672">*</span> (y_true <span style="color:#f92672">+</span> y_pred))  
+        <span style="color:#66d9ef">return</span> K<span style="color:#f92672">.</span>mean(log_lik <span style="color:#f92672">*</span> adv, keepdims<span style="color:#f92672">=</span>True)
+</code></pre></div><p>The log_lik is just a fancy way of asking did I guess correctly? y_true is given, and y_pred is what I guessed.</p>
 <p>Consider actual is 0 and I predicted 0.01. Plug in the values into the formula:</p>
-
-<pre><code class="language-python">y_true = 0, y_pred = 0.01  
-log(0 * (0 - 0.01) + (1 - 0) + (0 + 0.01))  
-log(0 + 1.01)  
-0.00995
-</code></pre>
-
-<p>So if we’re close, our log_lik value will come out to very close to zero. As we get closer to exact match, the log_lik value will approach zero.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">y_true <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, y_pred <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>  
+log(<span style="color:#ae81ff">0</span> <span style="color:#f92672">*</span> (<span style="color:#ae81ff">0</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.01</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.01</span>))  
+log(<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.01</span>)  
+<span style="color:#ae81ff">0.00995</span>
+</code></pre></div><p>So if we’re close, our log_lik value will come out to very close to zero. As we get closer to exact match, the log_lik value will approach zero.</p>
 <p>How about when we’re wrong?</p>
-
-<pre><code class="language-python">y_true = 0, y_pred = 1  
-log(0 * (0 - 1) + (1 - 1) + (0 + 1))  
-log(1)  
-0
-</code></pre>
-
-<p>From the above, you can see that our log_lik will be between negative infinity (exact match) to zero (completely wrong).</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">y_true <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, y_pred <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>  
+log(<span style="color:#ae81ff">0</span> <span style="color:#f92672">*</span> (<span style="color:#ae81ff">0</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">0</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>))  
+log(<span style="color:#ae81ff">1</span>)  
+<span style="color:#ae81ff">0</span>
+</code></pre></div><p>From the above, you can see that our log_lik will be between negative infinity (exact match) to zero (completely wrong).</p>
 <p>We set our loss to be equal to the log likelihood multiplied by the advantage. So if our model predicted well (log_lik very negative), and our rewards were relatively high (advantage positive), then the loss will be very negative. When we train our model, the negative loss will be good and the model will be adjusted to make this even more negative. On the other hand, if our relative rewards are bad (negative) then our loss will be positive and the model will be adjusted to make that outcome less likely.</p>
-
 <p><strong>Step 4</strong> is finally testing our model. As I described in step 1, we’re injecting some randomness into our learning by choosing the action based on the output of the final layer. So if our final layer is [0.75, 0.25], we’ll take action 1 over action 2 75% of the time. But when it comes time to testing, we should probably just take the higher value (the greedy approach). To see how our model is actually doing, we need to test periodically by acting greedily. When we hit a respectable score, we can stop.</p>
-
 <p>And that’s it.</p>
-
 <p>I’m not going to lie and tell you this is some 100% generalized method that will work out of the box on any environment. There are a lot of decisions we have to make during the process, and unfortunately, the only we can decide is to just take a guess, see how it does and adjust accordingly. The two main parameters that can throw off our learning are:</p>
-
 <ol>
 <li>Model type (number of neurons, layers, activations, learning rate, etc)</li>
 <li>Action to reward attribution via discount factor (lower factor leads to less attribution of action to future moves)</li>
 </ol>
-
 <p>And of course we can enter into endless loops, local minima, exploding gradients, or any number of issues that can plague neural networks.</p>
-
 <p>That being said, policy based agents can be useful. They boil down to trying something out, seeing how well it does, and reinforcing the model to do more or less of that. And that’s the core of many other reinforcement learning algorithms.</p>
-
 <p>Well, here’s the final code.</p>
-
-<p><a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/"><strong>breeko/Simple-Reinforcement-Learning-with-Tensorflow</strong><br />
+<p><a href="https://github.com/breeko/Simple-Reinforcement-Learning-with-Tensorflow/"><strong>breeko/Simple-Reinforcement-Learning-with-Tensorflow</strong><br>
 _Simple-Reinforcement-Learning-with-Tensorflow — Re-write of code from Simple Reinforcement Learning with Tensorflow…_github.com</a></p>
-
 <p>By Branko Blagojevic on February 12, 2018</p>
 
 </div>

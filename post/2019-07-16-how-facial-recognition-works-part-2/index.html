@@ -17,7 +17,7 @@ Python offers some great free libraries for face recognition. Sorry, thats a lie
 When talking about what distinguishes one face from another we normally talk about facial landmarks.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="How Facial Recognition Works Part 2, Facial Landmarks">
@@ -129,16 +129,10 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>In my <a href="https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/">last post</a> I discussed how face detection works. In this post I&rsquo;ll discuss how landmark detection works.</p>
-
+    <p>In my <a href="https://breeko.github.io/post/2019-07-08-how-facial-recognition-works/">last post</a> I discussed how face detection works. In this post I&rsquo;ll discuss how landmark detection works.</p>
 <p>Python offers some great free libraries for face recognition. Sorry, thats a lie. They offer great wrappers for C++ libraries like <a href="http://dlib.net/">dlib</a>. Using <a href="https://github.com/ageitgey/face_recognition">face_recognition</a>, we can identify the face locations of an image is as simple as <code>face_recognition.face_locations</code>.</p>
-
 <p>When talking about what distinguishes one face from another we normally talk about facial landmarks. For example, one person may have wide set eyes or a big nose. Identifying the location of these landmarks can help us compare faces.</p>
-
 <p>Consider Prince Harry and William Cumberbatch. One defining difference between their faces is their eye width. In fact, their eyes are so distinguishing that you can probably identify each just from their eyes.</p>
-
 <pre><code>import face_recognition as fr
 
 harry = fr.load_image_file(&quot;harry.png&quot;)
@@ -165,12 +159,8 @@ fig.set_size_inches(10, 10)
 
 axes[0].imshow(harry_cropped)
 axes[1].imshow(cumberbatch_cropped)
-</code></pre>
-
-<p><img src="/post/resources/img/harry_cumberbatch_cropped.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/harry_cumberbatch_cropped.png" alt=""></p>
 <p>Next you have to identify the landmarks. To do that use, you guessed it, <code>face_recognition.face_landmarks</code>. The landmarks are calculated using Histogram of Oriented Gradients (HOG) feature combined with a linear classifier, an image pyramid and sliding window detection scheme.</p>
-
 <pre><code>def draw_landmarks(ax, im, color=&quot;r&quot;, size=2, show_original=True):
     &quot;&quot;&quot; Draws landmarks around an image &quot;&quot;&quot;
     landmarks = fr.face_landmarks(im)
@@ -194,43 +184,26 @@ fig.set_size_inches(10, 10)
 
 harry_landmarks = draw_landmarks(axes[0], harry_cropped)
 cumberbatch_landmarks = draw_landmarks(axes[1], cumberbatch_cropped)
-</code></pre>
-
-<p><img src="/post/resources/img/harry_cumberbatch_landmarks.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/harry_cumberbatch_landmarks.png" alt=""></p>
 <p>So now we can compare the landmarks. Let&rsquo;s super-impose Harrys facial landmarks to Cumberbatch:</p>
-
 <pre><code>fig, ax = plt.subplots()
 fig.set_size_inches(5, 5)
 
 harry_landmarks = draw_landmarks(ax, harry_cropped, size=8, show_original=False)
 ax.imshow(cumberbatch_cropped)
-</code></pre>
-
-<p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks.png" alt=""></p>
 <p>Obviously the landmarks are off, but its partially due to the two images have different rotations. Our facial detection algorithm did a good job at keeping the bridge of the nose in the same relative position, but we need to rotate the image to do a fair comparison.</p>
-
 <p>Image transformations are pretty mind-bending. I found this resource to be incredibly helpful. To do affine transformations, you simply choose the operation you want, get the respective transformation matrix and perform a dot product on your original image.</p>
-
 <p>For instance, the scaling, the transformation matrix is::</p>
-
 <pre><code>cx  0  0 
  0  cy 0 
  0  0  1
-</code></pre>
-
-<p>With cx and cy being the percentage you want to scale the x and y parameters, respectively.</p>
-
+</code></pre><p>With cx and cy being the percentage you want to scale the x and y parameters, respectively.</p>
 <p>Rotation is a bit most complicated, but the same principal applied:</p>
-
 <pre><code> cosϴ  sinϴ  0
 -sinϴ  cosϴ  0
  0     0     1
-</code></pre>
-
-<p>With ϴ being the amount in radians you want to rotate.</p>
-
+</code></pre><p>With ϴ being the amount in radians you want to rotate.</p>
 <pre><code>def transform(im, radians, translation):
     # create combined tranformation matrix
     s = np.sin(radians)
@@ -260,26 +233,15 @@ ax.imshow(cumberbatch_cropped)
 
 cumberbatch_transformed = transform(cumberbatch_cropped, 0.1, (0,0))
 plt.imshow(cumberbatch_transformed)
-</code></pre>
-
-<p><img src="/post/resources/img/cumberbatch_transformed.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/cumberbatch_transformed.png" alt=""></p>
 <p>A natural product of the transform is small gaps due to the transform. The easiest way to address that is to use the nearest algorithm to fill those black gaps in, but I won&rsquo;t implement that in this post.</p>
-
 <p>Now if we compare the landmarks, it&rsquo;s a little bit closer.</p>
-
-<p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks_transformed.png" alt="" /></p>
-
+<p><img src="/post/resources/img/harry_vs_cumberbatch_landmarks_transformed.png" alt=""></p>
 <p>Now we can tell that the most striking difference may not be just his eyes, but his nose is also considerably longer and his face is wider.</p>
-
-<h1 id="how-facial-recognition-actually-works">How Facial Recognition Actually Works</h1>
-
+<h1 id="how-facial-recognition-actuallyworks">How Facial Recognition Actually Works</h1>
 <p>We essentially transformed someone&rsquo;s face into a numerical representation of points (landmarks). The logical next step to facial recognition would be to compare these landmarks and calculate some kind of landmark distance. But these are just the landmarks that make sense to humans. They may not be that distinguishing, or there may exist some other landmarks that are more distinguishing. So while this technique is useful in capturing different parts of a person&rsquo;s face, they may not be best suited to tell us definitively whether two photos contain the same person.</p>
-
 <p>Modern machine learning techniques do a similar process of converting a face into a numerical representation. Saying you have a large value in point 61 of your 128 point facial vector representation may not mean anything to us. After we have a numerical representation of the face, we can now use Euclidian distance to measure how different the vector is from some previous vector.</p>
-
 <p>There is no magical distance that we could use to tell us that two people are the same. We can only measure distances and test their accuracy. For instance, at a distance of 0.5, what percentage of test examples are correct? Packaged facial recognition services often provide the distance as a confidence. The dlib model has a purported 99.38% accuracy on the standard LFW face recognition benchmark using a distance of 0.6.</p>
-
 <p>In the next post I&rsquo;ll talk about model accuracy and how well the matching algorithm works as a subject ages.</p>
 
 </div>

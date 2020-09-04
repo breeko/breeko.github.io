@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gpt3 on ML-Everything</title>
+    <link>https://breeko.github.io/tags/gpt3/</link>
+    <description>Recent content in gpt3 on ML-Everything</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Sep 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://breeko.github.io/tags/gpt3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Demo Apps and Building a Business off GPT-3</title>
+      <link>https://breeko.github.io/post/2020-09-03-demo-apps-and-building-a-business-off-gpt3/</link>
+      <pubDate>Thu, 03 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2020-09-03-demo-apps-and-building-a-business-off-gpt3/</guid>
+      <description>Demo Apps and Building a Business off GPT-3 Here’s a cool app. Give a description of a website and have one built for you using GPT-3 magic. Here’s an example:
+A website like apple.com for twitter  But with demos like this, you have to read below the fold:
+Copy is being generous, since its only one line. So GPT-3 is producing the essentially: “Twitter. We believe that everyone deserves the right to express themselves” and maybe the tab text.</description>
+    </item>
+    
+    <item>
+      <title>Using GPT-3 to Explain Jokes</title>
+      <link>https://breeko.github.io/post/2020-09-02-using-gpt3-to-explain-jokes/</link>
+      <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://breeko.github.io/post/2020-09-02-using-gpt3-to-explain-jokes/</guid>
+      <description>Using GPT-3 to Explain Jokes There’s a Reddit bot that explains jokes. Well, that’s not exactly true, because its too good to be a bot and is curiously selective. Often times, the explanation is funnier than the joke. It hasn’t been active in about a year, but here’s an example:
+My wife and I went on our honeymoon to Australia. Unfortunately, I had to dial the help line. &amp;quot;G&#39;day this is Tim, you&#39;ve reached the Aussie help line.</description>
+    </item>
+    
+  </channel>
+</rss>

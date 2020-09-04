@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Forecasting on ML-Everything</title>
+    <title>forecasting on ML-Everything</title>
     <link>https://breeko.github.io/tags/forecasting/</link>
-    <description>Recent content in Forecasting on ML-Everything</description>
+    <description>Recent content in forecasting on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 06 Nov 2018 00:00:00 +0000</lastBuildDate>

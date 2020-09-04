@@ -15,7 +15,7 @@
         <meta name="description" content="Much has been written about facial recognition and its role in society. As with a lot of topics concerning artificial intelligence, it is often discussed with an air of mysticism, as though all the all seeing machines can now peer into our souls. Depending on the narrative of the piece, its accuracy is chillingly accurate or appallingly inadequate for use. Amazon got flack for pitching their Reckognition service to law enforcement, San Fransisco banned the technology, and it has even been called racist.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="How Facial Recognition Works Part 1: Face Detection">
@@ -125,16 +125,10 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>Much has been written about facial recognition and its role in society. As with a lot of topics concerning artificial intelligence, it is often discussed with an air of mysticism, as though all the all seeing machines can now peer into our souls. Depending on the narrative of the piece, its accuracy is chillingly accurate or appallingly inadequate for use. Amazon <a href="https://www.nytimes.com/2018/05/22/technology/amazon-facial-recognition.html">got flack</a> for pitching their Reckognition service to law enforcement, San Fransisco <a href="https://www.nytimes.com/2019/05/14/us/facial-recognition-ban-san-francisco.html">banned</a> the technology, and it has even been called <a href="https://www.nytimes.com/2018/02/09/technology/facial-recognition-race-artificial-intelligence.html">racist</a>. But the technology behind facial recognition isn&rsquo;t that complicated to understand and is quite interesting.</p>
-
+    <p>Much has been written about facial recognition and its role in society. As with a lot of topics concerning artificial intelligence, it is often discussed with an air of mysticism, as though all the all seeing machines can now peer into our souls. Depending on the narrative of the piece, its accuracy is chillingly accurate or appallingly inadequate for use. Amazon <a href="https://www.nytimes.com/2018/05/22/technology/amazon-facial-recognition.html">got flack</a> for pitching their Reckognition service to law enforcement, San Fransisco <a href="https://www.nytimes.com/2019/05/14/us/facial-recognition-ban-san-francisco.html">banned</a> the technology, and it has even been called <a href="https://www.nytimes.com/2018/02/09/technology/facial-recognition-race-artificial-intelligence.html">racist</a>. But the technology behind facial recognition isn&rsquo;t that complicated to understand and is quite interesting.</p>
 <p>I&rsquo;m planning on writing a series of posts about the technology behind facial recognition. This post will primarily deal with facial detection.</p>
-
 <h1 id="how-facial-detection-works">How Facial Detection Works</h1>
-
 <p>Below are the libraries I&rsquo;ll be using:</p>
-
 <pre><code>import cv2
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -142,32 +136,19 @@ import numpy as np
 
 from skimage.feature import hog
 from skimage import data, color, exposure
-</code></pre>
-
-<p>The first step to facial recognition is, unsurprisingly, to recognize the face. How do you identify a face? Well, a face generally has two eyebrows, two eyes, a nose, a mouth and a jaw-line. So essentially like this:</p>
-
-<p><img src="/post/resources/img/2019-07-08-avatar.png" alt="" /></p>
-
+</code></pre><p>The first step to facial recognition is, unsurprisingly, to recognize the face. How do you identify a face? Well, a face generally has two eyebrows, two eyes, a nose, a mouth and a jaw-line. So essentially like this:</p>
+<p><img src="/post/resources/img/2019-07-08-avatar.png" alt=""></p>
 <p>The problem is that most images have too much stuff going on. Consider Benedict Cumberbatch.</p>
-
-<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock.png" alt="" /></p>
-
+<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock.png" alt=""></p>
 <p>By just eyeballing it, we can make a generic face fit over Cumberbatch.</p>
-
-<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-mask.png" alt="" /></p>
-
+<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-mask.png" alt=""></p>
 <p>The problem is we got too much stuff going on in the picture. Sure we can eyeball it, but it would be difficult to specify a computer to match the face.</p>
-
 <p>We really care just about the edges, and edges are defined by changes in gradient. We can use the <a href="https://en.wikipedia.org/wiki/Sobel_operator">Sobel operator</a> to calculate the vertical and horizontal derivatives. Basically it&rsquo;s looking any drastic change in the surrounding pixels, which is basically an edge. If one pixel is white, and the neighbor is black, then the derivate (amount of change) between the two cells would be high.</p>
-
 <pre><code>cumberbatch = Image.load(&quot;images/orig/cumberbatch.png&quot;)
 
 gx = cv2.Sobel(cumberbatch, cv2.CV_32F, 1, 0, ksize=1)
 gy = cv2.Sobel(cumberbatch, cv2.CV_32F, 0, 1, ksize=1)
-</code></pre>
-
-<p><code>gx</code> and <code>gy</code> have the same shape of the original image except with the derivative in relation of its vertical and horizontal neighbors in their place.</p>
-
+</code></pre><p><code>gx</code> and <code>gy</code> have the same shape of the original image except with the derivative in relation of its vertical and horizontal neighbors in their place.</p>
 <pre><code>def normalize(a):
     return (a - np.min(a))/np.ptp(a)
 
@@ -184,23 +165,13 @@ axes[1].set_title(&quot;gy&quot;)
 axes[2].imshow(normalize(gx))
 axes[2].imshow(normalize(gy))
 axes[2].set_title(&quot;gx &amp; gy&quot;)
-</code></pre>
-
-<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-gx-gy.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-gx-gy.png" alt=""></p>
 <p>You can see that <code>gx</code> picked up mostly vertical edges (e.g. hair line), while <code>gy</code> only picked up mostly horizontal edges (e.g. mouth).</p>
-
 <p>Next we&rsquo;ll want to convert the cartesian coordinates into polar coordinates. Polar coordinates allow us to better see the lines of the face in magnitude and direction. We can calculate the magnitude and angle of the points directly using <code>cv2.cartToPolar</code>.</p>
-
 <pre><code>mag, angle = cv2.cartToPolar(gx, gy, angleInDegrees=True)
-</code></pre>
-
-<p>But using polar coordinates on each pixel provides too granular of a view to be used for comparison. We need to pool the polar coordinates, kind of like performing a survey of the surrounding coordinates to get a general sense of the directions each group of cells is pointing. That&rsquo;s called Histogram of Oriented Gradients (HOG).</p>
-
-<p><img src="/post/resources/img/2019-07-08-hog.png" alt="" /></p>
-
+</code></pre><p>But using polar coordinates on each pixel provides too granular of a view to be used for comparison. We need to pool the polar coordinates, kind of like performing a survey of the surrounding coordinates to get a general sense of the directions each group of cells is pointing. That&rsquo;s called Histogram of Oriented Gradients (HOG).</p>
+<p><img src="/post/resources/img/2019-07-08-hog.png" alt=""></p>
 <p>To visualize, we can plot the arrows. The number of neighboring cells we pool together will give us different levels of granularity.</p>
-
 <pre><code>fig, axes = plt.subplots(nrows=4,ncols=1, figsize=(12, 24))
 
 axes[0].axis('off')
@@ -222,20 +193,12 @@ for ax in axes.ravel()[1:]:
 
 plt.tight_layout()
 plt.show()
-</code></pre>
-
-<p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-hog.png" alt="" /></p>
-
+</code></pre><p><img src="/post/resources/img/2019-07-08-benedict-cumberbatch-sherlock-hog.png" alt=""></p>
 <p>Now we&rsquo;re in a good spot to actually compare to our simplified face</p>
-
-<p><img src="/post/resources/img/2019-07-08-avatar-hog.png" alt="" /></p>
-
+<p><img src="/post/resources/img/2019-07-08-avatar-hog.png" alt=""></p>
 <p>Well, maybe our generic face is less than ideal, but luckily there are better distillations which we can use. We can just use a sliding window to see if we get a reasonable match.</p>
-
-<p><img src="/post/resources/img/2019-07-08-face-hog.png" alt="" /></p>
-
+<p><img src="/post/resources/img/2019-07-08-face-hog.png" alt=""></p>
 <p>After detecting the face, we can get a lot of useful information, including location of the landmarks (e.g. nose, eyes, jawline). And it also allows us to distill the essence of a face into a vector. Comparing vectors of different faces is essentially how facial recognition works.</p>
-
 <p>In the next part I&rsquo;ll be discussing facial landmarks and transformations.</p>
 
 </div>

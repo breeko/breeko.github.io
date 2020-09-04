@@ -17,7 +17,7 @@ Using a regression to predict fantasy football performance is easier than you th
 In a prior post, I wrote about using linear programming to optimize your fantasy football picks. Linear programming ensures you pick the best lineup based on some points projections and constraints (e.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Using Linear Regression to Make Fantasy Football Picks">
@@ -129,177 +129,102 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>Optimize your fantasy football picks with a linear regression in just a few lines of code.</p>
-
+    <p>Optimize your fantasy football picks with a linear regression in just a few lines of code.</p>
 <p>Using a regression to predict fantasy football performance is easier than you think in R. With a few lines of code, you can predict player performance and optimize your lineup.</p>
-
 <p>In a <a href="https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/">prior post</a>, I wrote about using linear programming to optimize your fantasy football picks. Linear programming ensures you pick the best lineup based on some points projections and constraints (e.g. position and salary constraints). In that post, I had used average points this year as a proxy for points, but obviously that’s a flawed method. For instance, the players may do better or worse depending on their opponent. In this post, I’ll build on the optimization and design an actual strategy based on historic information. All the code is available <a href="https://github.com/breeko/Fantasy_LP">here</a>.</p>
-
 <p>I re-wrote the linear optimization in R. If you’re used to numerical analysis in python using pandas and numpy, R should be quick to pick up. Much of the pandas DataFrame api was modeled after R data frames. I found <a href="https://amzn.to/2yarefr">Practical Statistics for Data Scientist</a>s by O’Reilly to be a good resource. It’s a good combination of explaining statistical concepts and usage. Another resource I would recommend that is in Python is <a href="https://amzn.to/2Qy1noe">Data Science from Scratch</a>. It implements the basic tools of any data scientist from scratch and teaches the concepts along the way.</p>
-
 <h3 id="fantasy-football">Fantasy Football</h3>
-
-<p><img src="/post/resources/img/0*8eDTvCPIsHJ7OaZK.gif" alt="" /></p>
-
+<p><img src="/post/resources/img/0*8eDTvCPIsHJ7OaZK.gif" alt=""></p>
 <p>The details of how fantasy football scoring works is not important. Each player is awarded points based on how they performed in real life. For instance, 1 point per 25 passing yards, 4 points for a passing touchdown, etc. I use DraftKings (DK) points scoring system. As a side-note, Fantasy Football is big money with plenty of sharks. The competitions are very competitive and DraftKings take a healthy cut. There is a lot of variance as well, so a prudent strategy would include making a large number of smaller wagers and hoping for a statistical edge. In that respect, there is no optimal pool. I haven’t studied the actual market enough, but I doubt simple statistical methods would give you an edge in public competitions. But if you do want to dabble, use can use <a href="https://www.draftkings.com/r/drunko">my referral</a> to sign up or <a href="https://www.draftkings.com/">not</a>.</p>
-
-<h3 id="downloading-history-and-available-players-in-r">Downloading History and Available Players in R</h3>
-
+<h3 id="downloading-history-and-available-players-inr">Downloading History and Available Players in R</h3>
 <p>I downloaded all the DraftKings historical information from <a href="http://rotoguru.net/">RotoGuru</a>. They store the DK history in an easily digestible csv format. The base url is below, after which you swap out the WEEK and YEAR with their respective values.</p>
-
-<pre><code class="language-R">HISTORY_BASE_URL &lt;- &quot;[http://rotoguru1.com/cgi-bin/fyday.pl?game=dk&amp;scsv=1&amp;week=WEEK&amp;year=YEAR](http://rotoguru1.com/cgi-bin/fyday.pl?game=dk&amp;scsv=1&amp;week=WEEK&amp;year=YEAR)&quot;
-</code></pre>
-
-<p>The file <strong>history.R</strong> has functions that download, aggregate and update the history. The function <em>updateHistory</em> downloads the DK history from 2014 to today.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">HISTORY_BASE_URL <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;[http://rotoguru1.com/cgi-bin/fyday.pl?game=dk&amp;scsv=1&amp;week=WEEK&amp;year=YEAR](http://rotoguru1.com/cgi-bin/fyday.pl?game=dk&amp;scsv=1&amp;week=WEEK&amp;year=YEAR)&#34;</span>
+</code></pre></div><p>The file <strong>history.R</strong> has functions that download, aggregate and update the history. The function <em>updateHistory</em> downloads the DK history from 2014 to today.</p>
 <p>If you want to save or update the history retrieved earlier, just pass in a data frame:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># downloads history from 2014 - today  </span>
+history <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">updateHistory</span>()
 
-<pre><code class="language-R"># downloads history from 2014 - today  
-history &lt;- updateHistory()
+<span style="color:#75715e"># update history  </span>
+history <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">updateHistory</span>(history)
 
-# update history  
-history &lt;- updateHistory(history)
-
-# saves the history (default &quot;history.csv&quot;)  
-saveHistory(history, &quot;history.csv&quot;)
-</code></pre>
-
-<p>Here is the history:</p>
-
-<p><img src="/post/resources/img/1*tih2eWC3CiVVdas3iFULEA.png" alt="" /></p>
-
+<span style="color:#75715e"># saves the history (default &#34;history.csv&#34;)  </span>
+<span style="color:#a6e22e">saveHistory</span>(history, <span style="color:#e6db74">&#34;history.csv&#34;</span>)
+</code></pre></div><p>Here is the history:</p>
+<p><img src="/post/resources/img/1*tih2eWC3CiVVdas3iFULEA.png" alt=""></p>
 <h3 id="running-a-regression">Running a Regression</h3>
-
 <p>Before I run the regression, I’ll want to add some fields I think would be useful. The function <em>enrichHistory</em> adds a few fields like date and games. The games value says how many games the player has played in this year. I may want to avoid players that don’t have much of a history in my regression. In the example below, I filter the data to include only the last two years of history and players that played 3 or more games in a year.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># Get and enrich history  </span>
+h <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getLatestHistory</span>()  
+h <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">updateHistory</span>(h)  
+h <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">enrichHistory</span>(h)
 
-<pre><code class="language-R"># Get and enrich history  
-h &lt;- getLatestHistory()  
-h &lt;- updateHistory(h)  
-h &lt;- enrichHistory(h)
+<span style="color:#75715e"># Run a regression based on history  </span>
+h2016 <span style="color:#f92672">&lt;-</span> h<span style="color:#a6e22e">[</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(h<span style="color:#f92672">$</span>year)) <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">2016</span>) <span style="color:#f92672">&amp;</span> (h<span style="color:#f92672">$</span>games <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3</span>),]
+</code></pre></div><p>To get an fair estimate of how the model is doing, I separate the data into a training and test set.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">trainingRowIndex <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sample</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">nrow</span>(h2016), <span style="color:#ae81ff">0.8</span><span style="color:#f92672">*</span><span style="color:#a6e22e">nrow</span>(h2016))  
+trainingData <span style="color:#f92672">&lt;-</span> h2016[trainingRowIndex, ]  
+testData  <span style="color:#f92672">&lt;-</span> h2016[<span style="color:#f92672">-</span>trainingRowIndex, ]
+</code></pre></div><p>Finally, I run the regression</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">fit <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">lm</span>(dk.points <span style="color:#f92672">~</span> displayName <span style="color:#f92672">+</span> team <span style="color:#f92672">+</span> year <span style="color:#f92672">+</span> h.a <span style="color:#f92672">+</span> week <span style="color:#f92672">+</span> pos, data <span style="color:#f92672">=</span> trainingData)
 
-# Run a regression based on history  
-h2016 &lt;- h[(as.numeric(as.character(h$year)) &gt;= 2016) &amp; (h$games &gt; 3),]
-</code></pre>
-
-<p>To get an fair estimate of how the model is doing, I separate the data into a training and test set.</p>
-
-<pre><code class="language-R">trainingRowIndex &lt;- sample(1:nrow(h2016), 0.8*nrow(h2016))  
-trainingData &lt;- h2016[trainingRowIndex, ]  
-testData  &lt;- h2016[-trainingRowIndex, ]
-</code></pre>
-
-<p>Finally, I run the regression</p>
-
-<pre><code class="language-R">fit &lt;- lm(dk.points ~ displayName + team + year + h.a + week + pos, data = trainingData)
-
-summary(fit)
-</code></pre>
-
-<p><img src="/post/resources/img/1*sqdyduJWEbps3rZFC9zRFw.png" alt="" /></p>
-
+<span style="color:#a6e22e">summary</span>(fit)
+</code></pre></div><p><img src="/post/resources/img/1*sqdyduJWEbps3rZFC9zRFw.png" alt=""></p>
 <p>The number of coefficients in the model is equal to the sum of the number of unique players, teams, years, home/away, weeks and positions. Note that the intercept is 11.23 and a good chunk of the players don’t have a statistically significant coefficient. For instance, Adam Humphries is more or less the average wide for wide received for Tampa.</p>
-
 <p>How did the model do? Mean square error (MSE) tells us the average of the error (actual − forecast).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">mean</span>((<span style="color:#a6e22e">predict</span>(fit, trainingData) <span style="color:#f92672">-</span> trainingData<span style="color:#f92672">$</span>dk.points) ^ <span style="color:#ae81ff">2</span>)  
+<span style="color:#ae81ff">35.00807</span>
 
-<pre><code class="language-R">mean((predict(fit, trainingData) - trainingData$dk.points) ^ 2)  
-35.00807
-
-mean((predict(fit, testData) - testData$dk.points) ^ 2)  
-36.66413
-</code></pre>
-
-<p>That means on the data the model has seen, it’s off by around +/- 5.9 points (square root of 34). But for the data our model hasn’t seen, it’s off by +/- 6 points. Your numbers may be different since we used a random train/test set. You may also note that there is a warning:</p>
-
-<pre><code class="language-R">Warning message:  
-In predict.lm(fit, testData) :  
-  prediction from a rank-deficient fit may be misleading
-</code></pre>
-
-<p>There is a good <a href="https://stackoverflow.com/questions/26558631/predict-lm-in-a-loop-warning-prediction-from-a-rank-deficient-fit-may-be-mis">stack overflow answer</a> for this, but the short answer is that there is collinear covariates which means <a href="https://stats.stackexchange.com/questions/52177/what-to-do-with-collinear-variables">our variables are correlated</a>. To build a more serious model you’d probably want to address this.</p>
-
+<span style="color:#a6e22e">mean</span>((<span style="color:#a6e22e">predict</span>(fit, testData) <span style="color:#f92672">-</span> testData<span style="color:#f92672">$</span>dk.points) ^ <span style="color:#ae81ff">2</span>)  
+<span style="color:#ae81ff">36.66413</span>
+</code></pre></div><p>That means on the data the model has seen, it’s off by around +/- 5.9 points (square root of 34). But for the data our model hasn’t seen, it’s off by +/- 6 points. Your numbers may be different since we used a random train/test set. You may also note that there is a warning:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">Warning message<span style="color:#f92672">:</span>  
+In <span style="color:#a6e22e">predict.lm</span>(fit, testData) <span style="color:#f92672">:</span>  
+  prediction from a rank<span style="color:#f92672">-</span>deficient fit may be misleading
+</code></pre></div><p>There is a good <a href="https://stackoverflow.com/questions/26558631/predict-lm-in-a-loop-warning-prediction-from-a-rank-deficient-fit-may-be-mis">stack overflow answer</a> for this, but the short answer is that there is collinear covariates which means <a href="https://stats.stackexchange.com/questions/52177/what-to-do-with-collinear-variables">our variables are correlated</a>. To build a more serious model you’d probably want to address this.</p>
 <h3 id="predicting-performance-on-available-players">Predicting Performance on Available Players</h3>
-
 <p>Now that I have a model, I can use it to predict how the vailable players will do.</p>
-
 <p>Unfortunately, RotoGuru does not have the current available line-up available, or I wasn’t able to find it. Also, depending on the contest, your line-up may exclude some players (e.g. players playing on weekday games). To get the available line-up for your contest, you need a weeks_id. You can get your weeks_id from the contest page by checking the link to <code>Export to CSV</code>.</p>
-
-<p><img src="/post/resources/img/1*Y9f9E-dv6HZkllpY55Jj7Q.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*Y9f9E-dv6HZkllpY55Jj7Q.png" alt=""></p>
 <p>The file <strong>available.R</strong> has functions that allow you to retrieve your available line up. There are some differences between how RotoGuru shows players and stats and how DraftKings does, so we need to transform the available format to history format (e.g. Bob Smith vs Smith, Bob or Atlanta vs Falcons).</p>
-
-<pre><code class="language-R">a &lt;- getLatestAvailable(WEEKS_ID)  
-ah &lt;- availableToHistory(a, WEEK, YEAR, history=h2016)
-</code></pre>
-
-<p>I pass in the history to my <em>availableToHistory</em> function since I want to do a fuzzy match on displayName. For instance, our history may have Allen Robinson II while the available has Allen Robinson.</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">a <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getLatestAvailable</span>(WEEKS_ID)  
+ah <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">availableToHistory</span>(a, WEEK, YEAR, history<span style="color:#f92672">=</span>h2016)
+</code></pre></div><p>I pass in the history to my <em>availableToHistory</em> function since I want to do a fuzzy match on displayName. For instance, our history may have Allen Robinson II while the available has Allen Robinson.</p>
 <p>Since I filtered out some players from our history and some available players may be new, my regression won’t be able to predict every player. For example, based on my history, A.J. McCarron only played one game in 2016, 3 games in 2017 and 1 game in 2018, so he was excluded from our regression. Since the model never saw his name before, it cannot predict how he will do. Before I predict, I need to filter out those names.</p>
-
-<pre><code class="language-R">ahFiltered &lt;- ah[(ah$displayName %in% h2016$displayName),]
-</code></pre>
-
-<p>Finally, I can predict and solve for the optimal team based on my prediction and constraints:</p>
-
-<pre><code class="language-R">ahFiltered$prediction &lt;- predict(fit, ahFiltered)  
-solve(ahFiltered)
-</code></pre>
-
-<p><img src="/post/resources/img/1*AeFZBHPSbZ1SdX9Vvqd8vA.png" alt="" /></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">ahFiltered <span style="color:#f92672">&lt;-</span> ah<span style="color:#a6e22e">[</span>(ah<span style="color:#f92672">$</span>displayName <span style="color:#f92672">%in%</span> h2016<span style="color:#f92672">$</span>displayName),]
+</code></pre></div><p>Finally, I can predict and solve for the optimal team based on my prediction and constraints:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">ahFiltered<span style="color:#f92672">$</span>prediction <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">predict</span>(fit, ahFiltered)  
+<span style="color:#a6e22e">solve</span>(ahFiltered)
+</code></pre></div><p><img src="/post/resources/img/1*AeFZBHPSbZ1SdX9Vvqd8vA.png" alt=""></p>
 <p>Again, your line-up may be different since the regression was trained on a random sample of the training set.</p>
-
-<h3 id="issues-with-the-model">Issues with the Model</h3>
-
+<h3 id="issues-with-themodel">Issues with the Model</h3>
 <p>Here are some of the main issues with the model.</p>
-
-<h4 id="time-variables-are-factors">Time variables are factors</h4>
-
+<h4 id="time-variables-arefactors">Time variables are factors</h4>
 <p>The model treats year and week as factors. That means there is no relationship between weeks. Week 1 is its own variable, week 2 is its own variable, and so on. In reality, we would want a time component and treat this as a time series.</p>
-
 <h4 id="variables-are-independent">Variables are independent</h4>
-
 <p>There is a variable for the year which is applied uniformly to all predictions for that year. Maybe there was something special about the one year that would affect all players, or maybe there were some rule changes or extreme weather all year, but this is unlikely. The year is more relevant to the player or team. One team might have done very well in 2016, but less well in 2017. Or one player could have had a good year.</p>
-
 <h4 id="there-are-no-interactions-between-variables">There are no interactions between variables</h4>
-
 <p>Every variable is independent which is a problem. For instance, a team may have a strong pass defense. So a wide receiver would be negatively impacted when facing this team. Right now, we evaluate the player and the opponent independently. Ideally, we would decompose players into a vector. For instance, consider a simple two factor model for the player and opponent:</p>
-
-<p>player = [running, passing]<br />
-oppt = [running, passing]<br />
+<p>player = [running, passing]<br>
+oppt = [running, passing]<br>
 performance = player * oppt</p>
-
 <h1 id="strong-running-player-weak-running-defense"><strong>Strong</strong> running player, <strong>weak</strong> running defense</h1>
-
-<p>player = [1.0, 0.3]<br />
-oppt = [1.0, 0.5]<br />
+<p>player = [1.0, 0.3]<br>
+oppt = [1.0, 0.5]<br>
 performance = [1.0, 0.15]</p>
-
 <h1 id="strong-running-player-strong-running-defense"><strong>Strong</strong> running player, <strong>strong</strong> running defense</h1>
-
-<p>player = [1.0, 0.3]<br />
-oppt = [0.5, 0.5]<br />
+<p>player = [1.0, 0.3]<br>
+oppt = [0.5, 0.5]<br>
 performance = [0.5, 0.15]</p>
-
 <h1 id="weak-running-player-strong-running-defense"><strong>Weak</strong> running player, <strong>strong</strong> running defense</h1>
-
-<p>player = [0.5, 0.3]<br />
-oppt = [0.5, 0.5]<br />
+<p>player = [0.5, 0.3]<br>
+oppt = [0.5, 0.5]<br>
 performance = [0.25, 0.15]</p>
-
 <p>In the example above a high player number means strong while a high oppt number means weak. So the product of the two vectors determines performance.</p>
-
 <p>Of course you wouldn’t manually pick factors for each variable. You would just tell the model, imagine each player and team is a series of 2 random numbers, solve so that the sum-product of the two vectors is correlated to the points the player actually scores.</p>
-
 <h4 id="too-much-variability">Too much variability</h4>
-
 <p>I ran the model a few times and got significantly different results due to the sample chosen. Ideally, you would want to use a k-folds or other method to choose a model. You would also want to more closely examine some predictions and biases of the model.</p>
-
 <h3 id="final-thoughts">Final thoughts</h3>
-
 <p>A regression is a good start but it is very limited. I like the idea of a factor model, which I may implement in a future post. I’m not entirely convinced that fantasy football is stable enough to make a meaningful model, but there is a fair amount of data out there that it’s worth playing around with. I also haven’t studied the competitive DraftKing competitions but my initial impression that the people participating are very strong and use much more sophisticated models.</p>
-
 <p>By Branko Blagojevic on October 11, 2018</p>
 
 </div>

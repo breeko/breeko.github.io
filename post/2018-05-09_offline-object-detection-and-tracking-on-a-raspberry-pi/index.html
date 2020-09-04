@@ -17,7 +17,7 @@ In my last post I wrote about the YOLO model used for object detection. The most
 In my last post I wrote about the YOLO (You Only Look Once) model used for object detection.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Offline Object Detection and Tracking on a Raspberry Pi">
@@ -129,71 +129,49 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.</p>
-
+    <p>Load and run YOLO (You Only Look Once) object detection model on a Raspberry Pi and track objects throughout the day.</p>
 <p>In my last post I wrote about the YOLO model used for object detection. The most surprising thing was how simple the model is. It’s so simple that it can run offline on a raspberry pi</p>
-
 <p>In my <a href="https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/">last post</a> I wrote about the YOLO (You Only Look Once) model used for object detection. The most surprising thing when reading the paper was how clever and relatively simple the model is. The strength lies in the fact that the model only passes through the image once and from that single pass, is able to detect a number of objects. The architecture also allows mini versions with fewer layers, a smaller size but similar performance.</p>
-
 <p>In fact, the model is so small it can run offline on a weak device such as a rapberry pi. This is just what I did.</p>
-
 <h3 id="tldr">TLDR</h3>
-
 <p>I have two cats and I wanted to track their whereabouts when I was not at home. So I setup a raspberry pi to take periodically take a picture, detect the picture for objects and save the object locations down to a json file. After the objects were processed, I then wrote a script that applies a kind of heatmap on a base image with where the provided objects were over all the logs.</p>
-
 <figure>
     <img src="/post/resources/img/1*azur79ZVQn3ISAVO_Q5SRw.png"/> <figcaption>
             <h4>My cats eagerly awaiting the return of my wife</h4>
         </figcaption>
 </figure>
 
-
 <p>The project requires tensorflow, keras, numpy and matplotlib to be installed on your raspberry pi. I have some notes below on getting those installed. Below will set everything up and take a photo every minute until stopped, detect object and save them in json format in the logs directory.</p>
-
-<pre><code class="language-sh">git clone [https://github.com/breeko/spypy.git](https://github.com/breeko/spypy.git)  
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone <span style="color:#f92672">[</span>https://github.com/breeko/spypy.git<span style="color:#f92672">](</span>https://github.com/breeko/spypy.git<span style="color:#f92672">)</span>  
 cd spypy  
-./download_weights.sh # or just download weights manually  
+./download_weights.sh <span style="color:#75715e"># or just download weights manually</span>  
 python track.py
-</code></pre>
-
-<p>Once enough logs are saved, the below will convert the logs from the log directory and overlay the objects onto the input image. The object value has to be an object that the model was trained on, which is visible from the .classes file in the model directory.</p>
-
+</code></pre></div><p>Once enough logs are saved, the below will convert the logs from the log directory and overlay the objects onto the input image. The object value has to be an object that the model was trained on, which is visible from the .classes file in the model directory.</p>
 <p>python convert.py -i [input_image to draw over] -d [directory of logs] -o [object to detect]</p>
-
 <figure>
     <img src="/post/resources/img/1*pfGIMsqfdbb1F1D2rRnj_A.jpeg"/> <figcaption>
             <h4>I spy a Rapberry Pi</h4>
         </figcaption>
 </figure>
 
-
 <h4 id="dependencies">Dependencies</h4>
-
 <p>The most frustrating part was getting tensorflow and Keras to run on raspberry pi. Not because the pi is not powerful enough, but the standard methods to install tensorflow did not work for me (e.g. pip) and there is less support for weaker ARM hardware. I was able to install the tensorflow for python 2.7, but 3.4+ was not working for me. I won’t discuss it here in length, but here are the links that worked for me.</p>
-
 <blockquote>
 <p><a href="https://nikhilraghava.wordpress.com/2017/08/05/installing-keras-on-raspberry-pi-3/">Install Keras</a></p>
-
+</blockquote>
+<blockquote>
 <p><a href="http://ci.tensorflow.org/view/Nightly/job/nightly-pi-zero/lastSuccessfulBuild/artifact//output-artifacts/">Tensorflow wheel</a> (install with pip)</p>
-
+</blockquote>
+<blockquote>
 <p><a href="https://github.com/samjabrahams/tensorflow-on-raspberry-pi">Install tensorflow</a></p>
 </blockquote>
-
 <h4 id="object-recognition"><strong>Object recognition</strong></h4>
-
 <p>The first step is being able to detect the images.</p>
-
-<p>{{ figure src=&ldquo;/post/resources/img/1*VZPf2wq8AIjASwy0IfARCA.png&rdquo; title=&ldquo;He loves those stools&rdquo; }}</p>
-
+<p>{{ figure src=&rdquo;/post/resources/img/1*VZPf2wq8AIjASwy0IfARCA.png&rdquo; title=&quot;He loves those stools&rdquo; }}</p>
 <p>I wrote at length in my <a href="https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/">last post</a> about how object detection works, so I won’t go over much here. The file detect.py has a function called detect_from_image that creates the model based on provided config file and weights. The model takes about a minute to load from the config and weights (raspberry pi v3), but it only needs to load once.</p>
-
 <p>The function then runs the image through the model and parses out the response, maps the object output to their respective class names and re-scales the response to the original image size and returns a dictionary of the objects detected.</p>
-
 <p>Below is the signature of the main function in detect:</p>
-
-<pre><code class="language-python">def detect_from_image(  
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">detect_from_image</span>(  
   image,  
   anchors_path,  
   classes_path,  
@@ -202,143 +180,92 @@ python track.py
   min_confidence,  
   max_overlap,  
   model_image_size):
-</code></pre>
-
-<p>The <strong>image</strong> can either be a string with the image path or a PIL.Image object.</p>
-
+</code></pre></div><p>The <strong>image</strong> can either be a string with the image path or a PIL.Image object.</p>
 <p>The <strong>anchors_path</strong> is a list to the location of the anchors. The anchors are space separated values in a text file. The anchors for yolov2 are as follows:</p>
-
 <p>0.57273, 0.677385, 1.87446, 2.06253, 3.33843, 5.47434, 7.88282, 3.52778, 9.77052, 9.16828</p>
-
 <p>You can read more about anchors in my <a href="https://breeko.github.io/post/2018-04-05_how-to-actually-easily-detect-objects-with-deep-learning-on-raspberry-pi/">last post</a> under “Clustering Box Dimensions with Anchors”.</p>
-
 <p>The <strong>classes_path</strong> just lists the classes that the model was trained on in a space separated text file.</p>
-
 <p>The <strong>config_path</strong> holds the config file of the model. I tried saving the compiled model in .h5 format, but it caused a memory crash on my raspberry pi (v3). So I had to recreate the model every time through the config file and weights. I borrowed code from the great package <a href="https://github.com/allanzelener/YAD2K">yad2k</a> (Yet Another Darknet 2 Keras), but judging by the name, there are other options to convert the model to Keras.</p>
-
 <p>The <strong>weights_path</strong>  is a path to the weights. The weights are too large to host on github, but they can be found <a href="https://pjreddie.com/darknet/yolov2/">here</a>.</p>
-
 <p><strong>min_confidence</strong> is the minimum confidence level required to have the model detect and save down the location of an object. I found 50% works well</p>
-
 <p><strong>max_overlap</strong> is the maximum amount of overlap allowed by the same object. The way that YOLO works means that the same object is likely to be detected several times with overlapping rectangles. In this case, you have to decide if the same object overlaps X% (intersection over union), then just take the object with a higher confidence level. If you set this too low, then you may not detect multiple objects of the same type if they are near each other. If set too high, then you may detect the same object multiple times. I found 0.35 to work well for my purposes.</p>
-
-<p><img src="/post/resources/img/1*2LPQLE87SJBRCSXhpow9sA.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*2LPQLE87SJBRCSXhpow9sA.png" alt=""></p>
 <p><strong>model_image_size</strong> is the size to rescale your image before running it through the network. I found (608,608) to work well.</p>
-
 <p>The final output of the function will be similar to below and scaled to the original image size.</p>
-
-<pre><code class="language-python">{'cat': [{'center': (1596.50, 1024.16),  
-   'coors': [(2058.47, 1440.59),  
-    (2982.40, 2273.46)],  
-   'h': 832.86,  
-   'w': 923.93,  
-   'x': 2058.47,  
-   'y': 1440.59}],  
- 'chair': [{'center': (1569.28, 812.05),  
-   'coors': [(2088.55, 1339.94),  
-    (3127.08, 2395.71)],  
-   'h': 1055.77,  
-   'w': 1038.53,  
-   'x': 2088.55,  
-   'y': 1339.94}],  
- 'suitcase': [{'center': (1330.33, 1028.88),  
-   'coors': [(1606.64, 1172.80),  
-    (2159.25, 1460.63)],  
-   'h': 287.83,  
-   'w': 552.61,  
-   'x': 1606.64,  
-   'y': 1172.80}]}
-</code></pre>
-
-<h4 id="tracking-the-objects">Tracking the Objects</h4>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">{<span style="color:#e6db74">&#39;cat&#39;</span>: [{<span style="color:#e6db74">&#39;center&#39;</span>: (<span style="color:#ae81ff">1596.50</span>, <span style="color:#ae81ff">1024.16</span>),  
+   <span style="color:#e6db74">&#39;coors&#39;</span>: [(<span style="color:#ae81ff">2058.47</span>, <span style="color:#ae81ff">1440.59</span>),  
+    (<span style="color:#ae81ff">2982.40</span>, <span style="color:#ae81ff">2273.46</span>)],  
+   <span style="color:#e6db74">&#39;h&#39;</span>: <span style="color:#ae81ff">832.86</span>,  
+   <span style="color:#e6db74">&#39;w&#39;</span>: <span style="color:#ae81ff">923.93</span>,  
+   <span style="color:#e6db74">&#39;x&#39;</span>: <span style="color:#ae81ff">2058.47</span>,  
+   <span style="color:#e6db74">&#39;y&#39;</span>: <span style="color:#ae81ff">1440.59</span>}],  
+ <span style="color:#e6db74">&#39;chair&#39;</span>: [{<span style="color:#e6db74">&#39;center&#39;</span>: (<span style="color:#ae81ff">1569.28</span>, <span style="color:#ae81ff">812.05</span>),  
+   <span style="color:#e6db74">&#39;coors&#39;</span>: [(<span style="color:#ae81ff">2088.55</span>, <span style="color:#ae81ff">1339.94</span>),  
+    (<span style="color:#ae81ff">3127.08</span>, <span style="color:#ae81ff">2395.71</span>)],  
+   <span style="color:#e6db74">&#39;h&#39;</span>: <span style="color:#ae81ff">1055.77</span>,  
+   <span style="color:#e6db74">&#39;w&#39;</span>: <span style="color:#ae81ff">1038.53</span>,  
+   <span style="color:#e6db74">&#39;x&#39;</span>: <span style="color:#ae81ff">2088.55</span>,  
+   <span style="color:#e6db74">&#39;y&#39;</span>: <span style="color:#ae81ff">1339.94</span>}],  
+ <span style="color:#e6db74">&#39;suitcase&#39;</span>: [{<span style="color:#e6db74">&#39;center&#39;</span>: (<span style="color:#ae81ff">1330.33</span>, <span style="color:#ae81ff">1028.88</span>),  
+   <span style="color:#e6db74">&#39;coors&#39;</span>: [(<span style="color:#ae81ff">1606.64</span>, <span style="color:#ae81ff">1172.80</span>),  
+    (<span style="color:#ae81ff">2159.25</span>, <span style="color:#ae81ff">1460.63</span>)],  
+   <span style="color:#e6db74">&#39;h&#39;</span>: <span style="color:#ae81ff">287.83</span>,  
+   <span style="color:#e6db74">&#39;w&#39;</span>: <span style="color:#ae81ff">552.61</span>,  
+   <span style="color:#e6db74">&#39;x&#39;</span>: <span style="color:#ae81ff">1606.64</span>,  
+   <span style="color:#e6db74">&#39;y&#39;</span>: <span style="color:#ae81ff">1172.80</span>}]}
+</code></pre></div><h4 id="tracking-theobjects">Tracking the Objects</h4>
 <p>The tracking takes place in track.py. The file is fairly simple. Tracking can be accessed as follows:</p>
-
-<pre><code class="language-sh">track.py [-h] [-i INTERVAL] [-s START] [-e END] [-d DIR] [--vflip] [--hflip]
-</code></pre>
-
-<p><strong>interval</strong> is the interval in minutes in which you want a picture to be taken</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">track.py <span style="color:#f92672">[</span>-h<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-i INTERVAL<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-s START<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-e END<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-d DIR<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--vflip<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--hflip<span style="color:#f92672">]</span>
+</code></pre></div><p><strong>interval</strong> is the interval in minutes in which you want a picture to be taken</p>
 <p><strong>start</strong> is the time you want the camera to start (e.g. “10 am”)</p>
-
 <p><strong>end</strong> is the time you want the camera to end (e.g. “9 pm”)</p>
-
 <p><strong>directory</strong> is the directory that you want the json logs to be saved</p>
-
 <p><strong>vflip|hflip</strong> is a flag that tells the camera to vertically|horizontally flip the pictures taken</p>
-
 <p>The file is short enough that its worth looking at in its entirety:</p>
+<script type="application/javascript" src="https://gist.github.com/breeko/9fa59558524c25b0012ef4768b3849d6.js"></script>
 
-<script type="application/javascript" src="//gist.github.com/breeko/9fa59558524c25b0012ef4768b3849d6.js"></script>
-
-<h4 id="converting-logs-to-heat-maps-overlaid-on-images">Converting Logs to Heat-maps Overlaid on Images</h4>
-
+<h4 id="converting-logs-to-heat-maps-overlaid-onimages">Converting Logs to Heat-maps Overlaid on Images</h4>
 <p>The final step is converting the logs into heat-maps</p>
-
-<pre><code class="language-sh">convert.py [-h] [-d DIR] [-o OUTPUT] [-i INPUT] [-a ALPHA] [-b OBJECT]
-</code></pre>
-
-<p><strong>dir</strong> is the directory of the log (json) files that contain the object locations</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">convert.py <span style="color:#f92672">[</span>-h<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-d DIR<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-o OUTPUT<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-i INPUT<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-a ALPHA<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>-b OBJECT<span style="color:#f92672">]</span>
+</code></pre></div><p><strong>dir</strong> is the directory of the log (json) files that contain the object locations</p>
 <p><strong>output</strong> is the output of the final image</p>
-
 <p><strong>input</strong> is the base image to be drawn over</p>
-
 <p><strong>alpha</strong> is the redness of the alpha of the circles detecting the objects (higher is darker)</p>
-
 <p><strong>object</strong> is the object that you want to detect. If you have a lot of objects detected over a long period of time, you would want to set the alpha to be low, and vice versa.</p>
-
 <p>I didn’t run this long enough to capture any interesting cat location analytics but below is a the final output detecting the placement of cups in my living room throughout the day.</p>
-
 <figure>
     <img src="/post/resources/img/1*pE3JF2dGes3h6aMntdcmzQ.png"/> <figcaption>
             <h4>Someone moved my cup!</h4>
         </figcaption>
 </figure>
 
-
 <p>The code for the heatmap was taken from the <a href="https://stackoverflow.com/questions/42481203/heatmap-on-top-of-image">github answer</a> on a similar question. It is more of a hack and can definitely be improved. The underlying picture becomes faded and its sometimes tricky to get the right alpha balance but it serves its purpose here.</p>
-
 <h3 id="next-steps">Next Steps</h3>
-
 <h4 id="detect">Detect</h4>
-
 <ol>
 <li>Consider changing over to have Keras do all the manipulations, as opposed to numpy originally used for debugging</li>
 <li>Add support for other machine learning models. I couldn’t get the yolo-mini to produce any meaningful detections so there may be a bug somewhere</li>
 <li>Add support for raspberry pi zero</li>
 </ol>
-
 <h4 id="track">Track</h4>
-
 <ol>
 <li>Consider using detection to detect when objects in the frame are moving. This will free up a lot of time being spent running the same image through the model and allow for a higher frame count</li>
 <li>Take another look at pickling the model file and reducing the time it takes to load</li>
 <li>More flexibility on start and end input types [DONE]</li>
 </ol>
-
 <h4 id="convert">Convert</h4>
-
 <ol>
 <li>Re-think how the heatmap is drawn</li>
 <li>Expand the convert functionality to support multiple objects being detected and drawn with varying colors and a key</li>
 </ol>
-
-<h4 id="yad2k-out">yad2k_out</h4>
-
+<h4 id="yad2k_out">yad2k_out</h4>
 <ol>
 <li>Optional verbosity [DONE]</li>
 </ol>
-
 <h3 id="final-thoughts">Final Thoughts</h3>
-
 <p>A lot of people in the machine learning space are trying to sell you an API and real-time object detection using freely available models developed by others. The fact is that for many applications, you don’t need real-time detection and the models are small enough to run anywhere. It may take you 30 seconds to evaluate the image, but that’s fine for many purposes.</p>
-
 <p>This functionality is very low cost, secure and respectful of privacy. The fact that its cheap to build, relatively simple, fully customizable and able to run offline puts it at an advantage over many more expensive cloud services.</p>
-
 <p>Discussion can be found at <a href="https://news.ycombinator.com/item?id=17029430">hacker news</a>.</p>
-
 <p>By Branko Blagojevic on May 9, 2018</p>
 
 </div>

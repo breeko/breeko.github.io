@@ -16,7 +16,7 @@
 One of my favorite features of Scala is its case classes. Case classes are a lot like regular classes but they’re easier to setup and usually used to model immutable data. They also allow for easy pattern matching.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Scala’s Case Class in Python with Case Matching">
@@ -128,89 +128,51 @@ if (!doNotTrack) {
     
 
     <p>I’ve been doing a lot of Scala programming lately. Scala is a statically typed language that compiles to the JVM. Scala doesn’t break away from object oriented programming but has a lot of functional programming features.</p>
-
-<p><img src="/post/resources/img/2019-08-19-scala-family-guy.png" alt="" /></p>
-
+<p><img src="/post/resources/img/2019-08-19-scala-family-guy.png" alt=""></p>
 <p>One of my favorite features of Scala is its case classes. Case classes are a lot like regular classes but they’re easier to setup and usually used to model immutable data. They also allow for easy pattern matching.</p>
-
 <pre><code>case class Person(
   name: String,
   age: Int
 )
 
 val bob = Person(name=&quot;bob&quot;, age=20)
-</code></pre>
-
-<p>Values in a case class are publicly accessible and immutable by default. Note there is no new keyword when instantiating a case class.</p>
-
+</code></pre><p>Values in a case class are publicly accessible and immutable by default. Note there is no new keyword when instantiating a case class.</p>
 <p>Case classes can be compared:</p>
-
 <pre><code>val bob2 = Person(name=&quot;bob&quot;, age=20)
 println(bob == bob2) // true
-</code></pre>
-
-<p>Since case classes are usually used to model immutable data, Scala gives you a copy function where you can override certain fields. Copy returns a new instance</p>
-
+</code></pre><p>Since case classes are usually used to model immutable data, Scala gives you a copy function where you can override certain fields. Copy returns a new instance</p>
 <pre><code>val youngBob = bob.copy(age=15)
-</code></pre>
-
-<p>Scala also allows for matching.</p>
-
+</code></pre><p>Scala also allows for matching.</p>
 <pre><code>bob match {
   case Person(&quot;bob&quot;, _) =&gt; println(&quot;hi bob!&quot;)
   case _ =&gt; println(&quot;I don't know you&quot;)
 }
-</code></pre>
-
-<p>If you are interested in learning more about Scala, I recommend Scala for the Impatient. If you want to just play around, check out ScalaFiddle.</p>
-
+</code></pre><p>If you are interested in learning more about Scala, I recommend Scala for the Impatient. If you want to just play around, check out ScalaFiddle.</p>
 <p>I like Scala case classes so I thought it would be fun to build them out in Python.
 Case Classes in Python</p>
-
 <p>See full code below and skip down for discussion and examples:</p>
-
-<script type="application/javascript" src="//gist.github.com/breeko/1023b10314622e7d38b0f150c2f72ffb.js"></script>
+<script type="application/javascript" src="https://gist.github.com/breeko/1023b10314622e7d38b0f150c2f72ffb.js"></script>
 
 <p>CaseClass is not actually a class, but a function that returns a class. The function takes in any number of named parameters and their types (Scala is strongly typed after-all). The function raises a ValueError if your parameter value is not a type.</p>
-
 <p>Initializing a CaseClass can be seen below. Remember, the function returns the class.</p>
-
 <pre><code>Person = CaseClass(&quot;Person&quot;, name=str, age=int)
-</code></pre>
-
-<p>Now that we have a Person case class, we can create a few Person instances:</p>
-
+</code></pre><p>Now that we have a Person case class, we can create a few Person instances:</p>
 <pre><code>bob = Person(name=&quot;bob&quot;, age=20)
-</code></pre>
-
-<p>Our case class enforces the right parameters are passed and even the right types:</p>
-
+</code></pre><p>Our case class enforces the right parameters are passed and even the right types:</p>
 <pre><code>Person(name=&quot;bob&quot;) # ValueError: Missing values {'age'}
 Person(name=&quot;bob&quot;, age=20, weight=170) # ValueError: Extra values {'weight'}
 Person(name=&quot;bob&quot;, age=20.5) # ValueError: age is of &lt;class 'float'&gt;, must be of &lt;class 'int'&gt;
-</code></pre>
-
-<p>And case classes are meant to model immutable data, our values are immutable:</p>
-
+</code></pre><p>And case classes are meant to model immutable data, our values are immutable:</p>
 <pre><code>bob.name = &quot;jimmy&quot; # AttributeError: Reassignment to val
 bob.zip_code = 90210 # AttributeError: Value zip_code
-</code></pre>
-
-<p>We also have some useful features, like equality:</p>
-
+</code></pre><p>We also have some useful features, like equality:</p>
 <pre><code>bob2 = Person(name=&quot;bob&quot;, age=20)
 young_bob = Person(name=&quot;bob&quot;, age=15)
 bob == bob2 # True
 bob == young_bob # False
-</code></pre>
-
-<p>and copy:</p>
-
+</code></pre><p>and copy:</p>
 <pre><code>big_bob = bob.copy(name=&quot;big bob&quot;)
-</code></pre>
-
-<p>and of course match:</p>
-
+</code></pre><p>and of course match:</p>
 <pre><code>bob.match(
   ({&quot;name&quot;: &quot;alice&quot;}, &quot;Its alice!&quot;),
   ({&quot;name&quot;: &quot;bob&quot;}, &quot;Hi bob!&quot;),
@@ -222,9 +184,7 @@ bob.match(
   ({&quot;name&quot;: &quot;bob&quot;, &quot;age&quot;: 20}, &quot;Hi older bob!&quot;),
   (None, &quot;I don't know you&quot;)
 )
-</code></pre>
-
-<p>Sure, it’s not as nice as Scala, but pattern matching is long overdue in Python. Scala has some other features that I didn’t build out like guards on matching (conditional statements), but I’ll leave that to the reader.</p>
+</code></pre><p>Sure, it’s not as nice as Scala, but pattern matching is long overdue in Python. Scala has some other features that I didn’t build out like guards on matching (conditional statements), but I’ll leave that to the reader.</p>
 
 </div>
 

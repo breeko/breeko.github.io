@@ -16,7 +16,7 @@
 I wanted to test this his results empirically while also being lazy.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Calculating the Probability of Skittle Distribution by Brute Force">
@@ -127,40 +127,23 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>A <a href="https://medium.com/r/?url=https%3A%2F%2Fpossiblywrong.wordpress.com%2F2019%2F04%2F06%2Ffollow-up-i-found-two-identical-packs-of-skittles-among-468-packs-with-a-total-of-27740-skittles%2F">recent blog post</a> caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.</p>
-
+    <p>A <a href="https://medium.com/r/?url=https%3A%2F%2Fpossiblywrong.wordpress.com%2F2019%2F04%2F06%2Ffollow-up-i-found-two-identical-packs-of-skittles-among-468-packs-with-a-total-of-27740-skittles%2F">recent blog post</a> caught my attention. The author wanted to see how long it would take for him to get an identical distribution of Skittles in a bag. He estimated a reasonable estimate of 400–500 bags would be required for him to open before he found a matching bag. After [spoiler alert] 468 bags, he finally found a matching bag.</p>
 <p>I wanted to test this his results empirically while also being lazy. So I setup a simulation in python.</p>
-
-<script type="application/javascript" src="//gist.github.com/breeko/69e54a4e77229618efeb468fc97c90bf.js"></script>
+<script type="application/javascript" src="https://gist.github.com/breeko/69e54a4e77229618efeb468fc97c90bf.js"></script>
 
 <p>The get_bag function returns a bag of skittles with an input of a mean deviation for the number of skittles in the bag:</p>
-
 <pre><code>&gt; get_bag(2)
 'g:12;o:11;p:16;r:9;y:11'
-</code></pre>
-
-<p>The find_match function just keeps running trials until it gets a matching set, and then returns the number of trials run.</p>
-
+</code></pre><p>The find_match function just keeps running trials until it gets a matching set, and then returns the number of trials run.</p>
 <p>Here&rsquo;s the output from my simulation of 1,000 trials:</p>
-
-<p><img src="/post/resources/img/1_b62qemwuqEI6nfH_0l-UjA.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1_b62qemwuqEI6nfH_0l-UjA.png" alt=""></p>
 <p>The median amount of bags required to find a matching bag was 310. 95% of the trials found a matching bag in 667 trials or less.</p>
-
 <h3 id="assumptions">Assumptions</h3>
-
 <p>The author found the average number of skittles per bag was 59.27. He didn&rsquo;t state the standard deviation of the bag size, but from the histogram I guessed it was +/- 2.</p>
-
 <p>If every bag had exactly 59 skittles, the number of bags required to find a matching bag changes drastically.</p>
-
-<p><img src="/post/resources/img/1_JvfvUOXnfhq0raRvVUieBg.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1_JvfvUOXnfhq0raRvVUieBg.png" alt=""></p>
 <p>While with a standard deviation of 10, it would have probably taken around 700</p>
-
-<p><img src="/post/resources/img/1_1szcXFEhxMa80fd08TlP3A.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1_1szcXFEhxMa80fd08TlP3A.png" alt=""></p>
 <p>I always find probability to be a bit intimidating, so I prefer simulations, especially when I&rsquo;m trying to get a ballpark. We can get the same results without the diabetes.</p>
 
 </div>

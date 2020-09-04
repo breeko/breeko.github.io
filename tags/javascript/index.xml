@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Javascript on ML-Everything</title>
+    <title>javascript on ML-Everything</title>
     <link>https://breeko.github.io/tags/javascript/</link>
-    <description>Recent content in Javascript on ML-Everything</description>
+    <description>Recent content in javascript on ML-Everything</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 02 Nov 2019 00:00:00 +0000</lastBuildDate>

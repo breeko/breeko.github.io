@@ -16,7 +16,7 @@
 In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my github. For more information on R programming for data science, I recommend the book Practical Statistics for Data Scientists">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.54.0" />
+        <meta name="generator" content="Hugo 0.68.3" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="Using ESPN Forecasts to Make Draft King Final Fantasy Football Picks">
@@ -127,142 +127,103 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<p>ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power</p>
-
+    <p>ESPN fantasy football projection are free and available historically. Although they differ from DraftKing, they are granular enough to be converted and compared. Let’s see their predictive power</p>
 <p>In this post we’ll use ESPN predictions to optimize our fantasy pool. You can skip to the bottom for the code or just visit my <a href="https://github.com/breeko/Fantasy_LP">github</a>. For more information on R programming for data science, I recommend the book <a href="https://amzn.to/2yarefr">Practical Statistics for Data Scientists</a></p>
-
 <p>This post is a continuation of my series on using data science to make fantasy football picks. For more information, see my last two posts:</p>
-
 <ol>
 <li><a href="https://breeko.github.io/post/2018-09-17_using-python-and-linear-programming-to-optimize-fantasy-football-picks/">Using Python and Linear Programming to Optimize Fantasy Football Picks</a></li>
 <li><a href="https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/">Using Linear Regression to Make Fantasy Football Picks</a></li>
 </ol>
-
-<h4 id="why-you-shouldn-t-pay-for-predictions">Why You Shouldn’t Pay for Predictions</h4>
-
+<h4 id="why-you-shouldnt-pay-for-predictions">Why You Shouldn’t Pay for Predictions</h4>
 <p>The adage “those who can’t do, teach” is a bit harsh on teachers. However, in the prediction market it makes much more sense. If you had a statistical edge into a deep liquid market such as fantasy sports, you’d be wise to exploit the edge yourself rather than sell it. You can try to do both, make your picks and then scream them from the rooftop. In fact, that’s often what hedge fund managers do since they know convincing enough investors will make their prediction a self fulfilling prophecy as new money comes in and moves prices.</p>
-
 <p>But with fantasy sports you’re stuck in your position, so there is no opportunity to sell your positions after salaries moved in your direction. So giving away your estimates can’t help you. But what can happen is that, if your model has value, others can gleam insights from your model, adjust their model and the salaries will move to reflect your edge. So over time you’ll lose your edge since it will be incorporated into the new salaries.</p>
-
-<p><img src="/post/resources/img/0*Ob7SHSO1jwELarx3.jpg" alt="" /></p>
-
+<p><img src="/post/resources/img/0*Ob7SHSO1jwELarx3.jpg" alt=""></p>
 <p>For that reason I cannot imagine anybody selling fantasy football is adding much value. A better technique would be to sell a number of different sub-optimal models. As some perform better or worse, you can drop the losers and promote the record of the sellers. Over time you’ll want to replenish your supply to keep this shell game afloat. Hedge funds do this as well.</p>
-
 <h4 id="espn-predictions">ESPN Predictions</h4>
-
 <p>Everything I said above holds for free predictions as well, but there are other reasons someone may give out free predictions. The first one is obviously ads, but a company like ESPN may give out predictions in order to promote their own fantasy line. <a href="http://games.espn.com/ffl/resources/help/content?name=scoring-formats">ESPN point system</a> is slightly different from that of DraftKings, but <a href="http://games.espn.com/ffl/tools/projections">ESPN predictions</a> break down their predictions by attributes which allows us to convert between the two (e.g. rushing 16.5 yards). ESPN also generously provides us with historical predictions, which is very rare since that would allow people to easily track performance. However, they don’t provide historical weekly predictions from prior years, just the aggregate predictions from last year and the weekly predictions from this year.</p>
-
 <p>So let’s see how ESPN did. We’ll start with updating the latest DK point history. I wrote about this function in my <a href="https://breeko.github.io/post/2018-10-11_using-linear-regression-to-make-fantasy-football-picks/">last post</a> on using linear regression to make fantasy picks.</p>
-
-<pre><code class="language-R">source(&quot;espn.R&quot;)  
-source(&quot;utils.R&quot;)  
-source(&quot;history.R&quot;)  
-source(&quot;available.R&quot;)  
-source(&quot;solve.R&quot;)
-</code></pre>
-
-<h1 id="historic-analysis-of-espn-scores">HISTORIC ANALYSIS OF ESPN SCORES</h1>
-
-<p>h &lt;- getLatestHistory()<br />
-h &lt;- updateHistory(h,save=T)<br />
-h &lt;- enrichHistory(h)<br />
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;espn.R&#34;</span>)  
+<span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;utils.R&#34;</span>)  
+<span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;history.R&#34;</span>)  
+<span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;available.R&#34;</span>)  
+<span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;solve.R&#34;</span>)
+</code></pre></div><h1 id="historic-analysis-of-espn-scores">HISTORIC ANALYSIS OF ESPN SCORES</h1>
+<p>h &lt;- getLatestHistory()<br>
+h &lt;- updateHistory(h,save=T)<br>
+h &lt;- enrichHistory(h)<br>
 h &lt;- h[h$year == 2018,]</p>
-
 <p>We then need to download the ESPN historic predictions and convert the score to DK points score. The function <em>enrichEspn</em> applies a soft-match on the name so for instance Allen Robinson II matches Allen Robinson.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># Review historic ESPN scores  </span>
+espn <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getEspnHistory</span>(<span style="color:#ae81ff">2018</span>, startPeriod <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, endPeriod <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>, minPoints <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
 
-<pre><code class="language-R"># Review historic ESPN scores  
-espn &lt;- getEspnHistory(2018, startPeriod = 1, endPeriod = 9, minPoints = 0)
+espn <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">enrichEspn</span>(espn, h<span style="color:#f92672">$</span>displayName)
+</code></pre></div><p>Finally, we can merge the two tables, limit to only those that have both an ESPN DK score and an actual score and see the correlation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">h <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">merge</span>(h, espn<span style="color:#a6e22e">[c</span>(<span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;year&#34;</span>, <span style="color:#e6db74">&#34;week&#34;</span>, <span style="color:#e6db74">&#34;espn.dk.points&#34;</span>)], by<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;year&#34;</span>, <span style="color:#e6db74">&#34;week&#34;</span>), all.x<span style="color:#f92672">=</span>T)
 
-espn &lt;- enrichEspn(espn, h$displayName)
-</code></pre>
+espnCor <span style="color:#f92672">&lt;-</span> h[<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(h<span style="color:#f92672">$</span>espn.dk.points),]
 
-<p>Finally, we can merge the two tables, limit to only those that have both an ESPN DK score and an actual score and see the correlation.</p>
-
-<pre><code class="language-R">h &lt;- merge(h, espn[c(&quot;displayName&quot;, &quot;year&quot;, &quot;week&quot;, &quot;espn.dk.points&quot;)], by=c(&quot;displayName&quot;, &quot;year&quot;, &quot;week&quot;), all.x=T)
-
-espnCor &lt;- h[!is.na(h$espn.dk.points),]
-
-cor(espnCor$dk.points, espnCor$espn.dk.points)  
-# 0.65716
-</code></pre>
-
-<p>65% correlation between estimated and DK score is not bad, although it is biased with the players that ESPN predict score 0 and do in fact score 0. We can exclude those that have a predicted score below some threshold.</p>
-
+<span style="color:#a6e22e">cor</span>(espnCor<span style="color:#f92672">$</span>dk.points, espnCor<span style="color:#f92672">$</span>espn.dk.points)  
+<span style="color:#75715e"># 0.65716</span>
+</code></pre></div><p>65% correlation between estimated and DK score is not bad, although it is biased with the players that ESPN predict score 0 and do in fact score 0. We can exclude those that have a predicted score below some threshold.</p>
 <p>Let’s see how it would have do versus the actual scores:</p>
-
-<pre><code class="language-R">lapply(seq(1,9), function(x) testWeek(espnCor, x))
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">lapply</span>(<span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">9</span>), <span style="color:#a6e22e">function</span>(x) <span style="color:#a6e22e">testWeek</span>(espnCor, x))
 
 [[1]]  
-[1] &quot;predicted: 126.27 actual: 190.68 diff 64.41&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 126.27 actual: 190.68 diff 64.41&#34;</span>
 
 [[2]]  
-[1] &quot;predicted: 128.516 actual: 151.88 diff 23.364&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 128.516 actual: 151.88 diff 23.364&#34;</span>
 
 [[3]]  
-[1] &quot;predicted: 131.222 actual: 82.72 diff -48.502&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 131.222 actual: 82.72 diff -48.502&#34;</span>
 
 [[4]]  
-[1] &quot;predicted: 137.284 actual: 164.6 diff 27.316&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 137.284 actual: 164.6 diff 27.316&#34;</span>
 
 [[5]]  
-[1] &quot;predicted: 133.71 actual: 123.62 diff -10.09&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 133.71 actual: 123.62 diff -10.09&#34;</span>
 
 [[6]]  
-[1] &quot;predicted: 134.902 actual: 136.5 diff 1.598&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 134.902 actual: 136.5 diff 1.598&#34;</span>
 
 [[7]]  
-[1] &quot;predicted: 136.448 actual: 153.96 diff 17.512&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 136.448 actual: 153.96 diff 17.512&#34;</span>
 
 [[8]]  
-[1] &quot;predicted: 141.766 actual: 176.96 diff 35.194&quot;
+[1] <span style="color:#e6db74">&#34;predicted: 141.766 actual: 176.96 diff 35.194&#34;</span>
 
 [[9]]  
-[1] &quot;predicted: 143.468 actual: 123.46 diff -20.008&quot;
-</code></pre>
-
-<p>Our actual score is usually higher than our predicted which means ESPN is pretty conservative, although week 3 is way off. How good the model is depends on your competition so I would recommend comparing these actual scores to your particular contest.</p>
-
+[1] <span style="color:#e6db74">&#34;predicted: 143.468 actual: 123.46 diff -20.008&#34;</span>
+</code></pre></div><p>Our actual score is usually higher than our predicted which means ESPN is pretty conservative, although week 3 is way off. How good the model is depends on your competition so I would recommend comparing these actual scores to your particular contest.</p>
 <h4 id="drafting-a-dk-fantasy-team-based-on-espn-predictions">Drafting a DK Fantasy Team Based on ESPN Predictions</h4>
-
 <p>To use the converted ESPN scores to select a fantasy team, we can just do the following:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># CHOOSE FROM AVIALABLE BASED ON ESPN SCORES  </span>
+WEEKS_ID <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">22434</span>  
+WEEK <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">9</span>  
+YEAR <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">2018</span>
 
-<pre><code class="language-R"># CHOOSE FROM AVIALABLE BASED ON ESPN SCORES  
-WEEKS_ID &lt;- 22434  
-WEEK &lt;- 9  
-YEAR &lt;- 2018
+a <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getLatestAvailable</span>(WEEKS_ID)
 
-a &lt;- getLatestAvailable(WEEKS_ID)
+ah <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">availableToHistory</span>(a, week <span style="color:#f92672">=</span> WEEK, year <span style="color:#f92672">=</span> YEAR, displayNames <span style="color:#f92672">=</span> h<span style="color:#f92672">$</span>displayName)
 
-ah &lt;- availableToHistory(a, week = WEEK, year = YEAR, displayNames = h$displayName)
+ah <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">merge</span>(ah, espn<span style="color:#a6e22e">[c</span>(<span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;espn.dk.points&#34;</span>)], by <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;displayName&#34;</span>)
 
-ah &lt;- merge(ah, espn[c(&quot;displayName&quot;, &quot;espn.dk.points&quot;)], by = &quot;displayName&quot;)
+ah<span style="color:#f92672">$</span>prediction <span style="color:#f92672">&lt;-</span> ah<span style="color:#f92672">$</span>espn.dk.points
 
-ah$prediction &lt;- ah$espn.dk.points
+ah <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">merge</span>(ah, <span style="color:#a6e22e">unique</span>(h<span style="color:#a6e22e">[c</span>(<span style="color:#e6db74">&#34;displayName&#34;</span>, <span style="color:#e6db74">&#34;median&#34;</span>)]), by<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;displayName&#34;</span>, all.x <span style="color:#f92672">=</span> T)
 
-ah &lt;- merge(ah, unique(h[c(&quot;displayName&quot;, &quot;median&quot;)]), by=&quot;displayName&quot;, all.x = T)
+<span style="color:#75715e"># Filter out those that don&#39;t have a prediction</span>
 
-# Filter out those that don't have a prediction
+ahFiltered <span style="color:#f92672">&lt;-</span> ah[<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(ah<span style="color:#f92672">$</span>prediction),]  
+ahFiltered<span style="color:#f92672">$</span>pos <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.factor</span>(ahFiltered<span style="color:#f92672">$</span>pos)
 
-ahFiltered &lt;- ah[!is.na(ah$prediction),]  
-ahFiltered$pos &lt;- as.factor(ahFiltered$pos)
-
-solve(ahFiltered)
-</code></pre>
-
-<p><img src="/post/resources/img/1*KoU9Ej232rYRJwPgg9i6lg.png" alt="" /></p>
-
+<span style="color:#a6e22e">solve</span>(ahFiltered)
+</code></pre></div><p><img src="/post/resources/img/1*KoU9Ej232rYRJwPgg9i6lg.png" alt=""></p>
 <p>Optimal selection based on ESPN points</p>
-
 <p>WEEKS_ID is a an identifier for your particular match-up. Go to your contest and see the link for Export to CSV.</p>
-
-<p><img src="/post/resources/img/1*Y9f9E-dv6HZkllpY55Jj7Q.png" alt="" /></p>
-
+<p><img src="/post/resources/img/1*Y9f9E-dv6HZkllpY55Jj7Q.png" alt=""></p>
 <h3 id="final-thoughts">Final Thoughts</h3>
-
 <p>Building a model for something as unpredictable as fantasy football is challenging. A popular strategy in prediction models is the ensemble method, that combines many imperfect models and weights them accordingly. It’s kind of how a choir of imperfect voices can sound good as different imperfections balance each other out. I take the same approach to outside predictions. No one is going to sell you the goose that lays the golden eggs, but with enough polish you can turn a turd into something useful.</p>
-
 <p>By Branko Blagojevic on November 6, 2018.</p>
 
 </div>
