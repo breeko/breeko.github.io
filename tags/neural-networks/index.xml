@@ -13,10 +13,10 @@
     
     <item>
       <title>Building an Object Detection API with AWS S3, Rekognition and Lambda</title>
-      <link>https://breeko.github.io/blog/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</link>
+      <link>https://breeko.github.io/post/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</link>
       <pubDate>Mon, 18 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/blog/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</guid>
+      <guid>https://breeko.github.io/post/2019-03-18-building-an-object-detection-api-with-aws-s3-rekognition-and-lambda/</guid>
       <description>In a prior post, Offline Object Detection and Tracking on a Raspberry Pi, I wrote an implementation of an offline object detection model. Since that time, aws has begun to offer some great services in that space, so I felt it was time to write about building an online object detection model with aws.
 Use-Case My use-case is the same as the original article: take a picture periodically, process it, and display some information as to the location of given objects over time.</description>
     </item>

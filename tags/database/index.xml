@@ -13,10 +13,10 @@
     
     <item>
       <title>Ranking Reddit Bots, Lambda Database Architecture and a File Systems as a Database</title>
-      <link>https://breeko.github.io/blog/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</link>
+      <link>https://breeko.github.io/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</link>
       <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/blog/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</guid>
+      <guid>https://breeko.github.io/post/2018-09-09_ranking-reddit-bots-lambda-database-architecture-and-a-file-systems-as-a-database/</guid>
       <description>Botrank tracks votes for reddit bots. Updating records can be surprisingly tricky. Lambda Architecture can help.
 Lambda Architecture is a novel way to manage a database. Data is immutable and everything is built from the ground up. Everything can be re-created and nothing is lost.
 In my last post I wrote about a few Reddit bots I am working on. One of them, B0tRank, keeps track of “good bot” and “bad bot” comments and updates a ledger that has a rating of bots based on these votes.</description>

@@ -13,10 +13,10 @@
     
     <item>
       <title>Predicting the Stock Market, p-Hacking and Why You Should Be Bullish</title>
-      <link>https://breeko.github.io/blog/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</link>
+      <link>https://breeko.github.io/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</link>
       <pubDate>Thu, 29 Nov 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://breeko.github.io/blog/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</guid>
+      <guid>https://breeko.github.io/post/2018-11-29-predicting-the-stock-market-p-hacking-and-why-you-should-be-bullish/</guid>
       <description>Stock prices are just a series of numbers. Let’s try to fit a model to those numbers. What could go wrong?
 With the rise of stock market volatility in the last few months, there has been a renewed interest in the stock market. The stock market is a compelling challenge to engineers. It’s a mature market with practically unlimited depth and exceptionally low transaction costs. If you can digest the numbers and eek out a model that is just slightly better than random, you would have investors lining up to give you their money.</description>
     </item>
